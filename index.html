@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gaya Angkat Pesawat</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS: variabel & tema ===== */
+:root{--lift:#2563EB;--weight:#EF4444;--thrust:#16A34A;--drag:#F97316;--bg:#F0F9FF;--card:#fff;--text:#0F172A;--muted:#475569;--line:#BAE6FD;--sky1:#BFE6FF;--sky2:#F0F9FF}
+[data-theme=dark]{--bg:#0B1220;--card:#14203A;--text:#E8F0FF;--muted:#9FB3D1;--line:#25365C;--sky1:#0B1220;--sky2:#14203A}
+*{box-sizing:border-box}
+html{font-size:17px}body.pres{font-size:22px}
+body{margin:0;font-family:Inter,sans-serif;color:var(--text);background:linear-gradient(var(--sky1),var(--sky2) 420px) var(--bg);line-height:1.6;transition:background .3s}
+h1,h2,h3{font-family:Poppins,sans-serif;line-height:1.25;margin:0 0 .5em}
+:focus-visible{outline:3px solid var(--lift);outline-offset:2px}
+/* ===== CSS: komponen ===== */
+nav{position:sticky;top:0;z-index:10;display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding:8px 16px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav b{font-family:Poppins;margin-right:auto;color:var(--lift)}
+nav button,.btn{font:inherit;font-size:.85rem;border:0;border-radius:999px;padding:7px 14px;cursor:pointer;background:transparent;color:var(--text);transition:transform .15s,background .2s}
+nav button:hover{background:var(--line)}nav button.on{background:var(--lift);color:#fff}
+.btn{background:var(--lift);color:#fff;font-weight:600}.btn.alt{background:var(--line);color:var(--text)}.btn:active{transform:scale(.95)}
+#bar{position:sticky;top:50px;height:4px;background:var(--line);z-index:9}#bar i{display:block;height:100%;width:0;background:var(--lift);transition:width .4s}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+.pg{display:none;animation:in .35s}.pg.on{display:block}@keyframes in{from{opacity:0;transform:translateX(18px)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;margin-bottom:18px;box-shadow:0 8px 26px rgba(37,99,235,.08);transition:transform .2s ease, box-shadow .2s ease,border-color .2s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(37,99,235,.12);border-color: rgba(96,165,250,.45)}
+.tag{display:inline-block;background:var(--lift);color:#fff;font-family:Poppins;font-weight:600;border-radius:14px;padding:6px 18px;margin-bottom:14px;font-size:1.15rem}
+.sub{display:inline-block;background:var(--line);border-radius:12px;padding:4px 14px;font-weight:600}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pn{display:flex;justify-content:space-between;margin-top:22px}
+canvas,svg{max-width:100%}
+.formula{font-family:'JetBrains Mono',monospace;font-size:1.7rem;text-align:center;padding:26px 12px;border:3px solid var(--lift);border-radius:18px;box-shadow:0 0 22px rgba(37,99,235,.35);overflow-x:auto;background:linear-gradient(135deg, rgba(37,99,235,.06), rgba(14,165,233,.02));}
+.sym{cursor:pointer;padding:0 4px;border-radius:6px}.sym.hl,.sy.hl{background:#FDE68A;color:#000}
+.sy{border-radius:14px;padding:12px;border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));}
+.sy b{font-family:'JetBrains Mono',monospace}
+label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
+.ctl{display:flex;gap:8px;align-items:center}.ctl input[type=range]{flex:1}
+.ctl input[type=number],input.ans,select{font:inherit;border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:var(--bg);color:var(--text);width:110px}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
+.res div{background:var(--bg);border-radius:14px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:.9rem}
+.res small{display:block;font-family:Inter;color:var(--muted)}
+.st{font-weight:700;border-radius:12px;padding:8px 14px;color:#fff;display:inline-block}
+.warn{color:var(--weight);font-weight:600;min-height:1.5em}
+.sim{display:grid;grid-template-columns:300px 1fr;gap:16px}@media(max-width:800px){.sim{grid-template-columns:1fr}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:6px 14px;cursor:pointer}.tabs button.on{background:var(--lift);color:#fff}
+.lv{font-size:.75rem;color:#fff;border-radius:8px;padding:2px 8px;margin-left:6px}
+.fb{font-weight:700;margin-top:8px}.ok{color:var(--thrust)}.no{color:var(--weight)}
+.opt{display:block;width:100%;text-align:left;font:inherit;margin:6px 0;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);cursor:pointer;transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease}
+.opt:hover{transform:translateY(-1px);border-color: rgba(96,165,250,.5);box-shadow:0 8px 20px rgba(37,99,235,.08)}
+.opt.ok{background:#DCFCE7;color:#14532D}.opt.no{background:#FEE2E2;color:#7F1D1D}
+.hero{text-align:center;padding:30px 0;position:relative}.hero::before{content:"";position:absolute;inset:6% 14% auto;height:130px;background:radial-gradient(circle, rgba(59,130,246,.25), transparent 64%);filter:blur(24px);pointer-events:none}.hero h1{font-size:clamp(2rem,6vw,3.4rem);color:var(--lift)}
+#tip{min-height:3em;background:var(--bg);border-radius:12px;padding:10px 14px;margin-top:10px;border:1px solid var(--line)}
+.float{animation:fl 4s ease-in-out infinite;filter:drop-shadow(0 10px 18px rgba(37,99,235,.2))}@keyframes fl{50%{transform:translateY(-14px)}}
+.flight-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.flight-status{font-weight:700;color:var(--lift);margin-top:8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{nav,#bar,.pn,.btn{display:none}.pg{display:block!important}}
+
+/* ===== Penyegaran visual seluruh halaman ===== */
+:root{
+  --lift:#1d4ed8;
+  --weight:#dc2626;
+  --thrust:#059669;
+  --drag:#ea580c;
+  --bg:#f4f8ff;
+  --card:#ffffff;
+  --text:#12213a;
+  --muted:#60718b;
+  --line:#d7e4f5;
+  --sky1:#dbeafe;
+  --sky2:#f4f8ff;
+}
+[data-theme=dark]{
+  --bg:#08111f;
+  --card:#111e32;
+  --text:#eaf2ff;
+  --muted:#a8bad4;
+  --line:#263b59;
+  --sky1:#0b1a2e;
+  --sky2:#08111f;
+}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(96,165,250,.16),transparent 34rem),
+    linear-gradient(180deg,var(--sky1),var(--sky2) 28rem,var(--bg) 60rem);
+}
+nav{
+  gap:7px;
+  padding:12px clamp(14px,3vw,34px);
+  background:color-mix(in srgb,var(--card) 88%,transparent);
+  box-shadow:0 8px 26px rgba(15,35,70,.08);
+}
+nav b{font-size:1.04rem;letter-spacing:.02em}
+nav button{
+  border:1px solid transparent;
+  border-radius:12px;
+  padding:8px 12px;
+  font-weight:600;
+}
+nav button:hover{background:var(--bg);border-color:var(--line)}
+nav button.on{box-shadow:0 5px 14px rgba(29,78,216,.22)}
+#bar{top:0;height:3px}
+#bar i{background:linear-gradient(90deg,#38bdf8,var(--lift),#34d399)}
+main{max-width:1120px;padding:clamp(20px,4vw,42px) clamp(14px,3vw,28px) 72px}
+.pg.on{animation:pageIn .38s ease both}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{
+  border-radius:24px;
+  padding:clamp(18px,3vw,28px);
+  box-shadow:0 14px 36px rgba(24,56,104,.07);
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(24,56,104,.12)}
+.hero{
+  overflow:hidden;
+  padding:clamp(30px,7vw,72px) 16px;
+  margin-bottom:22px;
+  border:1px solid color-mix(in srgb,var(--line) 75%,transparent);
+  border-radius:32px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--card) 85%,transparent),color-mix(in srgb,var(--sky1) 60%,var(--card)));
+  box-shadow:0 24px 60px rgba(29,78,216,.10);
+}
+.hero::before{inset:0 18% auto;height:220px}
+.hero svg{position:relative;width:min(320px,75%);height:auto;margin-bottom:12px}
+.hero h1{position:relative;letter-spacing:-.04em}
+.hero p{position:relative;max-width:650px;margin:12px auto 22px}
+.hero .row{position:relative}
+h2,h3{letter-spacing:-.02em}
+.tag{
+  border-radius:999px;
+  padding:8px 18px;
+  font-size:1rem;
+  box-shadow:0 7px 18px rgba(29,78,216,.18);
+}
+.sub{border:1px solid var(--line);background:color-mix(in srgb,var(--line) 55%,var(--card))}
+.btn{
+  border-radius:13px;
+  padding:10px 16px;
+  box-shadow:0 6px 16px rgba(29,78,216,.14);
+}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn.alt{box-shadow:none;border:1px solid var(--line)}
+.grid{gap:18px}
+.grid>.card h3{color:var(--lift)}
+.formula{border-width:2px;box-shadow:0 12px 30px rgba(29,78,216,.12)}
+.sy{background:color-mix(in srgb,var(--card) 92%,var(--sky1));}
+.ctl input[type=range]{accent-color:var(--lift);cursor:pointer}
+.ctl input[type=number],input.ans,select{
+  min-height:42px;
+  border-radius:12px;
+}
+.sim{grid-template-columns:minmax(260px,330px) minmax(0,1fr);align-items:start;gap:20px}
+#panel{position:sticky;top:82px}
+#panel label{color:var(--muted);font-size:.82rem}
+#panel .row{gap:7px}
+#panel [data-ps]{font-size:.78rem;padding:8px 10px}
+.flight-actions .btn{flex:1 1 auto}
+.flight-status{
+  padding:10px 12px;
+  background:color-mix(in srgb,var(--lift) 9%,var(--card));
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+#cv1,#cv2,#cv3{
+  display:block;
+  border:1px solid var(--line);
+  box-shadow:0 12px 28px rgba(15,35,70,.09);
+}
+#cv1{margin:18px 0}
+#cv2{background:linear-gradient(180deg,#7dd3fc,#eff6ff);overflow:hidden}
+#cv3{margin-top:18px;border-radius:16px;background:var(--bg)}
+.res{gap:12px}
+.res div{
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+}
+.res div small{margin-bottom:5px}
+#sub{padding:10px 12px;background:var(--bg);border-radius:12px}
+#wr{padding:0 4px}
+.tabs button{padding:9px 16px;border-radius:12px;font-weight:600}
+.tabs button:hover{border-color:var(--lift)}
+.opt{border-radius:14px;padding:14px 16px}
+.pn{gap:12px}
+#tip{line-height:1.55}
+body.pres main{max-width:1280px}
+body.pres .card{padding:32px}
+body.pres .hero{padding-block:90px}
+@media(max-width:800px){
+  nav{position:relative}
+  nav b{width:100%;margin-bottom:4px}
+  #bar{top:0}
+  .sim{grid-template-columns:1fr}
+  #panel{position:static}
+}
+@media(max-width:520px){
+  html{font-size:16px}
+  nav{gap:5px;padding:10px}
+  nav button{font-size:.78rem;padding:7px 9px}
+  .card{border-radius:18px}
+  .hero{border-radius:24px}
+  .pn .btn{font-size:.78rem;padding:9px 12px}
+  .formula{font-size:1.2rem;padding:20px 10px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .pg.on{animation:none}
+}
+</style>
+</head>
+<body>
+<nav aria-label="Menu utama">
+<b>✈ Gaya Angkat</b>
+<button data-p="beranda">Beranda</button><button data-p="definisi">Definisi</button><button data-p="konsep">Konsep</button><button data-p="rumus">Rumus</button><button data-p="simulasi">Simulasi</button><button data-p="soal">Contoh Soal</button><button data-p="kuis">Kuis</button>
+<button id="tema" title="Mode gelap/terang (M)">🌓</button><button id="pres" title="Mode presentasi (P)">🖥</button>
+</nav>
+<div id="bar"><i></i></div>
+<main>
+
+<!-- ===== HTML: 1 Beranda ===== -->
+<section class="pg" id="beranda">
+<div class="hero">
+<svg class="float" width="260" viewBox="0 0 260 110" aria-hidden="true"><path d="M20 62 Q20 44 60 44 L205 46 Q245 52 248 64 Q240 78 205 78 L60 78 Q20 78 20 62Z" fill="#fff" stroke="#94A3B8" stroke-width="2"/><path d="M30 46 L8 14 L40 14 L70 46Z" fill="#2563EB"/><path d="M110 66 L70 100 L100 100 L150 68Z" fill="#60A5FA"/><path d="M205 52 L232 52 L238 60 L200 60Z" fill="#7DD3FC"/><circle cx="105" cy="62" r="3" fill="#94A3B8"/><circle cx="125" cy="62" r="3" fill="#94A3B8"/><circle cx="145" cy="62" r="3" fill="#94A3B8"/><circle cx="165" cy="62" r="3" fill="#94A3B8"/></svg>
+<h1>Gaya Angkat Pesawat</h1>
+<p style="color:var(--muted);font-size:1.15rem">Mengapa pesawat yang beratnya ratusan ton bisa terbang?</p>
+<div class="row" style="justify-content:center"><button class="btn" data-go="definisi">Mulai Belajar</button><button class="btn alt" data-go="simulasi">Langsung ke Simulasi</button></div>
+</div>
+<div class="grid">
+<div class="card"><h3>Apa itu gaya angkat?</h3><p>Gaya ke atas pada sayap yang melawan gaya berat.</p></div>
+<div class="card"><h3>Kenapa sayap melengkung?</h3><p>Udara di atas sayap mengalir lebih cepat, tekanannya lebih kecil.</p></div>
+<div class="card"><h3>Coba simulasinya</h3><p>Atur kecepatan dan luas sayap, lihat pesawat naik atau turun.</p></div>
+</div>
+<div class="card"><h3>Peta Belajar</h3><div class="row" id="peta"></div><p id="ident" style="color:var(--muted);margin-bottom:0"></p></div>
+</section>
+
+<!-- ===== HTML: 2 Definisi ===== -->
+<section class="pg" id="definisi">
+<span class="tag">1. Definisi</span>
+<div class="card"><p>Gaya angkat pesawat (lift force) adalah gaya yang bekerja pada sayap pesawat dengan arah ke atas dan membantu melawan gaya berat pesawat sehingga pesawat dapat terbang.</p>
+<span class="sub">Empat gaya utama yang bekerja pada pesawat</span>
+<svg viewBox="0 0 560 300" style="width:100%;max-width:640px;display:block;margin:10px auto" id="gaya">
+<g transform="translate(150,105)"><path d="M0 45 Q0 25 40 25 L200 27 Q250 33 255 47 Q245 62 200 62 L40 62 Q0 62 0 45Z" fill="#fff" stroke="#94A3B8" stroke-width="2"/><path d="M12 27 L-10 -5 L22 -5 L50 27Z" fill="#2563EB"/><path d="M100 50 L55 95 L90 95 L150 54Z" fill="#60A5FA"/></g>
+<g class="ar" data-t="Gaya angkat (lift): gaya ke atas pada sayap akibat perbedaan tekanan udara. Melawan gaya berat." style="cursor:pointer"><path d="M280 100 V20 M262 40 L280 15 L298 40" stroke="#2563EB" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="280" y="12" text-anchor="middle" fill="#2563EB" font-weight="700" font-size="14">Gaya angkat (lift)</text></g>
+<g class="ar" data-t="Gaya berat (weight): gaya tarik bumi ke bawah, besarnya m × g." style="cursor:pointer"><path d="M280 200 V275 M262 255 L280 280 L298 255" stroke="#EF4444" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="280" y="298" text-anchor="middle" fill="#EF4444" font-weight="700" font-size="14">Gaya berat (weight)</text></g>
+<g class="ar" data-t="Gaya dorong (thrust): gaya ke depan dari mesin yang menggerakkan pesawat." style="cursor:pointer"><path d="M10 150 H110 M90 132 L115 150 L90 168" stroke="#16A34A" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="5" y="125" fill="#16A34A" font-weight="700" font-size="14">Gaya dorong (thrust)</text></g>
+<g class="ar" data-t="Gaya hambat (drag): gaya ke belakang akibat gesekan dengan udara." style="cursor:pointer"><path d="M550 150 H450 M470 132 L445 150 L470 168" stroke="#F97316" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="555" y="125" text-anchor="end" fill="#F97316" font-weight="700" font-size="14">Gaya hambat (drag)</text></g>
+</svg>
+<div id="tip">Arahkan kursor atau klik salah satu panah untuk melihat penjelasannya.</div>
+<div class="row" style="margin-top:12px"><button class="btn alt" id="anim">Animasikan: lepas landas</button><span id="kond" style="color:var(--muted)"></span></div></div>
+</section>
+
+<!-- ===== HTML: 3 Konsep ===== -->
+<section class="pg" id="konsep">
+<span class="tag">2. Konsep</span>
+<div class="card"><h3>A. Hukum Bernoulli</h3>
+<p>Ketika kecepatan aliran fluida meningkat, tekanan statisnya menurun. Pada sayap pesawat, udara mengalir lebih cepat di bagian atas sehingga tekanannya lebih kecil dibanding bagian bawah.</p>
+<canvas id="cv1" width="700" height="300" style="width:100%;border-radius:16px;background:var(--bg)"></canvas>
+<div class="ctl"><label for="kc" style="margin:0">Kecepatan udara</label><input type="range" id="kc" min="1" max="6" value="3"><button class="btn alt" id="tp">Tampilkan distribusi tekanan</button></div>
+<div class="grid" style="margin-top:14px"><div class="sy">Kecepatan naik</div><div class="sy">Tekanan turun</div><div class="sy">Muncul gaya angkat</div></div></div>
+</section>
+
+<!-- ===== HTML: 4 Rumus ===== -->
+<section class="pg" id="rumus">
+<span class="tag">3. Rumus</span>
+<div class="card"><p class="sub">Rumus Gaya Angkat Pesawat</p>
+<div class="formula" id="fm"><span class="sym" data-s="F">ΔF</span> = ½ · <span class="sym" data-s="r">ρu</span> · (<span class="sym" data-s="a">Va</span>² − <span class="sym" data-s="b">Vb</span>²) · <span class="sym" data-s="A">A</span></div>
+<div class="grid" style="margin-top:14px">
+<div class="sy" data-s="r"><b>ρu</b> = massa jenis udara (kg/m³)</div>
+<div class="sy" data-s="A"><b>A</b> = luas sayap (m²)</div>
+<div class="sy" data-s="a"><b>Va</b> = kecepatan udara di atas sayap (m/s)</div>
+<div class="sy" data-s="b"><b>Vb</b> = kecepatan udara di bawah sayap (m/s)</div>
+<div class="sy" data-s="F"><b>ΔF</b> = gaya angkat (N)</div></div>
+<p><b>Syarat terbang:</b> ΔF ≥ m · g (gaya angkat harus lebih besar atau sama dengan gaya berat).</p>
+<div class="row"><button class="btn alt" id="salin">Salin rumus</button><button class="btn" id="jalan">Rumus berjalan</button></div>
+<pre id="lg" style="font-family:'JetBrains Mono',monospace;white-space:pre-wrap;min-height:5em"></pre>
+<div class="ctl"><label style="margin:0">Konverter km/jam → m/s</label><input type="number" id="kmh" value="900"><b id="ms"></b></div></div>
+</section>
+
+<!-- ===== HTML: 5 Simulasi ===== -->
+<section class="pg" id="simulasi">
+<span class="tag">4. Simulasi</span>
+<div class="sim">
+<div class="card" id="panel"></div>
+<div class="card"><canvas id="cv2" width="640" height="380" style="width:100%;border-radius:16px"></canvas>
+<div class="res" id="hasil"></div><div class="warn" id="wr"></div><p id="sub" style="font-family:'JetBrains Mono',monospace;font-size:.85rem"></p>
+<canvas id="cv3" width="640" height="200" style="width:100%"></canvas></div></div>
+</section>
+
+<!-- ===== HTML: 6 Contoh Soal ===== -->
+<section class="pg" id="soal">
+<span class="tag">5. Contoh Soal</span>
+<div class="card"><div class="tabs" id="tabs"></div><div id="sq"></div></div>
+<div class="card">Soal benar: <b id="skor">0</b> · Beruntun: <b id="streak">0</b></div>
+</section>
+
+<!-- ===== HTML: 7 Kuis ===== -->
+<section class="pg" id="kuis">
+<span class="tag">6. Kuis</span>
+<div class="card" id="kq"></div>
+</section>
+
+<div class="pn"><button class="btn alt" id="prev">← Sebelumnya</button><button class="btn" id="next">Selanjutnya →</button></div>
+</main>
+
+<script>
+/* ===== JS: konfigurasi (edit identitas di sini) ===== */
+const ID={nama:"Kelompok 3",anggota:["Daffa Harianovana","Putri Andriyani","Yulinka Nazelia Putri","Silva Claudia","Dide Hermawan","Rizky Dwi Rahmawan","Nazril Zaenal Arofi","Oskarjio Ignatius Simbolon","Bima Putra Setiawan"],kelas:"XI.A1",mapel:"Fisika",tahun:"2026/2027"};
+const g=10;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const fmt=(n,d=0)=>n.toLocaleString('id-ID',{maximumFractionDigits:d});
+
+/* ===== JS: fisika (fungsi murni) ===== */
+const hitungGayaAngkat=(rho,Va,Vb,A)=>0.5*rho*(Va*Va-Vb*Vb)*A;
+const hitungGayaBerat=m=>m*g;
+const tentukanStatus=(F,W)=>Math.abs(F-W)<=0.01*W?'melayang':F>W?'naik':'turun';
+
+/* ===== JS: navigasi ===== */
+const halaman=['beranda','definisi','konsep','rumus','simulasi','soal','kuis'];
+const visited=new Set();let cur=0;
+function go(p){
+  cur=typeof p==='number'?p:halaman.indexOf(p);
+  $$('.pg').forEach(e=>e.classList.toggle('on',e.id===halaman[cur]));
+  $$('nav [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===halaman[cur]));
+  visited.add(halaman[cur]);
+  $('#bar i').style.width=visited.size/halaman.length*100+'%';
+  $('#prev').style.visibility=cur?'visible':'hidden';
+  $('#next').style.visibility=cur<halaman.length-1?'visible':'hidden';
+  const pt=$('#peta');pt.innerHTML=halaman.slice(1).map(h=>`<span class="sub" style="${visited.has(h)?'background:var(--lift);color:#fff':''}">${visited.has(h)?'✓ ':''}${h}</span>`).join(' → ');
+  window.scrollTo(0,0);
+}
+$$('nav [data-p]').forEach(b=>b.onclick=()=>go(b.dataset.p));
+$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+$('#prev').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);
+$('#tema').onclick=()=>document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'':'dark';
+$('#pres').onclick=()=>document.body.classList.toggle('pres');
+document.addEventListener('keydown',e=>{
+  if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;
+  if(e.key==='ArrowRight'&&cur<halaman.length-1)go(cur+1);
+  if(e.key==='ArrowLeft'&&cur>0)go(cur-1);
+  if(e.key==='m'||e.key==='M')$('#tema').click();
+  if(e.key==='p'||e.key==='P')$('#pres').click();
+});
+if(matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.dataset.theme='dark';
+$('#ident').innerHTML=`<strong>${ID.nama}</strong> · ${ID.kelas} · ${ID.mapel} · ${ID.tahun}<ol>${ID.anggota.map(n=>`<li>${n}</li>`).join('')}</ol>`;
+
+/* ===== JS: Definisi ===== */
+$$('.ar').forEach(a=>{const s=()=>{$('#tip').textContent=a.dataset.t;a.animate([{opacity:1},{opacity:.4},{opacity:1}],{duration:500})};a.onmouseenter=s;a.onclick=s});
+$('#anim').onclick=()=>{
+  const k=[['Lepas landas: gaya dorong dan gaya angkat membesar.',1.4,1.2],['Terbang lurus: angkat = berat, dorong = hambat.',1,1],['Mendarat: gaya angkat dan dorong mengecil.',.6,.7]];
+  let i=0;const ar=$$('.ar');
+  const t=setInterval(()=>{if(i>=3){clearInterval(t);ar.forEach(a=>a.style.transform='');return}
+    $('#kond').textContent=k[i][0];
+    ar[0].style.transformOrigin='280px 150px';ar[0].style.transform=`scaleY(${k[i][1]})`;
+    ar[2].style.transformOrigin='60px 150px';ar[2].style.transform=`scaleX(${k[i][2]})`;i++},1600);
+};
+
+/* ===== JS: aliran udara (dipakai Konsep dan Simulasi) ===== */
+function bikinAliran(cv,getState){
+  const c=cv.getContext('2d'),W=cv.width,H=cv.height,P=[];
+  for(let i=0;i<70;i++)P.push({x:Math.random()*W,l:20+(i%7)*14,s:i%2?1:-1});
+  return function(){
+    const st=getState(),cy=st.cy??H/2,bump=x=>Math.exp(-Math.pow((x-W/2)/(W*.17),2));
+    if(st.tekanan){const gr=(y0,y1,col)=>{const q=c.createLinearGradient(0,y0,0,y1);q.addColorStop(0,col);q.addColorStop(1,'transparent');c.fillStyle=q;c.fillRect(W*.25,Math.min(y0,y1),W*.5,Math.abs(y1-y0))};
+      gr(cy-22,cy-120,'rgba(37,99,235,.35)');gr(cy+22,cy+120,'rgba(239,68,68,.45)')}
+    P.forEach(p=>{
+      p.x+=(p.s<0?st.va:st.vb);if(p.x>W)p.x=0;
+      const y=p.s<0?cy-p.l-34*bump(p.x):cy+p.l+14*bump(p.x);
+      c.fillStyle=p.s<0?'#2563EB':'#EF4444';c.fillRect(p.x,y,10,2.5)});
+    c.fillStyle='#64748B';c.beginPath();c.ellipse(W/2,cy,W*.2,16,0,0,7);c.fill();
+    c.fillStyle='#fff';c.font='600 13px Inter';c.textAlign='center';c.fillText('sayap',W/2,cy+4);
+  };
+}
+
+/* ===== JS: Konsep ===== */
+const f1=bikinAliran($('#cv1'),()=>({va:+$('#kc').value*1.6,vb:+$('#kc').value*.9,tekanan:tekananOn}));
+let tekananOn=false;
+$('#tp').onclick=()=>{tekananOn=!tekananOn;$('#tp').textContent=tekananOn?'Sembunyikan distribusi tekanan':'Tampilkan distribusi tekanan'};
+function lukisKonsep(){const c=$('#cv1').getContext('2d');c.clearRect(0,0,700,300);f1();
+  c.textAlign='left';c.font='600 14px Inter';c.fillStyle='#2563EB';c.fillText('Aliran udara lebih cepat → tekanan lebih kecil (P atas kecil)',14,24);
+  c.fillStyle='#EF4444';c.fillText('Aliran udara lebih lambat → tekanan lebih besar (P bawah besar)',14,286);
+  c.strokeStyle='#2563EB';c.fillStyle='#2563EB';c.lineWidth=8;c.beginPath();c.moveTo(600,170);c.lineTo(600,90);c.stroke();
+  c.beginPath();c.moveTo(584,100);c.lineTo(600,70);c.lineTo(616,100);c.fill();c.fillText('Gaya angkat',560,60)}
+
+/* ===== JS: Rumus ===== */
+$$('[data-s]').forEach(e=>{const on=()=>$$(`[data-s="${e.dataset.s}"]`).forEach(x=>x.classList.add('hl')),off=()=>$$('.hl').forEach(x=>x.classList.remove('hl'));e.onmouseenter=on;e.onmouseleave=off});
+$('#salin').onclick=()=>{navigator.clipboard?.writeText('ΔF = ½ · ρu · (Va² − Vb²) · A');$('#salin').textContent='Tersalin ✓'};
+$('#jalan').onclick=()=>{
+  const L=['ΔF = ½ · ρu · (Va² − Vb²) · A','ΔF = ½ × 1,2 × (250² − 200²) × 20','ΔF = ½ × 1,2 × (62.500 − 40.000) × 20','ΔF = ½ × 1,2 × 22.500 × 20','ΔF = 270.000 N'];
+  let i=0;$('#lg').textContent='';const t=setInterval(()=>{$('#lg').textContent+=L[i++]+'\n';if(i>=L.length)clearInterval(t)},900)};
+$('#kmh').oninput=()=>$('#ms').textContent='= '+fmt($('#kmh').value/3.6,1)+' m/s';$('#kmh').oninput();
+
+/* ===== JS: Simulasi ===== */
+const prm=[['rho','Massa jenis udara ρ (kg/m³)',.5,1.5,.05,1.2],['A','Luas sayap A (m²)',10,500,5,100],['Va','Kecepatan di atas sayap Va (m/s)',50,400,5,250],['Vb','Kecepatan di bawah sayap Vb (m/s)',50,400,5,200],['m','Massa pesawat (kg), g = 10 m/s²',1000,500000,1000,15000]];
+const preset={'Pesawat Kecil':[1.2,16,70,55,1000],'Pesawat Penumpang':[1.2,125,260,200,60000],'Stabil di Udara':[1.2,125,260,200,207000],'Lepas Landas':[1.2,360,300,230,300000],'Gagal Terbang':[1.2,50,150,145,100000]};
+const S={};
+$('#panel').innerHTML=prm.map(([k,t,lo,hi,st,d])=>`<label for="n_${k}">${t}</label><div class="ctl"><input type="range" id="r_${k}" min="${lo}" max="${hi}" step="${st}" value="${d}" aria-label="${t}"><input type="number" id="n_${k}" min="${lo}" max="${hi}" step="${st}" value="${d}"></div>`).join('')
+ +`<label>Preset</label><div class="row">${Object.keys(preset).map(k=>`<button class="btn alt" data-ps="${k}">${k}</button>`).join('')}</div><div class="flight-actions"><button class="btn" id="takeoffBtn">Lepas Landas</button><button class="btn alt" id="landingBtn">Mendarat</button><button class="btn alt" id="rs">Reset</button><button class="btn alt" id="pp">Pause</button></div><div class="flight-status" id="flightStatus">Status: Siap di landasan</div>`;
+function bacaInput(){prm.forEach(([k])=>S[k]=+$('#n_'+k).value)}
+function setNilai(a){prm.forEach(([k],i)=>{$('#r_'+k).value=$('#n_'+k).value=a[i]});bacaInput();alt=0; flightMode='landed'; updateFlightText();}
+prm.forEach(([k,,lo,hi])=>{
+  $('#r_'+k).oninput=e=>{$('#n_'+k).value=e.target.value;bacaInput()};
+  $('#n_'+k).oninput=e=>{let v=+e.target.value;if(!isNaN(v)){$('#r_'+k).value=v}bacaInput()}});
+$$('[data-ps]').forEach(b=>b.onclick=()=>{
+  setNilai(preset[b.dataset.ps]);
+  if(b.dataset.ps==='Stabil di Udara'){
+    alt=45;
+    flightMode='stable';
+    updateFlightText();
+  }
+});
+$('#rs').onclick=()=>setNilai(prm.map(p=>p[5]));
+let jeda=false,alt=0,vs=0,flightMode='landed';
+function updateFlightText(){
+  const label={
+    landed:'Status: Siap di landasan',
+    takeoff:'Status: Pesawat lepas landas',
+    cruising:'Status: Pesawat berada di udara',
+    stable:'Status: Terbang stabil — gaya angkat seimbang dengan gaya berat',
+    landing:'Status: Pesawat mendarat'
+  }[flightMode] || 'Status: Siap di landasan';
+  $('#flightStatus').textContent = label;
+}
+$('#takeoffBtn').onclick=()=>{flightMode='takeoff'; updateFlightText();};
+$('#landingBtn').onclick=()=>{flightMode='landing'; updateFlightText();};
+$('#pp').onclick=()=>{jeda=!jeda;$('#pp').textContent=jeda?'Play':'Pause'};
+bacaInput();
+const f2=bikinAliran($('#cv2'),()=>({va:S.Va/40,vb:S.Vb/40,cy:150,tekanan:true}));
+function hasil(){
+  const ok=prm.every(([k,,lo,hi])=>S[k]>=lo&&S[k]<=hi);
+  const F=hitungGayaAngkat(S.rho,S.Va,S.Vb,S.A),W=hitungGayaBerat(S.m),st=tentukanStatus(F,W);
+  const col={naik:'#16A34A',melayang:'#CA8A04',turun:'#DC2626'}[st];
+  $('#hasil').innerHTML=`<div><small>Gaya angkat ΔF</small>${fmt(F)} N</div><div><small>Gaya berat</small>${fmt(W)} N</div><div><small>Selisih</small>${fmt(F-W)} N</div><div><small>Status</small><span class="st" style="background:${col}">Pesawat ${st.toUpperCase()}</span></div>`;
+  $('#sub').textContent=`ΔF = ½ × ${fmt(S.rho,2)} × (${S.Va}² − ${S.Vb}²) × ${S.A} = ${fmt(F)} N`;
+  $('#wr').textContent=!ok?'Ada input di luar rentang. Periksa nilai yang kamu masukkan.':S.Vb>S.Va?'Vb lebih besar dari Va, sehingga gaya angkat bernilai negatif.':'';
+  return{F,W};
+}
+function panah(c,x,y0,len,col,txt){c.strokeStyle=c.fillStyle=col;c.lineWidth=8;const d=len>0?-1:1,L=Math.abs(len);c.beginPath();c.moveTo(x,y0);c.lineTo(x,y0+d*L);c.stroke();c.beginPath();c.moveTo(x-14,y0+d*(L-8));c.lineTo(x,y0+d*(L+14));c.lineTo(x+14,y0+d*(L-8));c.fill();c.font='600 13px Inter';c.fillText(txt,x+16,y0+d*L/2)}
+function gambarPesawat(c,x,y,tilt,scale,wingPhase){
+  c.save();
+  c.translate(x,y);
+  c.rotate(tilt);
+  c.scale(scale, scale);
+
+  const wingLift = Math.sin(wingPhase) * 12;
+
+  c.fillStyle='#dbeafe';
+  c.beginPath();
+  c.moveTo(-62,0);
+  c.lineTo(-10,-16);
+  c.lineTo(36,-10);
+  c.lineTo(72,0);
+  c.lineTo(36,10);
+  c.lineTo(-10,16);
+  c.closePath();
+  c.fill();
+
+  c.fillStyle='#60a5fa';
+  c.beginPath();
+  c.moveTo(-16,-4);
+  c.lineTo(18 - wingLift,-42);
+  c.lineTo(36 - wingLift/2,-30);
+  c.lineTo(14,4);
+  c.closePath();
+  c.fill();
+
+  c.beginPath();
+  c.moveTo(-16,4);
+  c.lineTo(18 + wingLift,42);
+  c.lineTo(36 + wingLift/2,30);
+  c.lineTo(14,-4);
+  c.closePath();
+  c.fill();
+
+  c.fillStyle='#1d4ed8';
+  c.beginPath();
+  c.moveTo(14,-5);
+  c.lineTo(62,-18);
+  c.lineTo(68,0);
+  c.lineTo(62,18);
+  c.lineTo(14,5);
+  c.closePath();
+  c.fill();
+
+  c.fillStyle='#0f172a';
+  c.fillRect(-54,-2,18,4);
+  c.fillRect(-66,-12,18,24);
+  c.fillRect(-2,-20,8,40);
+
+  c.fillStyle='#f8fafc';
+  c.fillRect(28,-3,12,6);
+  c.fillRect(-40,-10,12,20);
+
+  c.fillStyle='#f59e0b';
+  c.beginPath();
+  c.arc(20,0,7,0,Math.PI*2);
+  c.fill();
+
+  c.fillStyle='rgba(255,255,255,0.9)';
+  c.fillRect(-78,0,12,2);
+  c.fillRect(-80,-3,8,8);
+  c.restore();
+}
+function lukisSim(){
+  const cv=$('#cv2'),c=cv.getContext('2d');
+  const{F,W}=hasil();
+  const wingPhase = Date.now()/90;
+  if(!jeda){
+    vs=Math.max(-25,Math.min(25,(F-W)/S.m*1.5));
+    if(flightMode==='takeoff'){
+      alt=Math.min(90, alt + (F>W ? 2.2 : 0.7));
+      if(F>W && alt >= 35){flightMode='cruising'; updateFlightText();}
+      if(F<=W && alt >= 15){flightMode='landing'; updateFlightText();}
+    } else if(flightMode==='landing'){
+      alt=Math.max(0, alt - 2.0);
+      if(alt<=0){flightMode='landed'; updateFlightText();}
+    } else if(flightMode==='stable'){
+      alt=45;
+    } else if(flightMode==='cruising'){
+      alt=Math.max(15, alt + (F>W ? 0.2 : -0.9));
+      if(F<=W){flightMode='landing'; updateFlightText();}
+      if(alt >= 85){alt = 85; flightMode='landing'; updateFlightText();}
+    } else {
+      alt=Math.max(0, alt + vs*.05);
+    }
+  }
+
+  c.clearRect(0,0,640,380);
+  const gr=c.createLinearGradient(0,0,0,380);gr.addColorStop(0,'#38BDF8');gr.addColorStop(1,'#E0F2FE');c.fillStyle=gr;c.fillRect(0,0,640,380);
+
+  c.fillStyle='rgba(255,255,255,.65)';
+  for(let i=0;i<8;i++){
+    const cloudX=(i*92+alt*2+20)%700;
+    const cloudY=40 + (i%3)*45;
+    c.beginPath();
+    c.arc(cloudX,cloudY,18,0,Math.PI*2);c.arc(cloudX+18,cloudY-12,22,0,Math.PI*2);c.arc(cloudX+38,cloudY,20,0,Math.PI*2);
+    c.fill();
+  }
+
+  c.fillStyle='rgba(148,163,184,.18)';
+  for(let i=0;i<7;i++){const y=((i*62+alt*4)%360),x=(i*96+30)%610;c.beginPath();c.ellipse(x,y,45,16,0,0,Math.PI*2);c.fill();}
+
+  c.fillStyle='rgba(15,23,42,.12)';
+  c.fillRect(0,290,640,90);
+  c.strokeStyle='rgba(15,23,42,.2)';
+  c.lineWidth=2;
+  for(let i=0;i<9;i++){
+    const x=i*72+20;
+    c.beginPath();c.moveTo(x,320);c.lineTo(x+28,320);c.stroke();
+  }
+
+  f2();
+  const M=Math.max(F,W,1);
+  panah(c,120,140,F>0?20+90*F/M:0,'#1D4ED8','Angkat '+fmt(F)+' N');
+  panah(c,520,160,-(20+90*W/M),'#B91C1C','Berat '+fmt(W)+' N');
+
+  const planeX=300 + Math.sin((alt+Date.now()/1500)*0.06) * 16;
+  const planeY=210 + Math.cos((alt+Date.now()/2000)*0.08) * 22 - (F>W ? Math.min(30, (F-W)/W*20) : 0) - alt*0.45;
+  const tilt=(flightMode==='landing' ? -0.18 : (F>=W ? 0.18 : -0.12)) + Math.sin(Date.now()/500)*0.03;
+  gambarPesawat(c,planeX,planeY,tilt,1.2 + Math.min(0.6, alt/120), wingPhase);
+
+  c.fillStyle='#0F172A';c.textAlign='left';c.font='600 14px Inter';c.fillText('Ketinggian: '+fmt(alt)+' m',14,370);
+  c.fillStyle='#fff';c.fillRect(14,330,200,12);c.fillStyle='#2563EB';c.fillRect(14,330,200*F/M>0?200*Math.max(F,0)/M:0,12);
+  c.fillStyle='#EF4444';c.fillRect(14,346,200*W/M,12);
+  c.textAlign='left';
+}
+function grafik(){
+  const c=$('#cv3').getContext('2d');c.clearRect(0,0,640,200);
+  const rs=getComputedStyle(document.body),tc=rs.color,xs=[];let mx=1;
+  for(let v=50;v<=400;v+=10){const y=hitungGayaAngkat(S.rho,v,S.Vb,S.A);xs.push([v,y]);mx=Math.max(mx,y)}
+  mx=Math.max(mx,hitungGayaBerat(S.m))*1.1;
+  const X=v=>40+(v-50)/350*580,Y=y=>180-Math.max(y,0)/mx*160;
+  c.strokeStyle='#2563EB';c.lineWidth=2;c.beginPath();xs.forEach(([v,y],i)=>i?c.lineTo(X(v),Y(y)):c.moveTo(X(v),Y(y)));c.stroke();
+  c.strokeStyle='#EF4444';c.setLineDash([6,4]);c.beginPath();c.moveTo(40,Y(hitungGayaBerat(S.m)));c.lineTo(620,Y(hitungGayaBerat(S.m)));c.stroke();c.setLineDash([]);
+  c.fillStyle='#16A34A';c.beginPath();c.arc(X(S.Va),Y(hitungGayaAngkat(S.rho,S.Va,S.Vb,S.A)),6,0,7);c.fill();
+  c.fillStyle=tc;c.font='12px Inter';c.fillText('Grafik ΔF terhadap Va (garis merah putus-putus = gaya berat)',40,14);c.fillText('Va 50',40,198);c.fillText('400 m/s',590,198);
+}
+
+/* ===== JS: Contoh Soal ===== */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function gen(i,acak){
+  let b=acak?{rho:pick([1,1.2,1.3]),Vb:pick([100,150,200]),A:pick([10,20,30,40])}:{rho:1.2,Vb:200,A:20};
+  b.Va=acak?b.Vb+pick([30,50,80]):250;
+  if(i===4&&!acak)b={rho:1.2,Va:80,Vb:70,A:30};
+  const F=hitungGayaAngkat(b.rho,b.Va,b.Vb,b.A),dik=`ρ = ${b.rho} kg/m³, Va = ${b.Va} m/s, Vb = ${b.Vb} m/s, A = ${b.A} m²`;
+  const R=`ΔF = ½ · ρ · (Va² − Vb²) · A`;
+  if(i===0)return{lv:'Mudah',c:'#16A34A',t:`Sebuah pesawat terbang dengan ${dik}. Hitung gaya angkatnya!`,u:'N',a:F,h:['Gunakan ΔF = ½ · ρ · (Va² − Vb²) · A.','Hitung dulu Va² − Vb².',`Va² − Vb² = ${fmt(b.Va**2-b.Vb**2)}`],p:`Diketahui: ${dik}\nDitanya: ΔF\nRumus: ${R}\nPenyelesaian: ΔF = ½ × ${b.rho} × (${b.Va}² − ${b.Vb}²) × ${b.A} = ${fmt(F)} N\nJawaban: ${fmt(F)} N`};
+  if(i===1)return{lv:'Mudah',c:'#16A34A',t:`Gaya angkat sebuah pesawat ${fmt(F)} N dengan ρ = ${b.rho} kg/m³, Va = ${b.Va} m/s, Vb = ${b.Vb} m/s. Berapa luas sayapnya?`,u:'m²',a:b.A,h:['Ubah rumus: A = 2·ΔF / (ρ · (Va² − Vb²)).','Hitung penyebut: ρ · (Va² − Vb²).',`Penyebut = ${fmt(b.rho*(b.Va**2-b.Vb**2),1)}`],p:`Diketahui: ΔF = ${fmt(F)} N, ρ = ${b.rho}, Va = ${b.Va}, Vb = ${b.Vb}\nDitanya: A\nRumus: A = 2·ΔF / (ρ · (Va² − Vb²))\nPenyelesaian: A = ${fmt(2*F)} / ${fmt(b.rho*(b.Va**2-b.Vb**2),1)}\nJawaban: ${b.A} m²`};
+  if(i===2)return{lv:'Sedang',c:'#CA8A04',t:`Gaya angkat ${fmt(F)} N, ρ = ${b.rho} kg/m³, Vb = ${b.Vb} m/s, A = ${b.A} m². Berapa kecepatan udara di atas sayap (Va)?`,u:'m/s',a:b.Va,h:['Ubah rumus: Va² = 2·ΔF/(ρ·A) + Vb².','Hitung 2·ΔF/(ρ·A) lebih dulu.',`Va² = ${fmt(2*F/(b.rho*b.A)+b.Vb**2)}`],p:`Diketahui: ΔF = ${fmt(F)} N, ρ = ${b.rho}, Vb = ${b.Vb}, A = ${b.A}\nDitanya: Va\nRumus: Va = √(2·ΔF/(ρ·A) + Vb²)\nPenyelesaian: Va = √${fmt(2*F/(b.rho*b.A)+b.Vb**2)}\nJawaban: ${b.Va} m/s`};
+  if(i===3){const m=acak?Math.round(F/g*pick([.6,1.5])/1000)*1000:15000,W=m*g,ya=F>=W;return{lv:'Sedang',c:'#CA8A04',sel:1,t:`Pesawat bermassa ${fmt(m)} kg (g = 10 m/s²) memiliki ${dik}. Apakah pesawat dapat terbang?`,u:'',a:ya?'ya':'tidak',h:['Bandingkan ΔF dengan berat W = m · g.','Hitung ΔF dan W.',`W = ${fmt(W)} N`],p:`Diketahui: ${dik}, m = ${fmt(m)} kg\nDitanya: apakah ΔF ≥ m·g?\nPenyelesaian: ΔF = ${fmt(F)} N, W = ${fmt(m)} × 10 = ${fmt(W)} N\nJawaban: ${ya?'Ya, pesawat dapat terbang (ΔF ≥ W).':'Tidak, pesawat tidak dapat terbang (ΔF < W).'}`}}
+  return{lv:'Sulit',c:'#DC2626',t:`Saat lepas landas, udara di atas sayap melaju ${b.Va} m/s dan di bawah sayap ${b.Vb} m/s. Luas sayap ${b.A} m² dan massa jenis udara ${b.rho} kg/m³. Berapa gaya angkat yang dihasilkan?`,u:'N',a:F,h:['Tentukan Va, Vb, ρ, dan A dari cerita.','Masukkan ke rumus gaya angkat.',`Va² − Vb² = ${fmt(b.Va**2-b.Vb**2)}`],p:`Diketahui: ${dik}\nDitanya: ΔF\nRumus: ${R}\nPenyelesaian: ΔF = ½ × ${b.rho} × (${b.Va}² − ${b.Vb}²) × ${b.A} = ${fmt(F)} N\nJawaban: ${fmt(F)} N`};
+}
+let qi=0,benar=0,beruntun=0,soal=gen(0,false),hint=0;
+$('#tabs').innerHTML=[1,2,3,4,5].map((n,i)=>`<button data-q="${i}">Soal ${n}</button>`).join('');
+$$('[data-q]').forEach(b=>b.onclick=()=>{qi=+b.dataset.q;soal=gen(qi,false);hint=0;tampilSoal()});
+function tampilSoal(){
+  $$('[data-q]').forEach(b=>b.classList.toggle('on',+b.dataset.q===qi));
+  $('#sq').innerHTML=`<h3>Soal ${qi+1}<span class="lv" style="background:${soal.c}">${soal.lv}</span></h3><p>${soal.t}</p>
+  <div class="row">${soal.sel?'<select class="ans" id="in"><option value="">Pilih</option><option value="ya">Ya</option><option value="tidak">Tidak</option></select>':`<input class="ans" id="in" type="number" step="any" placeholder="Jawaban"> <b>${soal.u}</b>`}
+  <button class="btn" id="cek">Cek Jawaban</button></div><div class="fb" id="fb"></div>
+  <div class="row" style="margin-top:10px"><button class="btn alt" id="hn">Petunjuk</button><button class="btn alt" id="pb">Lihat Pembahasan</button><button class="btn alt" id="ac">Soal Acak</button><button class="btn alt" id="cs">Coba di Simulasi</button></div>
+  <div id="hx" style="margin-top:10px;color:var(--muted)"></div><pre id="px" style="white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:.85rem"></pre>`;
+  $('#cek').onclick=()=>{const v=$('#in').value,fb=$('#fb');let ok=false;
+    if(v==='')return fb.textContent='Isi jawabanmu dulu.';
+    ok=soal.sel?v===soal.a:Math.abs(+v-soal.a)<=Math.abs(soal.a)*.01;
+    fb.className='fb '+(ok?'ok':'no');fb.textContent=ok?'Benar! 🎉':'Belum tepat. Coba lagi atau buka petunjuk.';
+    if(ok){benar++;beruntun++}else beruntun=0;$('#skor').textContent=benar;$('#streak').textContent=beruntun;
+    if(ok)fb.animate([{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:300})};
+  $('#hn').onclick=()=>{if(hint<3)$('#hx').textContent=`Petunjuk ${hint+1}: `+soal.h[hint++]};
+  $('#pb').onclick=()=>{const L=soal.p.split('\n');$('#px').textContent='';let i=0;const t=setInterval(()=>{$('#px').textContent+=L[i++]+'\n';if(i>=L.length)clearInterval(t)},500)};
+  $('#ac').onclick=()=>{soal=gen(qi,true);hint=0;tampilSoal()};
+  $('#cs').onclick=()=>{const m=soal.t.match(/ρ = ([\d.,]+)/);const d=[...soal.t.matchAll(/(\d[\d.]*)/g)];go('simulasi');alert('Atur nilai soal secara manual di panel simulasi, lalu bandingkan hasilnya dengan pembahasan.')};
+}
+
+/* ===== JS: Kuis ===== */
+const bank=[
+ {q:'Gaya angkat pesawat bekerja pada sayap dengan arah...',o:['ke atas','ke bawah','ke depan','ke belakang'],a:0,e:'Gaya angkat (lift) arahnya ke atas dan melawan gaya berat.'},
+ {q:'Gaya yang arahnya ke belakang akibat gesekan udara disebut...',o:['gaya dorong','gaya hambat','gaya berat','gaya angkat'],a:1,e:'Gaya hambat (drag) melawan gerak pesawat.'},
+ {q:'Menurut Hukum Bernoulli, jika kecepatan fluida meningkat maka tekanan statisnya...',o:['meningkat','tetap','menurun','menjadi nol'],a:2,e:'Kecepatan naik, tekanan statis turun.'},
+ {q:'Rumus gaya angkat pesawat adalah...',o:['ΔF = ½ · ρu · (Va² − Vb²) · A','ΔF = m · g','ΔF = ρ · g · h','ΔF = ½ · m · v²'],a:0,e:'ΔF = ½ · ρu · (Va² − Vb²) · A.'},
+ {q:'Agar pesawat dapat terbang, syaratnya...',o:['ΔF < m · g','ΔF ≥ m · g','ΔF = 0','Va = Vb'],a:1,e:'Gaya angkat harus lebih besar atau sama dengan gaya berat.'}];
+let ki=0,ks=0,urut=[];
+function mulaiKuis(){ki=0;ks=0;urut=[...bank].sort(()=>Math.random()-.5);tampilKuis()}
+function tampilKuis(){
+  if(ki>=urut.length){const t=ks===5?'Pilot Handal':ks>=3?'Co-Pilot':'Calon Pilot';
+    $('#kq').innerHTML=`<h3>Skor akhir: ${ks * 20} / 100</h3><p style="font-size:1.3rem"><b>${t}</b> ✈</p><button class="btn" id="ul">Ulangi Kuis</button>`;$('#ul').onclick=mulaiKuis;return}
+  const s=urut[ki],o=s.o.map((t,i)=>({t,i})).sort(()=>Math.random()-.5);
+  $('#kq').innerHTML=`<p>Pertanyaan ${ki+1} dari ${urut.length}</p><h3>${s.q}</h3>${o.map(x=>`<button class="opt" data-i="${x.i}">${x.t}</button>`).join('')}<div class="fb" id="kf"></div>`;
+  $$('.opt').forEach(b=>b.onclick=()=>{
+    $$('.opt').forEach(x=>{x.disabled=true;x.classList.add(+x.dataset.i===s.a?'ok':'no')});
+    const ok=+b.dataset.i===s.a;if(ok)ks++;
+    $('#kf').innerHTML=(ok?'Benar! ':'Kurang tepat. ')+s.e+'<br><button class="btn" id="nx" style="margin-top:10px">Lanjut</button>';
+    $('#nx').onclick=()=>{ki++;tampilKuis()}});
+}
+
+/* ===== JS: loop animasi (berhenti saat tab tidak aktif) ===== */
+function loop(){
+  if(!document.hidden){
+    if(halaman[cur]==='konsep')lukisKonsep();
+    if(halaman[cur]==='simulasi'){lukisSim();grafik()}
+  }
+  requestAnimationFrame(loop);
+}
+tampilSoal();mulaiKuis();go(0);loop();
+</script>
+</body>
+</html>
