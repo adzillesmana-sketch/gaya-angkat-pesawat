@@ -31,11 +31,11 @@ main{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .pn{display:flex;justify-content:space-between;margin-top:22px}
 canvas,svg{max-width:100%}
-.formula{font-family:'JetBrains Mono',monospace;font-size:1.7rem;text-align:center;padding:26px 12px;border:3px solid var(--lift);border-radius:18px;box-shadow:0 0 22px rgba(37,99,235,.35);overflow-x:auto;background:linear-gradient(135deg, rgba(37,99,235,.06), rgba(14,165,233,.02));}
+.formula{min-width:0;font-family:'JetBrains Mono',monospace;font-size:1.7rem;line-height:1.7;text-align:center;padding:26px 12px;border:3px solid var(--lift);border-radius:18px;box-shadow:0 0 22px rgba(37,99,235,.35);overflow-wrap:anywhere;background:linear-gradient(135deg, rgba(37,99,235,.06), rgba(14,165,233,.02));}
 .derivation{display:grid;gap:10px;margin:16px 0}
-.derivation-step{padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.derivation-step{min-width:0;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
 .derivation-step p{margin:0 0 6px;color:var(--muted);font-size:.9rem}
-.equation{overflow-x:auto;text-align:center;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:1.15rem;padding:4px 0}
+.equation{min-width:0;max-width:100%;text-align:center;white-space:normal;overflow-wrap:anywhere;line-height:1.8;font-family:'JetBrains Mono',monospace;font-size:clamp(.82rem,3.4vw,1.1rem);padding:4px 0}
 .derivation-result{border-color:var(--lift);font-weight:700}
 .sym{cursor:pointer;padding:0 4px;border-radius:6px}.sym.hl,.sy.hl{background:#FDE68A;color:#000}
 .sy{border-radius:14px;padding:12px;border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));}
@@ -206,7 +206,7 @@ body.pres .hero{padding-block:90px}
   .card{border-radius:18px}
   .hero{border-radius:24px}
   .pn .btn{font-size:.78rem;padding:9px 12px}
-  .formula{font-size:1.2rem;padding:20px 10px}
+  .formula{font-size:clamp(1rem,4vw,1.2rem);padding:18px 10px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -278,9 +278,10 @@ body.pres .hero{padding-block:90px}
 <div class="equation">P<sub>b</sub> − P<sub>a</sub> = ½ · ρ<sub>u</sub> · V<sub>a</sub>² − ½ · ρ<sub>u</sub> · V<sub>b</sub>²</div></div>
 <div class="derivation-step derivation-result"><p>4. Selisih tekanan:</p>
 <div class="equation">ΔP = ½ · ρ<sub>u</sub> · (V<sub>a</sub>² − V<sub>b</sub>²)</div></div>
-<div class="derivation-step"><p>5. Karena ΔP = ΔF / A, maka gaya angkat adalah ΔF = ΔP · A.</p></div>
+<div class="derivation-step derivation-result"><p>5. Hubungan antara selisih tekanan dan gaya:</p>
+<div class="equation">ΔF = ΔP · A</div></div>
 </div>
-<p>Dengan P<sub>b</sub> sebagai tekanan di bawah sayap dan P<sub>a</sub> sebagai tekanan di atas sayap, rumus intinya:</p>
+<p><b>Rumus inti gaya angkat</b> (P<sub>b</sub> adalah tekanan di bawah sayap dan P<sub>a</sub> tekanan di atas sayap):</p>
 <div class="formula" id="fm"><span class="sym" data-s="F">ΔF</span> = ½ · <span class="sym" data-s="r">ρ<sub>u</sub></span> · (<span class="sym" data-s="a">V<sub>a</sub></span>² − <span class="sym" data-s="b">V<sub>b</sub></span>²) · <span class="sym" data-s="A">A</span></div>
 <div class="grid" style="margin-top:14px">
 <div class="sy" data-s="r"><b>ρu</b> = massa jenis udara (kg/m³)</div>
