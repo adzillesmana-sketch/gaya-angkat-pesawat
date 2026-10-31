@@ -111,6 +111,40 @@ nav button.on{box-shadow:0 5px 14px rgba(29,78,216,.22)}
 main{max-width:1120px;padding:clamp(20px,4vw,42px) clamp(14px,3vw,28px) 72px}
 .pg.on{animation:pageIn .38s ease both}
 @keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pg{position:relative;isolation:isolate}
+.pg::before{content:"ΔF = ½ρ(Vₐ² − Vᵦ²)A";position:absolute;z-index:0;top:8px;right:clamp(8px,3vw,34px);color:var(--lift);font:600 clamp(.62rem,1.3vw,.82rem)/1.4 'JetBrains Mono',monospace;letter-spacing:.04em;opacity:0;pointer-events:none}
+.pg>*{position:relative;z-index:1}
+.pg.on::before{animation:equation-trace .9s ease-out .04s both}
+.pg.on>.tag{animation:tag-arrive .55s cubic-bezier(.2,.8,.2,1) both}
+.pg.on>.card,.pg.on>.sim,.pg.on>.hero,.pg.on>.learning-intro,.pg.on>.learning-cards{animation:panel-arrive .65s cubic-bezier(.2,.75,.25,1) both}
+.pg.on>.card:nth-of-type(2),.pg.on>.sim{animation-delay:.1s}
+.pg.on>.card:nth-of-type(3){animation-delay:.2s}
+#simulasi.pg.on>.sim>.card:first-child{animation:panel-arrive .65s cubic-bezier(.2,.75,.25,1) .12s both}
+#simulasi.pg.on>.sim>.card:last-child{animation:panel-arrive .65s cubic-bezier(.2,.75,.25,1) .24s both}
+.pg.on .derivation-step{animation:equation-arrive .48s cubic-bezier(.2,.75,.25,1) both}
+.pg.on .derivation-step:nth-child(1){animation-delay:.12s}
+.pg.on .derivation-step:nth-child(2){animation-delay:.2s}
+.pg.on .derivation-step:nth-child(3){animation-delay:.28s}
+.pg.on .derivation-step:nth-child(4){animation-delay:.36s}
+.pg.on .derivation-step:nth-child(5){animation-delay:.44s}
+.pg.on .learning-card{animation:card-arrive .7s cubic-bezier(.2,.75,.25,1) both}
+.pg.on .learning-card:nth-child(1){animation-delay:.16s}
+.pg.on .learning-card:nth-child(2){animation-delay:.27s}
+.pg.on .learning-card:nth-child(3){animation-delay:.38s}
+.pg.on .sy{animation:chip-arrive .45s ease-out both}
+.pg.on .sy:nth-child(1){animation-delay:.16s}
+.pg.on .sy:nth-child(2){animation-delay:.23s}
+.pg.on .sy:nth-child(3){animation-delay:.3s}
+.pg.on .sy:nth-child(4){animation-delay:.37s}
+.pg.on .sy:nth-child(5){animation-delay:.44s}
+.pg.on #cv1,.pg.on #cv2,.pg.on #cv3,.pg.on #gaya{animation:visual-arrive .7s cubic-bezier(.2,.75,.25,1) .2s both}
+@keyframes equation-trace{0%{opacity:0;transform:translate(12px,-6px)}30%{opacity:.13}100%{opacity:.055;transform:translate(0,0)}}
+@keyframes tag-arrive{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes panel-arrive{from{opacity:0;clip-path:inset(0 0 12% round 22px)}to{opacity:1;clip-path:inset(0 0 0 round 22px)}}
+@keyframes equation-arrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes card-arrive{from{opacity:0;clip-path:inset(8% 0 0 round 22px)}to{opacity:1;clip-path:inset(0 0 0 round 22px)}}
+@keyframes chip-arrive{from{opacity:0;scale:.92}to{opacity:1;scale:1}}
+@keyframes visual-arrive{from{opacity:0;scale:.98;filter:blur(4px)}to{opacity:1;scale:1;filter:blur(0)}}
 .card{
   border-radius:24px;
   padding:clamp(18px,3vw,28px);
@@ -287,6 +321,7 @@ body.pres .hero{padding-block:90px}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .pg.on{animation:none}
+  .pg::before{animation:none!important;opacity:.055;transform:none}
   .scene-plane,.airflow-line,.physics-scene::before,.physics-scene::after,.orbit-dot,.scene-label,.formula-note,.visual-ring,.visual-core{animation:none}
   .learning-card{transition:none;transform:none}
 }
