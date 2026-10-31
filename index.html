@@ -49,6 +49,22 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
 .st{font-weight:700;border-radius:12px;padding:8px 14px;color:#fff;display:inline-block}
 .warn{color:var(--weight);font-weight:600;min-height:1.5em}
 .sim{display:grid;grid-template-columns:300px 1fr;gap:16px}@media(max-width:800px){.sim{grid-template-columns:1fr}}
+.ar-demo{margin-top:20px}
+.ar-demo p{color:var(--muted)}
+.ar-stage{position:relative;overflow:hidden;width:100%;aspect-ratio:4/3;max-height:72vh;border:1px solid var(--line);border-radius:18px;background:radial-gradient(ellipse at center,#12243a,#020609 75%)}
+.ar-stage video,.ar-stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ar-stage video{transform:scaleX(-1)}
+.ar-stage canvas{pointer-events:none}
+.ar-placeholder{position:absolute;inset:0;display:grid;place-content:center;gap:8px;padding:24px;text-align:center;color:#eaf2ff;background:radial-gradient(ellipse at center,rgba(8,17,31,.38),rgba(3,6,9,.88))}
+.ar-placeholder strong{font:600 1.1rem Poppins,sans-serif}
+.ar-placeholder span{max-width:34rem;color:#a8bad4;font-size:.9rem}
+.ar-stage.is-active .ar-placeholder{display:none}
+.ar-badge{position:absolute;top:12px;left:12px;padding:6px 10px;border:1px solid rgba(103,232,249,.25);border-radius:999px;background:rgba(3,6,9,.72);color:#a5f3fc;font:600 .72rem 'JetBrains Mono',monospace}
+.ar-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.ar-status{min-height:1.5em;margin:10px 0 0;color:var(--muted);font-size:.88rem}
+.ar-status[data-state=error]{color:#fca5a5}
+.ar-note{margin:8px 0 0;font-size:.78rem}
+@media(max-width:520px){.ar-stage{border-radius:14px;max-height:60vh}.ar-controls .btn{flex:1 1 130px}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:6px 14px;cursor:pointer}.tabs button.on{background:var(--lift);color:#fff}
 .lv{font-size:.75rem;color:#fff;border-radius:8px;padding:2px 8px;margin-left:6px}
 .fb{font-weight:700;margin-top:8px}.ok{color:var(--thrust)}.no{color:var(--weight)}
@@ -503,6 +519,20 @@ body::after{
 <div class="card"><canvas id="cv2" width="640" height="380" style="width:100%;border-radius:16px"></canvas>
 <div class="res" id="hasil"></div><div class="warn" id="wr"></div><p id="sub" style="font-family:'JetBrains Mono',monospace;font-size:.85rem"></p>
 <canvas id="cv3" width="640" height="200" style="width:100%"></canvas></div></div>
+<div class="card ar-demo">
+<span class="sub">DEMO AR · PELACAKAN TANGAN</span>
+<h3 style="margin-top:12px">Pesawat virtual mengikuti tanganmu</h3>
+<p>Arahkan kamera ke telapak tangan. Gerakkan tangan ke atas, bawah, atau samping untuk menerbangkan pesawat di tampilan kamera.</p>
+<div class="ar-stage" id="arStage">
+<video id="arVideo" autoplay playsinline muted aria-label="Tampilan kamera langsung"></video>
+<canvas id="arCanvas" aria-hidden="true"></canvas>
+<div class="ar-placeholder"><strong>Siap untuk demonstrasi AR?</strong><span>Tekan “Mulai kamera”, izinkan akses kamera, lalu tunjukkan telapak tanganmu di depan kamera.</span></div>
+<span class="ar-badge">✦ LIFT LAB · LIVE</span>
+</div>
+<div class="ar-controls"><button class="btn" id="arStart" type="button">Mulai kamera</button><button class="btn alt" id="arSwitch" type="button" disabled>Balik kamera</button><button class="btn alt" id="arStop" type="button" disabled>Matikan kamera</button></div>
+<p class="ar-status" id="arStatus" role="status" aria-live="polite">Kamera mati. Tekan mulai untuk mencoba demonstrasi.</p>
+<p class="ar-note">Kamera hanya aktif setelah kamu menekan tombol dan mengizinkan akses. Pelacakan diproses langsung di perangkat; video tidak direkam atau dikirim ke server. Perlu koneksi internet untuk memuat model pelacakan.</p>
+</div>
 </section>
 
 <!-- ===== HTML: 6 Contoh Soal ===== -->
@@ -548,6 +578,7 @@ const visited=new Set();let cur=0;
 function go(p){
   cur=typeof p==='number'?p:halaman.indexOf(p);
   const halamanAktif=halaman[cur],section=$(`#${halamanAktif}`);
+  if(halamanAktif!=='simulasi')stopArCamera(false);
   $$('.pg').forEach(e=>e.classList.remove('on'));
   section.dataset.equation=rumusHalaman[halamanAktif];
   void section.offsetWidth;
@@ -749,6 +780,168 @@ function gambarPesawat(c,x,y,tilt,scale,wingPhase){
   c.fillRect(-80,-3,8,8);
   c.restore();
 }
+const arVideo=$('#arVideo'),arCanvas=$('#arCanvas'),arCtx=arCanvas.getContext('2d');
+let arTracker=null,arStream=null,arFrame=0,arRunning=false,arStarting=false,arGeneration=0,arFacing='user';
+let arLastVideoTime=-1,arLastInference=0,arPalm=null,arHasHand=false,arStatusText='';
+const arEdges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+function setArStatus(message,isError=false){
+  if(arStatusText===message)return;
+  arStatusText=message;
+  $('#arStatus').textContent=message;
+  $('#arStatus').dataset.state=isError?'error':'ready';
+}
+function stopArCamera(updateStatus=true){
+  arGeneration++;
+  arRunning=false;
+  arStarting=false;
+  if(arFrame)cancelAnimationFrame(arFrame);
+  arFrame=0;
+  if(arStream)arStream.getTracks().forEach(track=>track.stop());
+  arStream=null;
+  arVideo.pause();
+  arVideo.srcObject=null;
+  $('#arStage').classList.remove('is-active');
+  $('#arStart').disabled=false;
+  $('#arSwitch').disabled=true;
+  $('#arStop').disabled=true;
+  arHasHand=false;
+  arPalm=null;
+  if(arCanvas.width&&arCanvas.height)arCtx.clearRect(0,0,arCanvas.width,arCanvas.height);
+  if(updateStatus)setArStatus('Kamera dimatikan. Tekan mulai untuk mencoba lagi.');
+}
+async function loadArTracker(){
+  const version='0.10.14';
+  const base=`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${version}`;
+  const {FilesetResolver,HandLandmarker}=await import(`${base}/vision_bundle.mjs`);
+  const vision=await FilesetResolver.forVisionTasks(`${base}/wasm`);
+  const options={baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task'},runningMode:'VIDEO',numHands:1};
+  try{
+    return await HandLandmarker.createFromOptions(vision,{...options,baseOptions:{...options.baseOptions,delegate:'GPU'}});
+  }catch(gpuError){
+    console.warn('Pelacakan tangan GPU tidak tersedia; mencoba CPU.',gpuError);
+    return HandLandmarker.createFromOptions(vision,{...options,baseOptions:{...options.baseOptions,delegate:'CPU'}});
+  }
+}
+async function startArCamera(){
+  if(arStarting||arStream)return;
+  if(!navigator.mediaDevices?.getUserMedia){
+    setArStatus('Browser ini tidak mendukung kamera. Coba buka situs dengan Chrome atau Safari terbaru.',true);
+    return;
+  }
+  if(!window.isSecureContext){
+    setArStatus('Kamera memerlukan koneksi aman HTTPS. Buka demonstrasi dari website.',true);
+    return;
+  }
+  arStarting=true;
+  const session=++arGeneration;
+  $('#arStart').disabled=true;
+  setArStatus('Meminta izin kamera…');
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:arFacing},width:{ideal:640},height:{ideal:480}},audio:false});
+    if(session!==arGeneration){stream.getTracks().forEach(track=>track.stop());return}
+    arStream=stream;
+    arVideo.srcObject=stream;
+    await arVideo.play();
+    if(session!==arGeneration)return;
+    $('#arStage').classList.add('is-active');
+    $('#arStop').disabled=false;
+    setArStatus('Memuat pelacak tangan. Pertahankan telapak tangan di depan kamera…');
+    if(!arTracker)arTracker=await loadArTracker();
+    if(session!==arGeneration)return;
+    arLastVideoTime=-1;
+    arLastInference=0;
+    arRunning=true;
+    $('#arSwitch').disabled=false;
+    setArStatus('Arahkan telapak tangan ke kamera untuk menggerakkan pesawat.');
+    arFrame=requestAnimationFrame(drawArFrame);
+  }catch(error){
+    if(session===arGeneration){
+      console.error('Tidak dapat memulai demonstrasi kamera.',error);
+      stopArCamera(false);
+      const message=error.name==='NotAllowedError'?'Izin kamera ditolak. Izinkan kamera di pengaturan browser, lalu coba lagi.':
+        error.name==='NotFoundError'?'Kamera tidak ditemukan di perangkat ini.':
+        error.name==='NotReadableError'?'Kamera sedang dipakai aplikasi lain. Tutup aplikasi tersebut lalu coba lagi.':
+        error.message?.includes('fetch')||error.message?.includes('Failed to load')?'Pelacak tangan gagal dimuat. Periksa koneksi internet lalu coba lagi.':
+        `Demo kamera gagal dimulai: ${error.message||'terjadi kesalahan yang tidak diketahui.'}`;
+      setArStatus(message,true);
+    }
+  }finally{
+    if(session===arGeneration){
+      arStarting=false;
+      $('#arStart').disabled=!!arStream;
+    }
+  }
+}
+function drawArFrame(time){
+  if(!arRunning)return;
+  if(arVideo.readyState>=2&&arVideo.videoWidth){
+    if(arCanvas.width!==arVideo.videoWidth||arCanvas.height!==arVideo.videoHeight){
+      arCanvas.width=arVideo.videoWidth;
+      arCanvas.height=arVideo.videoHeight;
+    }
+    const w=arCanvas.width,h=arCanvas.height;
+    arCtx.clearRect(0,0,w,h);
+    if(arVideo.currentTime!==arLastVideoTime&&time-arLastInference>=70){
+      arLastVideoTime=arVideo.currentTime;
+      arLastInference=time;
+      try{
+        const result=arTracker.detectForVideo(arVideo,time),hand=result.landmarks?.[0];
+        arHasHand=!!hand;
+        if(hand){
+          const palm={x:1-(hand[9].x),y:hand[9].y};
+          arPalm=arPalm?{x:arPalm.x*.65+palm.x*.35,y:arPalm.y*.65+palm.y*.35}:palm;
+        }else arPalm=null;
+        setArStatus(hand?'Tangan terdeteksi — gerakkan tanganmu untuk menerbangkan pesawat.':'Tunjukkan satu telapak tangan di depan kamera.');
+        if(hand){
+          const points=hand.map(p=>({x:(1-p.x)*w,y:p.y*h}));
+          arCtx.lineWidth=Math.max(2,w/300);
+          arCtx.strokeStyle='rgba(103,232,249,.78)';
+          arEdges.forEach(([a,b])=>{arCtx.beginPath();arCtx.moveTo(points[a].x,points[a].y);arCtx.lineTo(points[b].x,points[b].y);arCtx.stroke()});
+          points.forEach((p,i)=>{arCtx.beginPath();arCtx.arc(p.x,p.y,i===9?Math.max(5,w/90):Math.max(2,w/220),0,Math.PI*2);arCtx.fillStyle=i===9?'#f0abfc':'#67e8f9';arCtx.fill()});
+        }
+      }catch(error){
+        console.error('Pelacakan tangan berhenti karena kesalahan.',error);
+        stopArCamera(false);
+        setArStatus('Pelacakan mengalami kendala. Matikan kamera lalu mulai lagi.',true);
+        return;
+      }
+    }
+    if(arHasHand&&arPalm){
+      const px=arPalm.x*w,py=arPalm.y*h;
+      const planeX=Math.max(86,Math.min(w-86,px+w*.17));
+      const planeY=Math.max(72,Math.min(h-72,py-h*.16));
+      const scale=Math.max(.56,Math.min(1.05,w/640));
+      arCtx.save();
+      arCtx.strokeStyle='rgba(103,232,249,.72)';
+      arCtx.lineWidth=2;
+      arCtx.setLineDash([7,9]);
+      arCtx.beginPath();arCtx.moveTo(px,py);arCtx.lineTo(planeX,planeY);arCtx.stroke();
+      arCtx.setLineDash([]);
+      arCtx.shadowColor='#38bdf8';arCtx.shadowBlur=22;
+      gambarPesawat(arCtx,planeX,planeY,0,scale,time/120);
+      arCtx.shadowBlur=0;
+      arCtx.fillStyle='rgba(3,6,9,.78)';
+      arCtx.fillRect(planeX-91,planeY+45,182,25);
+      arCtx.fillStyle='#a5f3fc';
+      arCtx.font=`600 ${Math.max(11,w/48)}px "JetBrains Mono",monospace`;
+      arCtx.textAlign='center';
+      arCtx.fillText('ΔF = ½ρ(Vₐ² − Vᵦ²)A',planeX,planeY+62);
+      arCtx.restore();
+    }
+  }
+  arFrame=requestAnimationFrame(drawArFrame);
+}
+$('#arStart').onclick=startArCamera;
+$('#arStop').onclick=()=>stopArCamera();
+$('#arSwitch').onclick=async()=>{
+  if(!arStream||arStarting)return;
+  arFacing=arFacing==='user'?'environment':'user';
+  stopArCamera(false);
+  setArStatus(`Beralih ke kamera ${arFacing==='user'?'depan':'belakang'}…`);
+  await startArCamera();
+};
+window.addEventListener('pagehide',()=>stopArCamera(false));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopArCamera(false)});
 function lukisSim(){
   const cv=$('#cv2'),c=cv.getContext('2d');
   const{F,W}=hasil();
