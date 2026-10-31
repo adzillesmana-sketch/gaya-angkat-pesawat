@@ -211,6 +211,11 @@ body.pres .hero{padding-block:90px}
 .physics-scene .orbit-dot.one{top:12%;left:28%}
 .physics-scene .orbit-dot.two{right:13%;top:48%;width:8px;height:8px;background:#34d399;box-shadow:0 0 16px #34d399}
 .physics-scene .orbit-dot.three{bottom:12%;left:30%;width:7px;height:7px;background:#fbbf24;box-shadow:0 0 16px #fbbf24}
+.formula-note{position:absolute;z-index:0;max-width:76%;padding:8px 11px;border:1px solid color-mix(in srgb,var(--lift) 22%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--card) 82%,transparent);box-shadow:0 8px 22px rgba(24,56,104,.08);color:var(--lift);font:600 clamp(.62rem,1.1vw,.78rem)/1.5 'JetBrains Mono',monospace;white-space:nowrap;animation:formula-drift 5s ease-in-out infinite}
+.formula-note.one{top:3%;left:0;transform:rotate(-4deg)}
+.formula-note.two{right:0;bottom:3%;color:var(--thrust);transform:rotate(3deg);animation-delay:-2.5s}
+[data-theme=dark] .formula-note{color:#93c5fd}
+[data-theme=dark] .formula-note.two{color:#6ee7b7}
 .scene-plane{position:relative;z-index:1;width:min(100%,360px);height:auto;overflow:visible;filter:drop-shadow(0 22px 24px rgba(29,78,216,.2));animation:plane-hover 4.5s ease-in-out infinite}
 .airflow-line{fill:none;stroke:#38bdf8;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:7 12;animation:airflow 1.2s linear infinite}
 .airflow-line.alt{stroke:#34d399;animation-delay:-.6s}
@@ -232,6 +237,7 @@ body.pres .hero{padding-block:90px}
 .learning-card-visual .visual-ring{fill:none;stroke:currentColor;stroke-opacity:.35;stroke-width:1.5;stroke-dasharray:5 6;transform-origin:center;animation:orbit-spin 12s linear infinite}
 .learning-card-visual .visual-core{filter:drop-shadow(0 0 12px currentColor);animation:core-pulse 2.8s ease-in-out infinite}
 .learning-card-label{position:relative;align-self:flex-start;margin:8px 0;color:var(--card-accent);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;transform:translateZ(18px)}
+.card-equation{position:relative;align-self:flex-start;margin:2px 0 12px;padding:5px 8px;border:1px solid color-mix(in srgb,var(--card-accent) 32%,var(--line));border-radius:9px;background:color-mix(in srgb,var(--card-accent) 8%,var(--card));color:var(--card-accent);font:600 .72rem/1.5 'JetBrains Mono',monospace;transform:translateZ(16px)}
 .learning-card h3{position:relative;margin:0 0 8px;transform:translateZ(20px)}
 .learning-card p{position:relative;margin:0 0 18px;color:var(--muted);font-size:.9rem;transform:translateZ(15px)}
 .learning-card .btn{position:relative;align-self:flex-start;margin-top:auto;transform:translateZ(24px)}
@@ -241,6 +247,7 @@ body.pres .hero{padding-block:90px}
 @keyframes plane-hover{0%,100%{transform:translateY(4px) rotate(-2deg)}50%{transform:translateY(-9px) rotate(1.5deg)}}
 @keyframes label-drift{0%,100%{transform:translateY(2px)}50%{transform:translateY(-7px)}}
 @keyframes core-pulse{0%,100%{opacity:.72;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
+@keyframes formula-drift{0%,100%{translate:0 2px}50%{translate:0 -6px}}
 @media(max-width:800px){
   nav{position:relative}
   nav b{width:100%;margin-bottom:4px}
@@ -252,6 +259,11 @@ body.pres .hero{padding-block:90px}
   .hero-copy p{margin-inline:auto}
   .hero-copy .row{justify-content:center}
   .physics-scene{min-height:260px}
+  .formula-note{font-size:.62rem;padding:6px 8px}
+  .formula-note.one{top:2%;left:-1%}
+  .formula-note.two{right:-1%;bottom:2%}
+  .scene-label.top{top:25%;right:0}
+  .scene-label.bottom{bottom:24%;left:0}
   .learning-cards{grid-template-columns:1fr}
   .learning-card{min-height:0}
   .learning-card-visual{height:96px}
@@ -266,7 +278,7 @@ body.pres .hero{padding-block:90px}
   .formula{font-size:clamp(1rem,4vw,1.2rem);padding:18px 10px}
   .hero{padding:25px 18px}
   .physics-scene{min-height:220px}
-  .scene-label{font-size:.7rem;padding:6px 9px}
+  .scene-label{font-size:.66rem;padding:6px 9px}
   .learning-card{padding:18px}
 }
 @media(hover:none){
@@ -275,7 +287,7 @@ body.pres .hero{padding-block:90px}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .pg.on{animation:none}
-  .scene-plane,.airflow-line,.physics-scene::before,.physics-scene::after,.orbit-dot,.scene-label,.visual-ring,.visual-core{animation:none}
+  .scene-plane,.airflow-line,.physics-scene::before,.physics-scene::after,.orbit-dot,.scene-label,.formula-note,.visual-ring,.visual-core{animation:none}
   .learning-card{transition:none;transform:none}
 }
 </style>
@@ -300,6 +312,7 @@ body.pres .hero{padding-block:90px}
 </div>
 <div class="physics-scene" aria-hidden="true">
 <span class="orbit-dot one"></span><span class="orbit-dot two"></span><span class="orbit-dot three"></span>
+<span class="formula-note one">P + ½ρv² + ρgh = konstan</span><span class="formula-note two">ΔF = ½ρ(V<sub>a</sub>² − V<sub>b</sub>²)A</span>
 <span class="scene-label top">Tekanan atas ↓</span><span class="scene-label bottom">Gaya angkat ↑</span>
 <svg class="scene-plane" viewBox="0 0 360 230">
 <path class="airflow-line" d="M8 82 C85 42 150 54 210 88 S300 118 352 72"/>
@@ -315,9 +328,9 @@ body.pres .hero{padding-block:90px}
 </div>
 <div class="learning-intro"><h2>Jelajahi konsep penerbangan</h2><p>Pahami gaya yang membuat pesawat mampu terbang.</p></div>
 <div class="learning-cards">
-<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M20 42 Q48 35 108 44 M16 55 Q48 48 112 57 M24 68 Q54 61 104 70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 6"/><path d="M38 52 Q62 39 92 50 Q67 54 38 52Z" fill="currentColor" opacity=".8"/><circle class="visual-core" cx="64" cy="50" r="5" fill="#fff"/></svg></div><span class="learning-card-label">Fluida dinamis</span><h3>Hukum Bernoulli</h3><p>Amati bagaimana perubahan kecepatan aliran udara mengubah tekanan di sekitar sayap.</p><button class="btn alt" data-go="konsep">Pelajari konsep →</button></article>
-<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M64 72V31 M53 43L64 30L75 43" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 51H49 M40 42L50 51L40 60 M97 51H79 M88 42L78 51L88 60" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle class="visual-core" cx="64" cy="72" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Gaya pada pesawat</span><h3>Lift dan berat</h3><p>Kenali arah gaya angkat, gaya berat, gaya dorong, dan gaya hambat pada pesawat.</p><button class="btn alt" data-go="definisi">Lihat gaya →</button></article>
-<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M37 34H91 M37 50H91 M37 66H91" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M48 29L53 39 M75 45L80 55 M58 61L63 71" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/><circle class="visual-core" cx="101" cy="50" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Eksperimen virtual</span><h3>Simulasi gaya angkat</h3><p>Ubah kecepatan dan luas sayap, lalu lihat dampaknya terhadap gaya angkat pesawat.</p><button class="btn alt" data-go="simulasi">Coba simulasi →</button></article>
+<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M20 42 Q48 35 108 44 M16 55 Q48 48 112 57 M24 68 Q54 61 104 70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 6"/><path d="M38 52 Q62 39 92 50 Q67 54 38 52Z" fill="currentColor" opacity=".8"/><circle class="visual-core" cx="64" cy="50" r="5" fill="#fff"/></svg></div><span class="learning-card-label">Fluida dinamis</span><code class="card-equation">P + ½ρv² + ρgh = konstan</code><h3>Hukum Bernoulli</h3><p>Amati bagaimana perubahan kecepatan aliran udara mengubah tekanan di sekitar sayap.</p><button class="btn alt" data-go="konsep">Pelajari konsep →</button></article>
+<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M64 72V31 M53 43L64 30L75 43" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 51H49 M40 42L50 51L40 60 M97 51H79 M88 42L78 51L88 60" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle class="visual-core" cx="64" cy="72" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Gaya pada pesawat</span><code class="card-equation">ΔF = ΔP · A &nbsp;|&nbsp; W = m · g</code><h3>Lift dan berat</h3><p>Kenali arah gaya angkat, gaya berat, gaya dorong, dan gaya hambat pada pesawat.</p><button class="btn alt" data-go="definisi">Lihat gaya →</button></article>
+<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M37 34H91 M37 50H91 M37 66H91" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M48 29L53 39 M75 45L80 55 M58 61L63 71" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/><circle class="visual-core" cx="101" cy="50" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Eksperimen virtual</span><code class="card-equation">ΔF = ½ρ(V<sub>a</sub>² − V<sub>b</sub>²)A</code><h3>Simulasi gaya angkat</h3><p>Ubah kecepatan dan luas sayap, lalu lihat dampaknya terhadap gaya angkat pesawat.</p><button class="btn alt" data-go="simulasi">Coba simulasi →</button></article>
 </div>
 <div class="card"><h3>Peta Belajar</h3><div class="row" id="peta"></div><p id="ident" style="color:var(--muted);margin-bottom:0"></p></div>
 </section>
