@@ -342,6 +342,43 @@ body.pres .hero{padding-block:90px}
   .scene-aircraft{transition:none;transform:none}
   .learning-card{transition:none;transform:none}
 }
+[data-theme=dark]{
+  --bg:#030609;
+  --card:#0a1018;
+  --sky1:#030609;
+  --sky2:#030609;
+}
+[data-theme=dark] body{background:#030609}
+body{position:relative;isolation:isolate}
+body::before,body::after{
+  position:fixed;
+  z-index:-1;
+  top:20vh;
+  width:max-content;
+  max-width:21vw;
+  color:#155e75;
+  font:500 clamp(.58rem,.82vw,.76rem)/3.2 'JetBrains Mono',monospace;
+  white-space:pre;
+  pointer-events:none;
+  opacity:.2;
+}
+body::before{
+  content:"P + ½ρv² + ρgh = konstan\A ΔP = ½ρ(Vₐ² − Vᵦ²)\A ΔF = ΔP · A";
+  left:clamp(12px,2.4vw,36px);
+}
+body::after{
+  content:"L = ½ρv²SCₗ\A W = m · g\A ΣF = m · a";
+  right:clamp(12px,2.4vw,36px);
+  top:48vh;
+  color:#5b4b91;
+}
+[data-theme=dark] body::before{color:#67e8f9}
+[data-theme=dark] body::after{color:#a78bfa}
+@media(max-width:700px){
+  body::before,body::after{top:22vh;max-width:23vw;font-size:.48rem;line-height:3;opacity:.14}
+  body::before{left:6px}
+  body::after{right:6px;top:48vh}
+}
 </style>
 </head>
 <body>
