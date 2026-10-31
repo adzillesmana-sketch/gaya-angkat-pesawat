@@ -192,12 +192,69 @@ h2,h3{letter-spacing:-.02em}
 body.pres main{max-width:1280px}
 body.pres .card{padding:32px}
 body.pres .hero{padding-block:90px}
+.hero{padding:clamp(28px,5vw,58px);text-align:left}
+.hero::before{inset:0 auto auto 15%;width:70%;height:220px}
+.hero-layout{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(260px,.95fr);align-items:center;gap:clamp(20px,5vw,58px);max-width:980px;margin:0 auto}
+.hero-copy{z-index:1}
+.hero-copy h1{color:#60a5fa}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--card) 75%,transparent);color:var(--lift);font-size:.82rem;font-weight:700;letter-spacing:.04em}
+[data-theme=dark] .hero-kicker{color:#93c5fd}
+.hero-kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 12px #34d399}
+.hero-copy h1{max-width:620px;font-size:clamp(2.2rem,5vw,4rem);line-height:1.08}
+.hero-copy p{max-width:540px;margin:16px 0 24px;color:var(--muted);font-size:clamp(1rem,2vw,1.18rem)}
+.hero-copy .row{justify-content:flex-start}
+.physics-scene{position:relative;min-height:290px;display:grid;place-items:center;isolation:isolate}
+.physics-scene::before,.physics-scene::after{content:"";position:absolute;z-index:-1;border:1px solid color-mix(in srgb,var(--lift) 22%,transparent);border-radius:50%;aspect-ratio:1}
+.physics-scene::before{width:min(82%,280px);animation:orbit-spin 24s linear infinite}
+.physics-scene::after{width:min(62%,210px);animation:orbit-spin 17s linear infinite reverse}
+.physics-scene .orbit-dot{position:absolute;width:11px;height:11px;border:2px solid var(--card);border-radius:50%;background:#38bdf8;box-shadow:0 0 18px #38bdf8}
+.physics-scene .orbit-dot.one{top:12%;left:28%}
+.physics-scene .orbit-dot.two{right:13%;top:48%;width:8px;height:8px;background:#34d399;box-shadow:0 0 16px #34d399}
+.physics-scene .orbit-dot.three{bottom:12%;left:30%;width:7px;height:7px;background:#fbbf24;box-shadow:0 0 16px #fbbf24}
+.scene-plane{position:relative;z-index:1;width:min(100%,360px);height:auto;overflow:visible;filter:drop-shadow(0 22px 24px rgba(29,78,216,.2));animation:plane-hover 4.5s ease-in-out infinite}
+.airflow-line{fill:none;stroke:#38bdf8;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:7 12;animation:airflow 1.2s linear infinite}
+.airflow-line.alt{stroke:#34d399;animation-delay:-.6s}
+.scene-label{position:absolute;padding:8px 11px;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--card) 86%,transparent);box-shadow:0 10px 24px rgba(24,56,104,.1);font-size:.78rem;font-weight:700}
+.scene-label.top{top:7%;right:2%;color:var(--thrust);animation:label-drift 4s ease-in-out infinite}
+.scene-label.bottom{bottom:9%;left:1%;color:var(--lift);animation:label-drift 4.5s ease-in-out infinite reverse}
+.learning-intro{margin:28px 0 14px}
+.learning-intro h2{margin-bottom:5px;font-size:clamp(1.35rem,3vw,1.8rem)}
+.learning-intro p{margin:0;color:var(--muted)}
+.learning-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;perspective:1100px}
+.learning-card{--rx:0deg;--ry:0deg;position:relative;min-width:0;min-height:290px;display:flex;flex-direction:column;overflow:hidden;padding:22px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,color-mix(in srgb,var(--card) 90%,var(--lift)),var(--card) 66%);box-shadow:0 14px 32px rgba(24,56,104,.09);transform:rotateX(var(--rx)) rotateY(var(--ry));transform-style:preserve-3d;transition:transform .18s ease-out,box-shadow .25s,border-color .25s}
+.learning-card::before{content:"";position:absolute;inset:-40% -20% auto;height:190px;background:radial-gradient(ellipse,color-mix(in srgb,var(--card-accent) 24%,transparent),transparent 68%);pointer-events:none}
+.learning-card:hover{border-color:color-mix(in srgb,var(--card-accent) 52%,var(--line));box-shadow:0 24px 48px rgba(24,56,104,.16)}
+.learning-card:nth-child(1){--card-accent:#38bdf8}
+.learning-card:nth-child(2){--card-accent:#34d399}
+.learning-card:nth-child(3){--card-accent:#a78bfa}
+.learning-card-visual{position:relative;height:112px;display:grid;place-items:center;color:var(--card-accent);transform:translateZ(28px)}
+.learning-card-visual svg{width:128px;height:100px;overflow:visible}
+.learning-card-visual .visual-ring{fill:none;stroke:currentColor;stroke-opacity:.35;stroke-width:1.5;stroke-dasharray:5 6;transform-origin:center;animation:orbit-spin 12s linear infinite}
+.learning-card-visual .visual-core{filter:drop-shadow(0 0 12px currentColor);animation:core-pulse 2.8s ease-in-out infinite}
+.learning-card-label{position:relative;align-self:flex-start;margin:8px 0;color:var(--card-accent);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;transform:translateZ(18px)}
+.learning-card h3{position:relative;margin:0 0 8px;transform:translateZ(20px)}
+.learning-card p{position:relative;margin:0 0 18px;color:var(--muted);font-size:.9rem;transform:translateZ(15px)}
+.learning-card .btn{position:relative;align-self:flex-start;margin-top:auto;transform:translateZ(24px)}
+.learning-card:hover .btn{filter:brightness(1.08)}
+@keyframes orbit-spin{to{transform:rotate(360deg)}}
+@keyframes airflow{to{stroke-dashoffset:-38}}
+@keyframes plane-hover{0%,100%{transform:translateY(4px) rotate(-2deg)}50%{transform:translateY(-9px) rotate(1.5deg)}}
+@keyframes label-drift{0%,100%{transform:translateY(2px)}50%{transform:translateY(-7px)}}
+@keyframes core-pulse{0%,100%{opacity:.72;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
 @media(max-width:800px){
   nav{position:relative}
   nav b{width:100%;margin-bottom:4px}
   #bar{top:0}
   .sim{grid-template-columns:1fr}
   #panel{position:static}
+  .hero-layout{grid-template-columns:1fr;gap:8px}
+  .hero-copy{text-align:center}
+  .hero-copy p{margin-inline:auto}
+  .hero-copy .row{justify-content:center}
+  .physics-scene{min-height:260px}
+  .learning-cards{grid-template-columns:1fr}
+  .learning-card{min-height:0}
+  .learning-card-visual{height:96px}
 }
 @media(max-width:520px){
   html{font-size:16px}
@@ -207,10 +264,19 @@ body.pres .hero{padding-block:90px}
   .hero{border-radius:24px}
   .pn .btn{font-size:.78rem;padding:9px 12px}
   .formula{font-size:clamp(1rem,4vw,1.2rem);padding:18px 10px}
+  .hero{padding:25px 18px}
+  .physics-scene{min-height:220px}
+  .scene-label{font-size:.7rem;padding:6px 9px}
+  .learning-card{padding:18px}
+}
+@media(hover:none){
+  .learning-card{transform:none}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .pg.on{animation:none}
+  .scene-plane,.airflow-line,.physics-scene::before,.physics-scene::after,.orbit-dot,.scene-label,.visual-ring,.visual-core{animation:none}
+  .learning-card{transition:none;transform:none}
 }
 </style>
 </head>
@@ -226,15 +292,32 @@ body.pres .hero{padding-block:90px}
 <!-- ===== HTML: 1 Beranda ===== -->
 <section class="pg" id="beranda">
 <div class="hero">
-<svg class="float" width="260" viewBox="0 0 260 110" aria-hidden="true"><path d="M20 62 Q20 44 60 44 L205 46 Q245 52 248 64 Q240 78 205 78 L60 78 Q20 78 20 62Z" fill="#fff" stroke="#94A3B8" stroke-width="2"/><path d="M30 46 L8 14 L40 14 L70 46Z" fill="#2563EB"/><path d="M110 66 L70 100 L100 100 L150 68Z" fill="#60A5FA"/><path d="M205 52 L232 52 L238 60 L200 60Z" fill="#7DD3FC"/><circle cx="105" cy="62" r="3" fill="#94A3B8"/><circle cx="125" cy="62" r="3" fill="#94A3B8"/><circle cx="145" cy="62" r="3" fill="#94A3B8"/><circle cx="165" cy="62" r="3" fill="#94A3B8"/></svg>
+<div class="hero-layout">
+<div class="hero-copy"><span class="hero-kicker">LAB FISIKA INTERAKTIF</span>
 <h1>Gaya Angkat Pesawat</h1>
 <p style="color:var(--muted);font-size:1.15rem">Mengapa pesawat yang beratnya ratusan ton bisa terbang?</p>
 <div class="row" style="justify-content:center"><button class="btn" data-go="definisi">Mulai Belajar</button><button class="btn alt" data-go="simulasi">Langsung ke Simulasi</button></div>
 </div>
-<div class="grid">
-<div class="card"><h3>Apa itu gaya angkat?</h3><p>Gaya ke atas pada sayap yang melawan gaya berat.</p></div>
-<div class="card"><h3>Kenapa sayap melengkung?</h3><p>Udara di atas sayap mengalir lebih cepat, tekanannya lebih kecil.</p></div>
-<div class="card"><h3>Coba simulasinya</h3><p>Atur kecepatan dan luas sayap, lihat pesawat naik atau turun.</p></div>
+<div class="physics-scene" aria-hidden="true">
+<span class="orbit-dot one"></span><span class="orbit-dot two"></span><span class="orbit-dot three"></span>
+<span class="scene-label top">Tekanan atas ↓</span><span class="scene-label bottom">Gaya angkat ↑</span>
+<svg class="scene-plane" viewBox="0 0 360 230">
+<path class="airflow-line" d="M8 82 C85 42 150 54 210 88 S300 118 352 72"/>
+<path class="airflow-line alt" d="M5 148 C78 188 150 176 210 142 S300 112 355 158"/>
+<g transform="translate(48 72)">
+<path d="M22 73 Q24 49 74 47 L235 51 Q278 57 282 75 Q272 91 234 95 L74 98 Q28 98 22 73Z" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"/>
+<path d="M65 53 L26 13 L62 12 L103 52Z" fill="#2563eb"/>
+<path d="M137 88 L94 147 L130 145 L177 91Z" fill="#60a5fa"/>
+<path d="M231 56 L277 62 L284 73 L235 73Z" fill="#38bdf8"/>
+<circle cx="138" cy="70" r="4" fill="#94a3b8"/><circle cx="159" cy="70" r="4" fill="#94a3b8"/><circle cx="180" cy="70" r="4" fill="#94a3b8"/>
+</g></svg></div>
+</div>
+</div>
+<div class="learning-intro"><h2>Jelajahi konsep penerbangan</h2><p>Pahami gaya yang membuat pesawat mampu terbang.</p></div>
+<div class="learning-cards">
+<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M20 42 Q48 35 108 44 M16 55 Q48 48 112 57 M24 68 Q54 61 104 70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 6"/><path d="M38 52 Q62 39 92 50 Q67 54 38 52Z" fill="currentColor" opacity=".8"/><circle class="visual-core" cx="64" cy="50" r="5" fill="#fff"/></svg></div><span class="learning-card-label">Fluida dinamis</span><h3>Hukum Bernoulli</h3><p>Amati bagaimana perubahan kecepatan aliran udara mengubah tekanan di sekitar sayap.</p><button class="btn alt" data-go="konsep">Pelajari konsep →</button></article>
+<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M64 72V31 M53 43L64 30L75 43" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 51H49 M40 42L50 51L40 60 M97 51H79 M88 42L78 51L88 60" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle class="visual-core" cx="64" cy="72" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Gaya pada pesawat</span><h3>Lift dan berat</h3><p>Kenali arah gaya angkat, gaya berat, gaya dorong, dan gaya hambat pada pesawat.</p><button class="btn alt" data-go="definisi">Lihat gaya →</button></article>
+<article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M37 34H91 M37 50H91 M37 66H91" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M48 29L53 39 M75 45L80 55 M58 61L63 71" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/><circle class="visual-core" cx="101" cy="50" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Eksperimen virtual</span><h3>Simulasi gaya angkat</h3><p>Ubah kecepatan dan luas sayap, lalu lihat dampaknya terhadap gaya angkat pesawat.</p><button class="btn alt" data-go="simulasi">Coba simulasi →</button></article>
 </div>
 <div class="card"><h3>Peta Belajar</h3><div class="row" id="peta"></div><p id="ident" style="color:var(--muted);margin-bottom:0"></p></div>
 </section>
@@ -361,6 +444,16 @@ document.addEventListener('keydown',e=>{
 });
 if(matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.dataset.theme='dark';
 $('#ident').innerHTML=`<strong>${ID.nama}</strong> · ${ID.kelas} · ${ID.mapel} · ${ID.tahun}<ol>${ID.anggota.map(n=>`<li>${n}</li>`).join('')}</ol>`;
+if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+  $$('.learning-card').forEach(card=>{
+    card.onpointermove=e=>{
+      const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+      card.style.setProperty('--rx',`${(0.5-y)*8}deg`);
+      card.style.setProperty('--ry',`${(x-0.5)*8}deg`);
+    };
+    card.onpointerleave=()=>{card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg')};
+  });
+}
 
 /* ===== JS: Definisi ===== */
 $$('.ar').forEach(a=>{const s=()=>{$('#tip').textContent=a.dataset.t;a.animate([{opacity:1},{opacity:.4},{opacity:1}],{duration:500})};a.onmouseenter=s;a.onclick=s});
