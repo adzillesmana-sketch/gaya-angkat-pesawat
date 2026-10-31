@@ -109,42 +109,42 @@ nav button.on{box-shadow:0 5px 14px rgba(29,78,216,.22)}
 #bar{top:0;height:3px}
 #bar i{background:linear-gradient(90deg,#38bdf8,var(--lift),#34d399)}
 main{max-width:1120px;padding:clamp(20px,4vw,42px) clamp(14px,3vw,28px) 72px}
-.pg.on{animation:pageIn .38s ease both}
-@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pg.on{animation:page-settle .58s cubic-bezier(.22,.75,.25,1) both}
 .pg{position:relative;isolation:isolate}
-.pg::before{content:"ΔF = ½ρ(Vₐ² − Vᵦ²)A";position:absolute;z-index:0;top:8px;right:clamp(8px,3vw,34px);color:var(--lift);font:600 clamp(.62rem,1.3vw,.82rem)/1.4 'JetBrains Mono',monospace;letter-spacing:.04em;opacity:0;pointer-events:none}
+.pg::before{content:attr(data-equation);position:absolute;z-index:0;top:10px;right:clamp(8px,3vw,34px);max-width:min(54%,440px);padding:7px 11px;border:1px solid color-mix(in srgb,var(--lift) 22%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--card) 88%,transparent);box-shadow:0 8px 22px rgba(24,56,104,.08);color:var(--lift);font:600 clamp(.62rem,1.3vw,.82rem)/1.4 'JetBrains Mono',monospace;letter-spacing:.02em;text-align:center;opacity:0;pointer-events:none;backdrop-filter:blur(8px)}
 .pg>*{position:relative;z-index:1}
-.pg.on::before{animation:equation-trace .9s ease-out .04s both}
-.pg.on>.tag{animation:tag-arrive .55s cubic-bezier(.2,.8,.2,1) both}
-.pg.on>.card,.pg.on>.sim,.pg.on>.hero,.pg.on>.learning-intro,.pg.on>.learning-cards{animation:panel-arrive .65s cubic-bezier(.2,.75,.25,1) both}
-.pg.on>.card:nth-of-type(2),.pg.on>.sim{animation-delay:.1s}
-.pg.on>.card:nth-of-type(3){animation-delay:.2s}
-#simulasi.pg.on>.sim>.card:first-child{animation:panel-arrive .65s cubic-bezier(.2,.75,.25,1) .12s both}
-#simulasi.pg.on>.sim>.card:last-child{animation:panel-arrive .65s cubic-bezier(.2,.75,.25,1) .24s both}
-.pg.on .derivation-step{animation:equation-arrive .48s cubic-bezier(.2,.75,.25,1) both}
-.pg.on .derivation-step:nth-child(1){animation-delay:.12s}
-.pg.on .derivation-step:nth-child(2){animation-delay:.2s}
-.pg.on .derivation-step:nth-child(3){animation-delay:.28s}
-.pg.on .derivation-step:nth-child(4){animation-delay:.36s}
-.pg.on .derivation-step:nth-child(5){animation-delay:.44s}
-.pg.on .learning-card{animation:card-arrive .7s cubic-bezier(.2,.75,.25,1) both}
-.pg.on .learning-card:nth-child(1){animation-delay:.16s}
-.pg.on .learning-card:nth-child(2){animation-delay:.27s}
-.pg.on .learning-card:nth-child(3){animation-delay:.38s}
-.pg.on .sy{animation:chip-arrive .45s ease-out both}
-.pg.on .sy:nth-child(1){animation-delay:.16s}
-.pg.on .sy:nth-child(2){animation-delay:.23s}
-.pg.on .sy:nth-child(3){animation-delay:.3s}
-.pg.on .sy:nth-child(4){animation-delay:.37s}
+.pg.on::before{animation:equation-float 1.15s cubic-bezier(.2,.75,.25,1) both}
+.pg.on>.tag{animation:tag-arrive .5s cubic-bezier(.2,.8,.2,1) .04s both}
+.pg.on>.card,.pg.on>.sim,.pg.on>.hero,.pg.on>.learning-intro,.pg.on>.learning-cards{animation:content-rise .62s cubic-bezier(.2,.75,.25,1) .12s both}
+.pg.on>.card:nth-of-type(2){animation-delay:.22s}
+.pg.on>.card:nth-of-type(3){animation-delay:.32s}
+.pg.on>.learning-intro{animation-delay:.12s}
+.pg.on>.learning-cards{animation-delay:.2s}
+#simulasi.pg.on>.sim>.card:first-child{animation:content-rise .62s cubic-bezier(.2,.75,.25,1) .14s both}
+#simulasi.pg.on>.sim>.card:last-child{animation:content-rise .62s cubic-bezier(.2,.75,.25,1) .25s both}
+.pg.on .derivation-step{animation:content-rise .48s cubic-bezier(.2,.75,.25,1) both}
+.pg.on .derivation-step:nth-child(1){animation-delay:.2s}
+.pg.on .derivation-step:nth-child(2){animation-delay:.27s}
+.pg.on .derivation-step:nth-child(3){animation-delay:.34s}
+.pg.on .derivation-step:nth-child(4){animation-delay:.41s}
+.pg.on .derivation-step:nth-child(5){animation-delay:.48s}
+.pg.on .learning-card{animation:content-rise .62s cubic-bezier(.2,.75,.25,1) both}
+.pg.on .learning-card:nth-child(1){animation-delay:.22s}
+.pg.on .learning-card:nth-child(2){animation-delay:.31s}
+.pg.on .learning-card:nth-child(3){animation-delay:.4s}
+.pg.on .sy{animation:chip-arrive .4s ease-out both}
+.pg.on .sy:nth-child(1){animation-delay:.2s}
+.pg.on .sy:nth-child(2){animation-delay:.26s}
+.pg.on .sy:nth-child(3){animation-delay:.32s}
+.pg.on .sy:nth-child(4){animation-delay:.38s}
 .pg.on .sy:nth-child(5){animation-delay:.44s}
-.pg.on #cv1,.pg.on #cv2,.pg.on #cv3,.pg.on #gaya{animation:visual-arrive .7s cubic-bezier(.2,.75,.25,1) .2s both}
-@keyframes equation-trace{0%{opacity:0;transform:translate(12px,-6px)}30%{opacity:.13}100%{opacity:.055;transform:translate(0,0)}}
-@keyframes tag-arrive{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes panel-arrive{from{opacity:0;clip-path:inset(0 0 12% round 22px)}to{opacity:1;clip-path:inset(0 0 0 round 22px)}}
-@keyframes equation-arrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes card-arrive{from{opacity:0;clip-path:inset(8% 0 0 round 22px)}to{opacity:1;clip-path:inset(0 0 0 round 22px)}}
-@keyframes chip-arrive{from{opacity:0;scale:.92}to{opacity:1;scale:1}}
-@keyframes visual-arrive{from{opacity:0;scale:.98;filter:blur(4px)}to{opacity:1;scale:1;filter:blur(0)}}
+.pg.on #cv1,.pg.on #cv2,.pg.on #cv3,.pg.on #gaya{animation:visual-arrive .65s cubic-bezier(.2,.75,.25,1) .22s both}
+@keyframes page-settle{from{opacity:0}to{opacity:1}}
+@keyframes equation-float{0%{opacity:0;transform:translateY(12px) rotate(1deg) scale(.97);filter:blur(5px)}25%{opacity:.9;filter:blur(0)}65%{opacity:.82;transform:translateY(-2px) rotate(0) scale(1)}100%{opacity:.32;transform:translateY(0) rotate(0) scale(1)}}
+@keyframes tag-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes content-rise{from{opacity:0;transform:translateY(18px) scale(.99);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes chip-arrive{from{opacity:0;transform:translateY(7px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes visual-arrive{from{opacity:0;transform:scale(.97);filter:blur(3px)}to{opacity:1;transform:scale(1);filter:blur(0)}}
 .card{
   border-radius:24px;
   padding:clamp(18px,3vw,28px);
@@ -466,12 +466,25 @@ const tentukanStatus=(F,W)=>Math.abs(F-W)<=0.01*W?'melayang':F>W?'naik':'turun';
 
 /* ===== JS: navigasi ===== */
 const halaman=['beranda','definisi','konsep','rumus','simulasi','soal','kuis'];
+const rumusHalaman={
+  beranda:'P + ½ρv² + ρgh = konstan',
+  definisi:'ΣF = m · a',
+  konsep:'P + ½ρv² = konstan',
+  rumus:'ΔF = ½ρᵤ(Vₐ² − Vᵦ²)A',
+  simulasi:'L = ½ρv²SCₗ',
+  soal:'F = m · a',
+  kuis:'W = m · g'
+};
 const visited=new Set();let cur=0;
 function go(p){
   cur=typeof p==='number'?p:halaman.indexOf(p);
-  $$('.pg').forEach(e=>e.classList.toggle('on',e.id===halaman[cur]));
-  $$('nav [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===halaman[cur]));
-  visited.add(halaman[cur]);
+  const halamanAktif=halaman[cur],section=$(`#${halamanAktif}`);
+  $$('.pg').forEach(e=>e.classList.remove('on'));
+  section.dataset.equation=rumusHalaman[halamanAktif];
+  void section.offsetWidth;
+  section.classList.add('on');
+  $$('nav [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===halamanAktif));
+  visited.add(halamanAktif);
   $('#bar i').style.width=visited.size/halaman.length*100+'%';
   $('#prev').style.visibility=cur?'visible':'hidden';
   $('#next').style.visibility=cur<halaman.length-1?'visible':'hidden';
