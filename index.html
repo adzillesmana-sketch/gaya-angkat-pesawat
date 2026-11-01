@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{if(sessionStorage.getItem('gaya-angkat-intro-seen')==='1')document.documentElement.classList.add('intro-seen')}catch(error){console.warn('Status intro sesi tidak dapat dibaca:',error)}</script>
 <title>Gaya Angkat Pesawat</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
@@ -17,6 +18,8 @@ h1,h2,h3{font-family:Poppins,sans-serif;line-height:1.25;margin:0 0 .5em}
 /* ===== CSS: komponen ===== */
 nav{position:sticky;top:0;z-index:10;display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding:8px 16px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 nav b{font-family:Poppins;margin-right:auto;color:var(--lift)}
+nav .menu-toggle{display:none}
+.nav-links{display:contents}
 nav button,.btn{font:inherit;font-size:.85rem;border:0;border-radius:999px;padding:7px 14px;cursor:pointer;background:transparent;color:var(--text);transition:transform .15s,background .2s}
 nav button:hover{background:var(--line)}nav button.on{background:var(--lift);color:#fff}
 .btn{background:var(--lift);color:#fff;font-weight:600}.btn.alt{background:var(--line);color:var(--text)}.btn:active{transform:scale(.95)}
@@ -329,8 +332,12 @@ body.pres .hero{padding-block:90px}
 @keyframes formula-drift{0%,100%{translate:0 2px}50%{translate:0 -6px}}
 @keyframes hero-flow-dot{0%{left:4%;opacity:.25}45%{opacity:1}100%{left:96%;opacity:.25}}
 @media(max-width:800px){
-  nav{position:relative}
-  nav b{width:100%;margin-bottom:4px}
+  nav{position:sticky;top:0;display:flex;gap:8px;padding:10px 12px}
+  nav b{width:auto;margin:0 auto 0 0}
+  nav .menu-toggle{display:inline-flex;align-items:center;justify-content:center;min-width:42px;min-height:42px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:1.15rem}
+  .nav-links{display:none;flex:1 0 100%;gap:6px;flex-wrap:wrap;padding-top:6px}
+  nav.menu-open .nav-links{display:flex}
+  .nav-links button{flex:1 1 auto}
   #bar{top:0}
   .sim{grid-template-columns:1fr}
   #panel{position:static}
@@ -419,13 +426,19 @@ body::after{
 .hero-meta{color:#e2e8f0;text-shadow:0 2px 10px rgba(0,0,0,.8)}
 body.intro-active{overflow:hidden}
 body.intro-active nav,body.intro-active #bar,body.intro-active main{visibility:hidden}
+html.intro-seen body.intro-active{overflow:auto}
+html.intro-seen body.intro-active nav,html.intro-seen body.intro-active #bar,html.intro-seen body.intro-active main{visibility:visible}
+html.intro-seen .site-intro{display:none!important}
 body.site-entering nav,body.site-entering #bar,body.site-entering main{animation:site-enter .8s ease both}
 @keyframes site-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .site-intro{position:fixed;inset:0;z-index:1000;overflow:hidden;background:#020617;opacity:1;visibility:visible;transition:opacity .8s ease,visibility .8s ease}
 .site-intro[hidden]{display:none}
 .site-intro.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
-.site-intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;background:#020617}
+.site-intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;background:#020617;transition:opacity .45s ease}
 .site-intro::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(2,6,23,.32),transparent 24%)}
+.site-intro.is-fallback::before{content:"";position:absolute;inset:-20%;background:radial-gradient(ellipse at 30% 45%,rgba(125,211,252,.5),transparent 34%),radial-gradient(ellipse at 72% 55%,rgba(96,165,250,.48),transparent 38%);filter:blur(35px);animation:fallback-cloud 1.5s ease-in-out forwards;pointer-events:none}
+.site-intro.is-fallback video{opacity:0}
+@keyframes fallback-cloud{to{opacity:0;transform:scale(1.2)}}
 .intro-skip{position:absolute;z-index:1;right:clamp(16px,4vw,48px);bottom:clamp(16px,4vh,36px);padding:10px 16px;border:1px solid rgba(255,255,255,.4);border-radius:999px;background:rgba(2,6,23,.52);color:#fff;font:600 .85rem Inter,sans-serif;cursor:pointer;backdrop-filter:blur(8px)}
 .intro-skip:hover{background:rgba(2,6,23,.78)}
 .intro-fallback{position:absolute;z-index:1;top:20px;right:20px;left:20px;margin:0;color:#fff;text-align:center;font-size:.9rem;text-shadow:0 2px 8px #000}
@@ -446,8 +459,11 @@ body.site-entering nav,body.site-entering #bar,body.site-entering main{animation
 </section>
 <nav aria-label="Menu utama" aria-hidden="true" inert>
 <b>✈ Gaya Angkat</b>
+<button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Buka menu">☰</button>
+<div class="nav-links" id="navLinks">
 <button data-p="beranda">Beranda</button><button data-p="definisi">Definisi</button><button data-p="konsep">Konsep</button><button data-p="rumus">Rumus</button><button data-p="simulasi">Simulasi</button><button data-p="soal">Contoh Soal</button><button data-p="kuis">Kuis</button>
 <button id="tema" title="Mode gelap/terang (M)">🌓</button><button id="pres" title="Mode presentasi (P)">🖥</button>
+</div>
 </nav>
 <div id="bar" aria-hidden="true" inert><i></i></div>
 <main aria-hidden="true" inert>
@@ -460,7 +476,7 @@ body.site-entering nav,body.site-entering #bar,body.site-entering main{animation
 <h1>Kenapa pesawat bisa<span>terbang?</span></h1>
 <p>Mengapa pesawat yang beratnya ratusan ton bisa terbang?</p>
 <div class="hero-equation">ΔF = ½ρ(Vₐ² − Vᵦ²)A<small>Selisih tekanan udara menghasilkan gaya angkat</small></div>
-<div class="row" style="justify-content:flex-start"><button class="btn" data-go="definisi">Jelajahi konsep <span aria-hidden="true">↗</span></button><button class="btn alt" data-go="simulasi">Buka simulasi</button></div>
+<div class="row" style="justify-content:flex-start"><button class="btn" data-go="definisi">Mulai Belajar <span aria-hidden="true">↗</span></button><button class="btn alt" data-go="simulasi">Coba Simulasi</button></div>
 <div class="hero-meta"><span>BERNOULLI</span><span>AERODINAMIKA</span><span>INTERAKTIF</span></div>
 </div>
 <div class="physics-scene" role="img" aria-label="Ilustrasi pesawat dan aliran udara di sekitar sayap">
@@ -606,51 +622,97 @@ const rumusHalaman={
 };
 const visited=new Set();let cur=0;
 const siteIntro=$('#siteIntro'),introMovie=$('#introMovie'),introFallback=$('#introFallback');
-const introSkip=$('#introSkip');
+const introSkip=$('#introSkip'),nav=$('nav'),menuToggle=$('#menuToggle');
 const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
+let fallbackTimer=0;
+function showIntroFallback(message){
+  if(!document.body.classList.contains('intro-active')||siteIntro.classList.contains('is-fallback'))return;
+  introMovie.pause();
+  introMovie.hidden=true;
+  siteIntro.classList.add('is-fallback');
+  introFallback.textContent=message;
+  introFallback.hidden=false;
+  window.clearTimeout(fallbackTimer);
+  fallbackTimer=window.setTimeout(()=>closeSiteIntro(),1500);
+}
 function syncIntroVideo(){
   if(!document.body.classList.contains('intro-active')||motionPreference.matches||document.hidden){introMovie.pause();return}
   const playback=introMovie.play();
   if(playback)playback.catch(error=>{
-    if(error.name==='AbortError')return;
-    introFallback.textContent='Video tidak dapat diputar otomatis. Lewati Intro untuk masuk ke website.';
-    introFallback.hidden=false;
+    if(!document.body.classList.contains('intro-active')||document.hidden||siteIntro.classList.contains('is-fallback'))return;
+    showIntroFallback('Video intro tidak dapat diputar. Website akan dibuka sebentar lagi.');
     console.error('Video intro gagal diputar:',error);
   });
+  if(!fallbackTimer)fallbackTimer=window.setTimeout(()=>{
+    fallbackTimer=0;
+    if(document.body.classList.contains('intro-active')&&!document.hidden&&(introMovie.paused||introMovie.readyState===0))
+      showIntroFallback('Video intro tidak dapat dimuat. Website akan dibuka sebentar lagi.');
+  },4000);
 }
-function closeSiteIntro(){
-  if(!document.body.classList.contains('intro-active'))return;
-  document.body.classList.remove('intro-active');
-  document.body.classList.add('site-entering');
-  siteIntro.classList.add('is-leaving');
-  siteIntro.setAttribute('aria-hidden','true');
-  $('nav').removeAttribute('aria-hidden');$('nav').removeAttribute('inert');
+function restoreSiteControls(){
+  nav.removeAttribute('aria-hidden');nav.removeAttribute('inert');
   $('#bar').removeAttribute('aria-hidden');$('#bar').removeAttribute('inert');
   $('main').removeAttribute('aria-hidden');$('main').removeAttribute('inert');
+}
+function closeSiteIntro(immediate=false){
+  if(!document.body.classList.contains('intro-active'))return;
+  window.clearTimeout(fallbackTimer);
+  try{sessionStorage.setItem('gaya-angkat-intro-seen','1')}
+  catch(error){console.warn('Status intro sesi tidak dapat disimpan:',error)}
+  document.body.classList.remove('intro-active');
+  if(!immediate)document.body.classList.add('site-entering');
+  siteIntro.inert=true;
+  siteIntro.setAttribute('inert','');
+  siteIntro.setAttribute('aria-hidden','true');
+  restoreSiteControls();
   introMovie.pause();
+  closeMobileNav();
+  if(immediate){
+    siteIntro.hidden=true;
+    siteIntro.classList.remove('is-leaving','is-fallback');
+    document.body.classList.remove('site-entering');
+    return;
+  }
+  siteIntro.classList.add('is-leaving');
   window.setTimeout(()=>{
     siteIntro.hidden=true;
     document.body.classList.remove('site-entering');
     $('nav [data-p="beranda"]').focus({preventScroll:true});
   },850);
 }
-introSkip.addEventListener('click',closeSiteIntro);
-introMovie.addEventListener('ended',closeSiteIntro);
+function closeMobileNav(){
+  nav.classList.remove('menu-open');
+  menuToggle.setAttribute('aria-expanded','false');
+  menuToggle.setAttribute('aria-label','Buka menu');
+}
+menuToggle.addEventListener('click',()=>{
+  const open=menuToggle.getAttribute('aria-expanded')!=='true';
+  menuToggle.setAttribute('aria-expanded',String(open));
+  menuToggle.setAttribute('aria-label',open?'Tutup menu':'Buka menu');
+  nav.classList.toggle('menu-open',open);
+});
+introSkip.addEventListener('click',()=>{
+  closeSiteIntro(true);
+  $('nav [data-p="beranda"]').focus({preventScroll:true});
+});
+introMovie.addEventListener('ended',()=>closeSiteIntro());
 introMovie.addEventListener('error',()=>{
-  introFallback.textContent='Video intro tidak dapat dimuat. Lewati Intro untuk masuk ke website.';
-  introFallback.hidden=false;
+  showIntroFallback('Video intro tidak dapat dimuat. Website akan dibuka sebentar lagi.');
   console.error('Video intro gagal dimuat:',introMovie.error);
 });
 if(motionPreference.addEventListener)motionPreference.addEventListener('change',()=>{
-  if(motionPreference.matches)closeSiteIntro();else syncIntroVideo();
+  if(motionPreference.matches)closeSiteIntro(true);else syncIntroVideo();
 });
 else if(motionPreference.addListener)motionPreference.addListener(()=>{
-  if(motionPreference.matches)closeSiteIntro();else syncIntroVideo();
+  if(motionPreference.matches)closeSiteIntro(true);else syncIntroVideo();
 });
 document.addEventListener('visibilitychange',syncIntroVideo);
-if(motionPreference.matches)closeSiteIntro();else syncIntroVideo();
+if(document.documentElement.classList.contains('intro-seen')||motionPreference.matches)closeSiteIntro(true);
+else syncIntroVideo();
 function go(p){
-  cur=typeof p==='number'?p:halaman.indexOf(p);
+  const next=typeof p==='number'?p:halaman.indexOf(p);
+  if(next<0||next>=halaman.length)return;
+  cur=next;
   const halamanAktif=halaman[cur],section=$(`#${halamanAktif}`);
   if(halamanAktif!=='simulasi')stopArCamera(false);
   $$('.pg').forEach(e=>e.classList.remove('on'));
@@ -658,12 +720,13 @@ function go(p){
   void section.offsetWidth;
   section.classList.add('on');
   $$('nav [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===halamanAktif));
+  closeMobileNav();
   visited.add(halamanAktif);
   $('#bar i').style.width=visited.size/halaman.length*100+'%';
   $('#prev').style.visibility=cur?'visible':'hidden';
   $('#next').style.visibility=cur<halaman.length-1?'visible':'hidden';
   const pt=$('#peta');pt.innerHTML=halaman.slice(1).map(h=>`<span class="sub" style="${visited.has(h)?'background:var(--lift);color:#fff':''}">${visited.has(h)?'✓ ':''}${h}</span>`).join(' → ');
-  window.scrollTo(0,0);
+  window.scrollTo({top:0,behavior:motionPreference.matches?'auto':'smooth'});
 }
 $$('nav [data-p]').forEach(b=>b.onclick=()=>go(b.dataset.p));
 $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -672,6 +735,7 @@ $('#tema').onclick=()=>document.documentElement.dataset.theme=document.documentE
 $('#pres').onclick=()=>document.body.classList.toggle('pres');
 document.addEventListener('keydown',e=>{
   if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;
+  if(e.key==='Escape'&&nav.classList.contains('menu-open')){closeMobileNav();menuToggle.focus();return}
   if(e.key==='ArrowRight'&&cur<halaman.length-1)go(cur+1);
   if(e.key==='ArrowLeft'&&cur>0)go(cur-1);
   if(e.key==='m'||e.key==='M')$('#tema').click();
