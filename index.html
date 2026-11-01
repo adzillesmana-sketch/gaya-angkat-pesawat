@@ -532,6 +532,43 @@ nav #tema{font-size:1.1rem;line-height:1}
   #beranda .scene-formula{bottom:2%}
 }
 @media(prefers-reduced-motion:reduce){#beranda .hero-wing,#beranda .airfoil-card .airflow-streams{animation:none}}
+#sejarah>.tag{margin-bottom:18px}
+#sejarah>.card{padding:clamp(18px,3vw,34px);overflow:hidden}
+#sejarah .history-heading{max-width:760px;margin:0 auto 28px;text-align:center}
+#sejarah .history-kicker{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--lift);font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+#sejarah .history-kicker::before,#sejarah .history-kicker::after{content:"";width:22px;height:1px;background:currentColor;opacity:.55}
+#sejarah .history-heading h2{margin-bottom:10px;font-size:clamp(1.45rem,3vw,2.1rem);letter-spacing:-.04em}
+#sejarah .history-heading p{max-width:660px;margin:0 auto;color:var(--muted)}
+#sejarah .history-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr));gap:18px}
+#sejarah .history-card{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--card) 94%,var(--sky1));box-shadow:0 10px 28px rgba(24,56,104,.07);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+#sejarah .history-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--lift) 48%,var(--line));box-shadow:0 18px 38px rgba(24,56,104,.14)}
+#sejarah .history-media{position:relative;display:block;aspect-ratio:16/10;margin:0;overflow:hidden;background:linear-gradient(135deg,#10213b,#1d4b73)}
+#sejarah .history-media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .45s ease,filter .3s ease}
+#sejarah .history-card:hover .history-media img{transform:scale(1.045);filter:saturate(1.08)}
+#sejarah .history-media.is-diagram{background:#f8fafc}
+#sejarah .history-media.is-diagram img{object-fit:contain;padding:12px}
+#sejarah .history-credit{position:absolute;right:8px;bottom:8px;left:8px;width:fit-content;max-width:calc(100% - 16px);padding:5px 9px;border:1px solid rgba(255,255,255,.18);border-radius:9px;background:rgba(3,10,22,.78);color:#eaf2ff;font-size:.65rem;line-height:1.35;backdrop-filter:blur(8px)}
+#sejarah .history-credit a{color:#bae6fd;text-decoration:underline;text-underline-offset:2px}
+#sejarah .history-copy{padding:17px 19px 19px}
+#sejarah .history-date{display:inline-flex;align-items:center;gap:7px;margin-bottom:9px;color:var(--lift);font:700 .72rem 'JetBrains Mono',monospace;letter-spacing:.04em}
+#sejarah .history-date::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 4px color-mix(in srgb,var(--lift) 15%,transparent)}
+#sejarah .history-copy h3{margin:0 0 7px;font-size:1.04rem}
+#sejarah .history-copy p{margin:0;color:var(--muted);font-size:.87rem}
+#sejarah .history-outro{display:flex;align-items:flex-start;gap:13px;margin:24px 0 0;padding:16px 18px;border:1px solid color-mix(in srgb,var(--lift) 28%,var(--line));border-radius:16px;background:color-mix(in srgb,var(--lift) 7%,var(--card));font-size:.9rem}
+#sejarah .history-outro strong{flex:none;color:var(--lift);font-size:1.1rem}
+#sejarah .history-outro p{margin:0}
+[data-theme=dark] #sejarah .history-kicker,[data-theme=dark] #sejarah .history-date{color:#7dd3fc}
+[data-theme=dark] #sejarah .history-outro{border-color:rgba(125,211,252,.24);background:rgba(37,99,235,.1)}
+[data-theme=dark] #sejarah.pg::before{color:#7dd3fc;border-color:rgba(125,211,252,.3)}
+@media(max-width:520px){
+  #sejarah .history-grid{grid-template-columns:1fr;gap:14px}
+  #sejarah .history-heading{margin-bottom:22px}
+  #sejarah .history-copy{padding:15px 16px 17px}
+  #sejarah .history-outro{padding:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  #sejarah .history-card,#sejarah .history-media img{transition:none}
+}
 </style>
 </head>
 <body>
@@ -539,7 +576,7 @@ nav #tema{font-size:1.1rem;line-height:1}
 <b>✈ Gaya Angkat</b>
 <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Buka menu">☰</button>
 <div class="nav-links" id="navLinks">
-<button data-p="beranda">Beranda</button><button data-p="definisi">Materi</button><button data-p="rumus">Rumus</button><button data-p="simulasi">Simulasi</button><button data-about>Tentang</button><button data-p="konsep">Konsep</button><button data-p="soal">Contoh Soal</button><button data-p="kuis">Kuis</button>
+<button data-p="beranda">Beranda</button><button data-p="sejarah">Sejarah Singkat</button><button data-p="definisi">Materi</button><button data-p="rumus">Rumus</button><button data-p="simulasi">Simulasi</button><button data-about>Tentang</button><button data-p="konsep">Konsep</button><button data-p="soal">Contoh Soal</button><button data-p="kuis">Kuis</button>
 <button id="tema" type="button" aria-label="Aktifkan mode gelap" title="Ganti tema warna">☼</button><button id="pres" title="Mode presentasi (P)">🖥</button>
 </div>
 </nav>
@@ -582,9 +619,44 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="card" id="aboutCard"><h3>Tentang pembelajaran</h3><div class="row" id="peta"></div><p id="ident" style="color:var(--muted);margin-bottom:0"></p></div>
 </section>
 
-<!-- ===== HTML: 2 Definisi ===== -->
+<!-- ===== HTML: 2 Sejarah Singkat ===== -->
+<section class="pg" id="sejarah">
+<span class="tag">1. Sejarah Singkat</span>
+<div class="card">
+<header class="history-heading">
+<span class="history-kicker">Jejak ilmu penerbangan</span>
+<h2>Dari rasa kagum pada burung hingga pesawat bermesin</h2>
+<p>Setiap lompatan dalam penerbangan berawal dari rasa ingin tahu, lalu dibuktikan lewat teori dan eksperimen.</p>
+</header>
+<div class="history-grid" aria-label="Linimasa sejarah aerodinamika dan penerbangan">
+<article class="history-card">
+<figure class="history-media"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/ETH-BIB-Bernoulli%2C_Daniel_%281700-1782%29-Portrait-Portr_10971.jpg/960px-ETH-BIB-Bernoulli%2C_Daniel_%281700-1782%29-Portrait-Portr_10971.jpg" alt="Potret Daniel Bernoulli" loading="lazy" decoding="async" width="960" height="640"><figcaption class="history-credit">Potret: <a href="https://commons.wikimedia.org/wiki/File:ETH-BIB-Bernoulli,_Daniel_(1700-1782)-Portrait-Portr_10971.jpg" target="_blank" rel="noopener noreferrer">ETH-Bibliothek / Wikimedia Commons</a> · domain publik</figcaption></figure>
+<div class="history-copy"><span class="history-date">1738 · DASAR FLUIDA</span><h3>Prinsip Bernoulli</h3><p>Daniel Bernoulli menjelaskan bahwa pada aliran fluida, kecepatan yang lebih tinggi berkaitan dengan tekanan yang lebih rendah.</p></div>
+</article>
+<article class="history-card">
+<figure class="history-media"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Replica_1853_Cayley_Glider_%28BAPC89%29_%2850731050317%29.jpg/960px-Replica_1853_Cayley_Glider_%28BAPC89%29_%2850731050317%29.jpg" alt="Replika pesawat luncur rancangan Sir George Cayley" loading="lazy" decoding="async" width="960" height="640"><figcaption class="history-credit">Foto: Alan Wilson · <a href="https://commons.wikimedia.org/wiki/File:Replica_1853_Cayley_Glider_(BAPC89)_(50731050317).jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a> · dipotong</figcaption></figure>
+<div class="history-copy"><span class="history-date">1799 · KONSEP PESAWAT</span><h3>Gagasan George Cayley</h3><p>Sir George Cayley memisahkan fungsi gaya angkat (lift) dan gaya dorong (thrust), serta merancang konsep pesawat bersayap tetap.</p></div>
+</article>
+<article class="history-card">
+<figure class="history-media"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Otto_Lilienthal_rep%C3%BCl%C3%A9shez_k%C3%A9sz%C3%BCl.jpg" alt="Otto Lilienthal bersiap melakukan penerbangan dengan pesawat luncur" loading="lazy" decoding="async" width="640" height="420"><figcaption class="history-credit">Foto arsip: <a href="https://commons.wikimedia.org/wiki/File:Otto_Lilienthal_rep%C3%BCl%C3%A9shez_k%C3%A9sz%C3%BCl.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · domain publik</figcaption></figure>
+<div class="history-copy"><span class="history-date">AKHIR ABAD KE-19 · UJI TERBANG</span><h3>Eksperimen Otto Lilienthal</h3><p>Melalui penerbangan glider berulang, Lilienthal mengumpulkan pengalaman penting tentang aerodinamika dan kendali.</p></div>
+</article>
+<article class="history-card">
+<figure class="history-media"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/First_flight2.jpg/960px-First_flight2.jpg" alt="Wright Flyer mengudara dalam penerbangan pertama pada 17 Desember 1903" loading="lazy" decoding="async" width="960" height="640"><figcaption class="history-credit">Foto: John T. Daniels · <a href="https://commons.wikimedia.org/wiki/File:First_flight2.jpg" target="_blank" rel="noopener noreferrer">Library of Congress / Wikimedia Commons</a> · domain publik</figcaption></figure>
+<div class="history-copy"><span class="history-date">1903 · PENERBANGAN BERMESIN</span><h3>Wright Bersaudara</h3><p>Setelah menguji banyak bentuk sayap di terowongan angin buatan sendiri, Wright Bersaudara berhasil menerbangkan Wright Flyer di Kitty Hawk.</p></div>
+</article>
+<article class="history-card">
+<figure class="history-media is-diagram"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Tkj.jpg" alt="Diagram sirkulasi aliran udara yang menjelaskan hubungan dengan gaya angkat menurut Kutta–Joukowski" loading="lazy" decoding="async" width="640" height="567"><figcaption class="history-credit">Diagram: Sergioeng · <a href="https://commons.wikimedia.org/wiki/File:Tkj.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a> · disesuaikan</figcaption></figure>
+<div class="history-copy"><span class="history-date">ABAD KE-20 · MODEL MATEMATIS</span><h3>Teorema Kutta–Joukowski</h3><p>Teorema ini merumuskan hubungan sirkulasi aliran dengan gaya angkat, sehingga aerodinamika dapat dianalisis secara kuantitatif.</p></div>
+</article>
+</div>
+<div class="history-outro"><strong aria-hidden="true">✦</strong><p><b>Warisan mereka:</b> dari pengamatan sederhana hingga perhitungan ilmiah, rangkaian gagasan ini membentuk fondasi teknologi penerbangan modern.</p></div>
+</div>
+</section>
+
+<!-- ===== HTML: 3 Definisi ===== -->
 <section class="pg" id="definisi">
-<span class="tag">1. Definisi</span>
+<span class="tag">2. Definisi</span>
 <div class="card"><p>Gaya angkat pesawat (lift force) adalah gaya yang bekerja pada sayap pesawat dengan arah ke atas dan membantu melawan gaya berat pesawat sehingga pesawat dapat terbang.</p>
 <span class="sub">Empat gaya utama yang bekerja pada pesawat</span>
 <svg viewBox="0 0 560 300" style="width:100%;max-width:640px;display:block;margin:10px auto" id="gaya">
@@ -598,9 +670,9 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="row" style="margin-top:12px"><button class="btn alt" id="anim">Animasikan: lepas landas</button><span id="kond" style="color:var(--muted)"></span></div></div>
 </section>
 
-<!-- ===== HTML: 3 Konsep ===== -->
+<!-- ===== HTML: 4 Konsep ===== -->
 <section class="pg" id="konsep">
-<span class="tag">2. Konsep</span>
+<span class="tag">3. Konsep</span>
 <div class="card"><h3>A. Hukum Bernoulli</h3>
 <p>Ketika kecepatan aliran fluida meningkat, tekanan statisnya menurun. Pada sayap pesawat, udara mengalir lebih cepat di bagian atas sehingga tekanannya lebih kecil dibanding bagian bawah.</p>
 <canvas id="cv1" width="700" height="300" style="width:100%;border-radius:16px;background:var(--bg)"></canvas>
@@ -608,9 +680,9 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="grid" style="margin-top:14px"><div class="sy">Kecepatan naik</div><div class="sy">Tekanan turun</div><div class="sy">Muncul gaya angkat</div></div></div>
 </section>
 
-<!-- ===== HTML: 4 Rumus ===== -->
+<!-- ===== HTML: 5 Rumus ===== -->
 <section class="pg" id="rumus">
-<span class="tag">3. Rumus</span>
+<span class="tag">4. Rumus</span>
 <div class="card"><p class="sub">Penurunan Rumus Gaya Angkat Pesawat</p>
 <div class="derivation">
 <div class="derivation-step"><p>1. Persamaan Bernoulli untuk aliran udara di bawah dan di atas sayap:</p>
@@ -638,9 +710,9 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="ctl"><label style="margin:0">Konverter km/jam → m/s</label><input type="number" id="kmh" value="900"><b id="ms"></b></div></div>
 </section>
 
-<!-- ===== HTML: 5 Simulasi ===== -->
+<!-- ===== HTML: 6 Simulasi ===== -->
 <section class="pg" id="simulasi">
-<span class="tag">4. Simulasi</span>
+<span class="tag">5. Simulasi</span>
 <div class="sim">
 <div class="card" id="panel"></div>
 <div class="card"><canvas id="cv2" width="640" height="380" style="width:100%;border-radius:16px"></canvas>
@@ -667,16 +739,16 @@ nav #tema{font-size:1.1rem;line-height:1}
 </div>
 </section>
 
-<!-- ===== HTML: 6 Contoh Soal ===== -->
+<!-- ===== HTML: 7 Contoh Soal ===== -->
 <section class="pg" id="soal">
-<span class="tag">5. Contoh Soal</span>
+<span class="tag">6. Contoh Soal</span>
 <div class="card"><div class="tabs" id="tabs"></div><div id="sq"></div></div>
 <div class="card">Soal benar: <b id="skor">0</b> · Beruntun: <b id="streak">0</b></div>
 </section>
 
-<!-- ===== HTML: 7 Kuis ===== -->
+<!-- ===== HTML: 8 Kuis ===== -->
 <section class="pg" id="kuis">
-<span class="tag">6. Kuis</span>
+<span class="tag">7. Kuis</span>
 <div class="card" id="kq"></div>
 </section>
 
@@ -696,9 +768,10 @@ const hitungGayaBerat=m=>m*g;
 const tentukanStatus=(F,W)=>Math.abs(F-W)<=0.01*W?'melayang':F>W?'naik':'turun';
 
 /* ===== JS: navigasi ===== */
-const halaman=['beranda','definisi','konsep','rumus','simulasi','soal','kuis'];
+const halaman=['beranda','sejarah','definisi','konsep','rumus','simulasi','soal','kuis'];
 const rumusHalaman={
   beranda:'P + ½ρv² + ρgh = konstan',
+  sejarah:'1738 → 1799 → 1903 → abad ke-20',
   definisi:'ΣF = m · a',
   konsep:'P + ½ρv² = konstan',
   rumus:'ΔF = ½ρᵤ(Vₐ² − Vᵦ²)A',
