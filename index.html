@@ -410,46 +410,39 @@ body::after{
   body::before{left:6px}
   body::after{right:6px;top:48vh}
 }
+.hero-copy h1{color:#f8fbff}
+.hero-copy p{color:#e2e8f0!important;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.hero-equation,.hero-kicker,.hero-copy .btn.alt{background:rgba(7,17,32,.78);backdrop-filter:blur(8px)}
+.hero-equation{border-color:rgba(125,211,252,.3);color:#a5f3fc}
+.hero-equation small{color:#c1d0e4}
+.hero-copy .btn.alt{color:#f1f5f9;border-color:rgba(125,211,252,.3)}
+.hero-meta{color:#e2e8f0;text-shadow:0 2px 10px rgba(0,0,0,.8)}
 body.intro-active{overflow:hidden}
-.site-intro{position:fixed;inset:0;z-index:1000;display:grid;overflow:hidden;background:#020617;color:#fff;opacity:1;visibility:visible;transition:opacity .55s ease,visibility .55s ease}
+body.intro-active nav,body.intro-active #bar,body.intro-active main{visibility:hidden}
+body.site-entering nav,body.site-entering #bar,body.site-entering main{animation:site-enter .8s ease both}
+@keyframes site-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.site-intro{position:fixed;inset:0;z-index:1000;overflow:hidden;background:#020617;opacity:1;visibility:visible;transition:opacity .8s ease,visibility .8s ease}
 .site-intro[hidden]{display:none}
 .site-intro.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
-.site-intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;background:radial-gradient(ellipse at 50% 42%,#0d2944,#020617 70%)}
-.site-intro::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,.18),transparent 30%,rgba(2,6,23,.06) 52%,rgba(2,6,23,.82))}
-.intro-content{position:absolute;z-index:1;right:clamp(20px,7vw,100px);bottom:clamp(26px,7vh,72px);left:clamp(20px,7vw,100px);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;max-width:1180px;margin-inline:auto}
-.intro-copy{max-width:580px}
-.intro-kicker{display:inline-flex;align-items:center;gap:9px;margin-bottom:9px;color:#a5f3fc;font:600 .72rem 'JetBrains Mono',monospace;letter-spacing:.13em;text-transform:uppercase}
-.intro-kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 14px #34d399}
-.intro-copy p{margin:0;color:#e2e8f0;font-size:clamp(.95rem,1.8vw,1.12rem);text-shadow:0 2px 12px rgba(0,0,0,.65)}
-.intro-actions{display:flex;align-items:center;gap:16px;flex-shrink:0}
-.intro-enter{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 24px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:linear-gradient(110deg,#0891b2,#2563eb);box-shadow:0 10px 32px rgba(14,165,233,.34);color:#fff;font:700 .95rem Inter,sans-serif;cursor:pointer;transition:transform .2s,box-shadow .2s}
-.intro-enter:hover{transform:translateY(-2px);box-shadow:0 15px 38px rgba(14,165,233,.48)}
-.intro-enter span{font-size:1.2rem;transition:transform .2s}
-.intro-enter:hover span{transform:translateX(4px)}
-.intro-skip{padding:10px 4px;border:0;background:none;color:#e2e8f0;font:600 .82rem Inter,sans-serif;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
-.intro-fallback{position:absolute;z-index:1;top:20px;right:20px;left:20px;margin:0;color:#fecaca;text-align:center;font-size:.82rem;text-shadow:0 2px 8px #000}
-@media(max-width:600px){
-  .intro-content{right:20px;bottom:28px;left:20px;display:grid;justify-items:center;gap:18px;text-align:center}
-  .intro-copy p{font-size:.92rem}
-  .intro-actions{width:100%;flex-direction:column;gap:8px}
-  .intro-enter{width:min(100%,320px);min-height:50px}
-  .intro-skip{padding:8px 12px}
-}
+.site-intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;background:#020617}
+.site-intro::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(2,6,23,.32),transparent 24%)}
+.intro-skip{position:absolute;z-index:1;right:clamp(16px,4vw,48px);bottom:clamp(16px,4vh,36px);padding:10px 16px;border:1px solid rgba(255,255,255,.4);border-radius:999px;background:rgba(2,6,23,.52);color:#fff;font:600 .85rem Inter,sans-serif;cursor:pointer;backdrop-filter:blur(8px)}
+.intro-skip:hover{background:rgba(2,6,23,.78)}
+.intro-fallback{position:absolute;z-index:1;top:20px;right:20px;left:20px;margin:0;color:#fff;text-align:center;font-size:.9rem;text-shadow:0 2px 8px #000}
+@media(max-width:520px){.intro-skip{right:16px;bottom:16px}}
 @media(prefers-reduced-motion:reduce){
-  .site-intro,.intro-enter,.intro-enter span{transition:none}
+  .site-intro{transition:none}
+  body.site-entering nav,body.site-entering #bar,body.site-entering main{animation:none}
 }
 </style>
 </head>
 <body class="intro-active">
-<section class="site-intro" id="siteIntro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
-<video id="introMovie" muted playsinline preload="auto" aria-hidden="true">
+<section class="site-intro" id="siteIntro" aria-label="Video pembuka">
+<video id="introMovie" autoplay muted playsinline preload="auto" aria-hidden="true">
 <source src="flight-intro.mp4" type="video/mp4">
 </video>
-<p class="intro-fallback" id="introFallback" hidden>Video intro tidak bisa diputar di browser ini. Kamu tetap bisa lanjut ke materi.</p>
-<div class="intro-content">
-<div class="intro-copy"><span class="intro-kicker">LAB FISIKA INTERAKTIF</span><p id="introTitle">Saksikan pembuka, lalu mulai jelajahi fisika penerbangan.</p></div>
-<div class="intro-actions"><button class="intro-enter" id="introEnter" type="button">Mulai belajar <span aria-hidden="true">→</span></button><button class="intro-skip" id="introSkip" type="button">Lewati intro</button></div>
-</div>
+<p class="intro-fallback" id="introFallback" role="status" hidden></p>
+<button class="intro-skip" id="introSkip" type="button">Lewati Intro</button>
 </section>
 <nav aria-label="Menu utama" aria-hidden="true" inert>
 <b>✈ Gaya Angkat</b>
@@ -464,19 +457,18 @@ body.intro-active{overflow:hidden}
 <div class="hero">
 <div class="hero-layout">
 <div class="hero-copy"><span class="hero-kicker">LAB FISIKA INTERAKTIF</span>
-<h1>Fisika di balik<span>gaya angkat.</span></h1>
+<h1>Kenapa pesawat bisa<span>terbang?</span></h1>
 <p>Mengapa pesawat yang beratnya ratusan ton bisa terbang?</p>
 <div class="hero-equation">ΔF = ½ρ(Vₐ² − Vᵦ²)A<small>Selisih tekanan udara menghasilkan gaya angkat</small></div>
 <div class="row" style="justify-content:flex-start"><button class="btn" data-go="definisi">Jelajahi konsep <span aria-hidden="true">↗</span></button><button class="btn alt" data-go="simulasi">Buka simulasi</button></div>
 <div class="hero-meta"><span>BERNOULLI</span><span>AERODINAMIKA</span><span>INTERAKTIF</span></div>
 </div>
-<div class="physics-scene" role="img" aria-label="Ilustrasi pesawat dengan aliran udara dan persamaan gaya angkat">
+<div class="physics-scene" role="img" aria-label="Ilustrasi pesawat dan aliran udara di sekitar sayap">
 <span class="hero-flow one"></span><span class="hero-flow two"></span>
 <span class="scene-label top"><small>ALIRAN UDARA</small>v ↑ &nbsp; P ↓</span>
 <svg class="float" width="260" viewBox="0 0 260 110" aria-hidden="true"><path d="M20 62 Q20 44 60 44 L205 46 Q245 52 248 64 Q240 78 205 78 L60 78 Q20 78 20 62Z" fill="#fff" stroke="#94A3B8" stroke-width="2"/><path d="M30 46 L8 14 L40 14 L70 46Z" fill="#2563EB"/><path d="M110 66 L70 100 L100 100 L150 68Z" fill="#60A5FA"/><path d="M205 52 L232 52 L238 60 L200 60Z" fill="#7DD3FC"/><circle cx="105" cy="62" r="3" fill="#94A3B8"/><circle cx="125" cy="62" r="3" fill="#94A3B8"/><circle cx="145" cy="62" r="3" fill="#94A3B8"/><circle cx="165" cy="62" r="3" fill="#94A3B8"/></svg>
 <span class="scene-label bottom"><small>GAYA ANGKAT</small>ΔF &nbsp; ↑</span>
 <span class="scene-formula">ΔF = ΔP · A</span>
-</div>
 </div>
 </div>
 <div class="learning-intro"><h2>Jelajahi konsep penerbangan</h2><p>Pahami gaya yang membuat pesawat mampu terbang.</p></div>
@@ -614,43 +606,49 @@ const rumusHalaman={
 };
 const visited=new Set();let cur=0;
 const siteIntro=$('#siteIntro'),introMovie=$('#introMovie'),introFallback=$('#introFallback');
+const introSkip=$('#introSkip');
 const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 function syncIntroVideo(){
   if(!document.body.classList.contains('intro-active')||motionPreference.matches||document.hidden){introMovie.pause();return}
   const playback=introMovie.play();
   if(playback)playback.catch(error=>{
     if(error.name==='AbortError')return;
-    if(error.name==='NotAllowedError'){
-      introMovie.controls=true;
-      introFallback.hidden=false;
-      introFallback.textContent='Tekan putar untuk menonton intro, atau lanjutkan ke materi.';
-      return;
-    }
+    introFallback.textContent='Video tidak dapat diputar otomatis. Lewati Intro untuk masuk ke website.';
     introFallback.hidden=false;
-    console.error('Video pembuka gagal diputar:',error);
+    console.error('Video intro gagal diputar:',error);
   });
 }
 function closeSiteIntro(){
   if(!document.body.classList.contains('intro-active'))return;
   document.body.classList.remove('intro-active');
+  document.body.classList.add('site-entering');
   siteIntro.classList.add('is-leaving');
   siteIntro.setAttribute('aria-hidden','true');
   $('nav').removeAttribute('aria-hidden');$('nav').removeAttribute('inert');
   $('#bar').removeAttribute('aria-hidden');$('#bar').removeAttribute('inert');
   $('main').removeAttribute('aria-hidden');$('main').removeAttribute('inert');
   introMovie.pause();
-  window.setTimeout(()=>{siteIntro.hidden=true;$('nav [data-p="beranda"]').focus({preventScroll:true})},600);
+  window.setTimeout(()=>{
+    siteIntro.hidden=true;
+    document.body.classList.remove('site-entering');
+    $('nav [data-p="beranda"]').focus({preventScroll:true});
+  },850);
 }
-$('#introEnter').addEventListener('click',closeSiteIntro);
-$('#introSkip').addEventListener('click',closeSiteIntro);
+introSkip.addEventListener('click',closeSiteIntro);
+introMovie.addEventListener('ended',closeSiteIntro);
 introMovie.addEventListener('error',()=>{
+  introFallback.textContent='Video intro tidak dapat dimuat. Lewati Intro untuk masuk ke website.';
   introFallback.hidden=false;
-  introFallback.textContent='Video intro tidak bisa diputar di browser ini. Kamu tetap bisa lanjut ke materi.';
-  console.error('Video pembuka gagal dimuat:',introMovie.error);
+  console.error('Video intro gagal dimuat:',introMovie.error);
 });
-if(motionPreference.addEventListener)motionPreference.addEventListener('change',syncIntroVideo);
-else if(motionPreference.addListener)motionPreference.addListener(syncIntroVideo);
+if(motionPreference.addEventListener)motionPreference.addEventListener('change',()=>{
+  if(motionPreference.matches)closeSiteIntro();else syncIntroVideo();
+});
+else if(motionPreference.addListener)motionPreference.addListener(()=>{
+  if(motionPreference.matches)closeSiteIntro();else syncIntroVideo();
+});
 document.addEventListener('visibilitychange',syncIntroVideo);
+if(motionPreference.matches)closeSiteIntro();else syncIntroVideo();
 function go(p){
   cur=typeof p==='number'?p:halaman.indexOf(p);
   const halamanAktif=halaman[cur],section=$(`#${halamanAktif}`);
@@ -659,7 +657,6 @@ function go(p){
   section.dataset.equation=rumusHalaman[halamanAktif];
   void section.offsetWidth;
   section.classList.add('on');
-  syncIntroVideo();
   $$('nav [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===halamanAktif));
   visited.add(halamanAktif);
   $('#bar i').style.width=visited.size/halaman.length*100+'%';
@@ -675,7 +672,6 @@ $('#tema').onclick=()=>document.documentElement.dataset.theme=document.documentE
 $('#pres').onclick=()=>document.body.classList.toggle('pres');
 document.addEventListener('keydown',e=>{
   if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;
-  if(e.key==='Escape'&&document.body.classList.contains('intro-active')){closeSiteIntro();return}
   if(e.key==='ArrowRight'&&cur<halaman.length-1)go(cur+1);
   if(e.key==='ArrowLeft'&&cur>0)go(cur-1);
   if(e.key==='m'||e.key==='M')$('#tema').click();
@@ -684,13 +680,6 @@ document.addEventListener('keydown',e=>{
 if(matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.dataset.theme='dark';
 $('#ident').innerHTML=`<strong>${ID.nama}</strong> · ${ID.kelas} · ${ID.mapel} · ${ID.tahun}<ol>${ID.anggota.map(n=>`<li>${n}</li>`).join('')}</ol>`;
 if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
-  const scene=$('.physics-scene');
-  scene.onpointermove=e=>{
-    const r=scene.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
-    scene.style.setProperty('--scene-rx',`${(0.5-y)*8}deg`);
-    scene.style.setProperty('--scene-ry',`${(x-0.5)*10}deg`);
-  };
-  scene.onpointerleave=()=>{scene.style.setProperty('--scene-rx','0deg');scene.style.setProperty('--scene-ry','0deg')};
   $$('.learning-card').forEach(card=>{
     card.onpointermove=e=>{
       const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
