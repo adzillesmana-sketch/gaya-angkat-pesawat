@@ -255,12 +255,14 @@ body.pres .hero{padding-block:90px}
 .hero-layout{position:relative;display:grid;grid-template-columns:minmax(0,1.14fr) minmax(280px,.86fr);align-items:center;gap:clamp(20px,5vw,58px);max-width:980px;margin:0 auto}
 .hero-copy{z-index:1}
 .hero-copy h1{color:#f8fbff}
-.hero-kicker{display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;padding:7px 12px;border:1px solid rgba(125,211,252,.22);border-radius:999px;background:rgba(15,35,59,.74);color:#bae6fd;font-size:.76rem;font-weight:700;letter-spacing:.12em}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;padding:7px 12px;border:1px solid rgba(125,211,252,.22);border-radius:999px;background:rgba(15,35,59,.74);color:#bae6fd;font-size:.76rem;font-weight:700;letter-spacing:.12em}
 [data-theme=dark] .hero-kicker{color:#bae6fd}
 .hero-kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:#67e8f9;box-shadow:0 0 12px #22d3ee}
 .hero-copy h1{max-width:650px;font-size:clamp(2.5rem,5.3vw,4.3rem);line-height:.98;letter-spacing:-.055em}
 .hero-copy h1 span{display:block;color:transparent;background:linear-gradient(100deg,#67e8f9 4%,#60a5fa 48%,#c4b5fd 95%);background-clip:text;-webkit-background-clip:text}
-.hero-copy p{max-width:480px;margin:20px 0 28px;color:#a8bad4!important;font-size:clamp(1rem,1.7vw,1.15rem)!important}
+.hero-copy p{max-width:510px;margin:18px 0 20px;color:#a8bad4!important;font-size:clamp(1rem,1.7vw,1.15rem)!important}
+.hero-equation{display:inline-flex;flex-direction:column;gap:2px;margin:0 0 20px;padding:9px 13px;border:1px solid rgba(125,211,252,.22);border-radius:12px;background:rgba(15,35,59,.72);color:#a5f3fc;font:600 .84rem 'JetBrains Mono',monospace}
+.hero-equation small{color:#91a9c5;font:500 .68rem Inter,sans-serif}
 .hero-copy .row{justify-content:flex-start}
 .hero-copy .btn{background:linear-gradient(100deg,#0891b2,#2563eb);box-shadow:0 10px 28px rgba(14,165,233,.25)}
 .hero-copy .btn.alt{color:#dbeafe;background:rgba(15,35,59,.72);border-color:rgba(125,211,252,.22);box-shadow:none}
@@ -269,8 +271,8 @@ body.pres .hero{padding-block:90px}
 .hero-meta span::before{content:"";width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 10px #34d399}
 .physics-scene{position:relative;min-height:360px;display:grid;place-items:center;isolation:isolate;perspective:900px;border:1px solid rgba(125,211,252,.12);border-radius:28px;background-image:linear-gradient(rgba(125,211,252,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.045) 1px,transparent 1px),radial-gradient(ellipse at 50% 48%,rgba(14,165,233,.16),transparent 58%),linear-gradient(145deg,rgba(10,26,47,.76),rgba(7,15,28,.48));background-size:28px 28px,28px 28px,auto,auto;box-shadow:inset 0 0 60px rgba(14,165,233,.07),0 22px 60px rgba(0,0,0,.2)}
 .physics-scene::before,.physics-scene::after{content:"";position:absolute;z-index:-1;border:1px solid rgba(125,211,252,.18);border-radius:50%;aspect-ratio:1}
-.physics-scene::before{width:min(83%,310px);animation:orbit-spin 34s linear infinite}
-.physics-scene::after{width:min(65%,235px);border-style:dashed;border-color:rgba(196,181,253,.23);animation:orbit-spin 25s linear infinite reverse}
+.physics-scene::before{width:min(83%,310px);animation:hero-pulse 3.8s ease-in-out infinite}
+.physics-scene::after{width:min(65%,235px);border-style:dashed;border-color:rgba(196,181,253,.32);animation:orbit-spin 12s linear infinite reverse}
 .physics-scene .orbit-dot{position:absolute;width:10px;height:10px;border:2px solid #07101f;border-radius:50%;background:#67e8f9;box-shadow:0 0 20px #22d3ee}
 .physics-scene .orbit-dot.one{top:12%;left:28%}
 .physics-scene .orbit-dot.two{right:13%;top:48%;width:8px;height:8px;background:#a78bfa;box-shadow:0 0 18px #a78bfa}
@@ -281,7 +283,7 @@ body.pres .hero{padding-block:90px}
 [data-theme=dark] .formula-note{color:#bae6fd}
 [data-theme=dark] .formula-note.two{color:#a7f3d0}
 .scene-aircraft{position:relative;z-index:1;width:min(100%,390px);transform:rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg));transform-style:preserve-3d;transition:transform .28s cubic-bezier(.2,.7,.2,1);will-change:transform}
-.scene-plane{position:relative;z-index:1;display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 24px 28px rgba(14,165,233,.2));animation:plane-hover 5.2s ease-in-out infinite}
+.scene-plane{position:relative;z-index:1;display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 24px 28px rgba(14,165,233,.2));animation:hero-plane-hover 2.8s ease-in-out infinite;will-change:transform,filter}
 .scene-plane .airflow-line{fill:none;stroke:#38bdf8;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:7 12;animation:airflow 1.2s linear infinite}
 .scene-plane .airflow-line.alt{stroke:#a78bfa;animation-delay:-.6s}
 .scene-plane .plane-body{fill:url(#planeBody);stroke:#bae6fd;stroke-opacity:.8;stroke-width:1.5}
@@ -292,6 +294,10 @@ body.pres .hero{padding-block:90px}
 .scene-label small{color:#91a9c5;font:500 .56rem Inter,sans-serif}
 .scene-label.top{top:18%;right:1%;animation:label-drift 4s ease-in-out infinite}
 .scene-label.bottom{bottom:19%;left:1%;animation:label-drift 4.5s ease-in-out infinite reverse}
+.hero-flow{position:absolute;z-index:0;left:8%;right:8%;height:3px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(56,189,248,.58),transparent);opacity:.85}
+.hero-flow::after{content:"";position:absolute;top:50%;left:0;width:11px;height:11px;border:2px solid #e0f2fe;border-radius:50%;background:#38bdf8;box-shadow:0 0 16px 4px rgba(56,189,248,.75);transform:translate(-50%,-50%);animation:hero-flow-dot 1.8s ease-in-out infinite}
+.hero-flow.one{top:34%}.hero-flow.two{top:66%}
+.hero-flow.two::after{animation-delay:-.9s;background:#a78bfa;border-color:#ede9fe;box-shadow:0 0 16px 4px rgba(167,139,250,.7)}
 .learning-intro{margin:28px 0 14px}
 .learning-intro h2{margin-bottom:5px;font-size:clamp(1.35rem,3vw,1.8rem)}
 .learning-intro p{margin:0;color:var(--muted)}
@@ -318,6 +324,9 @@ body.pres .hero{padding-block:90px}
 @keyframes label-drift{0%,100%{transform:translateY(2px)}50%{transform:translateY(-7px)}}
 @keyframes core-pulse{0%,100%{opacity:.72;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
 @keyframes formula-drift{0%,100%{translate:0 2px}50%{translate:0 -6px}}
+@keyframes hero-pulse{0%,100%{transform:scale(.88);opacity:.45}50%{transform:scale(1.08);opacity:1}}
+@keyframes hero-plane-hover{0%,100%{transform:translateY(10px) rotate(-2.5deg) scale(.98);filter:drop-shadow(0 10px 12px rgba(14,165,233,.18))}50%{transform:translateY(-18px) rotate(2.5deg) scale(1.04);filter:drop-shadow(0 24px 24px rgba(14,165,233,.42))}}
+@keyframes hero-flow-dot{0%{left:4%;opacity:.25}45%{opacity:1}100%{left:96%;opacity:.25}}
 @media(max-width:800px){
   nav{position:relative}
   nav b{width:100%;margin-bottom:4px}
@@ -328,6 +337,7 @@ body.pres .hero{padding-block:90px}
   .hero-copy{text-align:center}
   .hero-copy p{margin-inline:auto}
   .hero-copy .row{justify-content:center}
+  .hero-equation{margin-inline:auto}
   .physics-scene{min-height:290px}
   .formula-note{font-size:.56rem;padding:6px 8px}
   .formula-note.one{top:4%;left:2%}
@@ -358,7 +368,7 @@ body.pres .hero{padding-block:90px}
   html{scroll-behavior:auto}
   .pg.on{animation:none}
   .pg::before{animation:none!important;opacity:.055;transform:none}
-  .scene-plane,.scene-plane .airflow-line,.physics-scene::before,.physics-scene::after,.orbit-dot,.scene-label,.formula-note,.visual-ring,.visual-core{animation:none}
+  .scene-plane,.scene-plane .airflow-line,.physics-scene::before,.physics-scene::after,.hero-flow,.hero-flow::after,.orbit-dot,.scene-label,.formula-note,.visual-ring,.visual-core{animation:none}
   .scene-aircraft{transition:none;transform:none}
   .learning-card{transition:none;transform:none}
 }
@@ -417,10 +427,12 @@ body::after{
 <div class="hero-copy"><span class="hero-kicker">LAB FISIKA INTERAKTIF</span>
 <h1>Fisika di balik<span>gaya angkat.</span></h1>
 <p>Mengapa pesawat yang beratnya ratusan ton bisa terbang?</p>
+<div class="hero-equation">ΔF = ½ρ(Vₐ² − Vᵦ²)A<small>Selisih tekanan udara menghasilkan gaya angkat</small></div>
 <div class="row" style="justify-content:flex-start"><button class="btn" data-go="definisi">Jelajahi konsep <span aria-hidden="true">↗</span></button><button class="btn alt" data-go="simulasi">Buka simulasi</button></div>
 <div class="hero-meta"><span>BERNOULLI</span><span>AERODINAMIKA</span><span>INTERAKTIF</span></div>
 </div>
 <div class="physics-scene" aria-hidden="true">
+<span class="hero-flow one"></span><span class="hero-flow two"></span>
 <span class="orbit-dot one"></span><span class="orbit-dot two"></span><span class="orbit-dot three"></span>
 <span class="formula-note one">P + ½ρv² + ρgh = konstan</span><span class="formula-note two">ΔF = ½ρ(V<sub>a</sub>² − V<sub>b</sub>²)A</span>
 <span class="scene-label top"><small>KECEPATAN ATAS</small>Vₐ &nbsp; 250 m/s</span><span class="scene-label bottom"><small>GAYA ANGKAT</small>ΔF &nbsp; ↑</span>
