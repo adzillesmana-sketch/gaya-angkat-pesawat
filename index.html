@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark">
+<html lang="id" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -447,6 +447,115 @@ body.site-entering nav,body.site-entering #bar,body.site-entering main{animation
   .site-intro{transition:none}
   body.site-entering nav,body.site-entering #bar,body.site-entering main{animation:none}
 }
+html,body{overflow-x:clip}
+#beranda.pg.on{margin-top:calc(-1 * clamp(20px,4vw,42px))}
+#beranda .hero{
+  width:100vw;
+  min-height:min(760px,calc(100vh - 62px));
+  margin:0 0 34px calc(50% - 50vw);
+  padding:clamp(28px,4.2vw,64px) clamp(24px,7vw,100px);
+  border:0;
+  border-radius:0;
+  color:#fff;
+  background:
+    radial-gradient(ellipse at 79% 76%,rgba(226,246,255,.82),transparent 25%),
+    radial-gradient(ellipse at 90% 87%,rgba(248,253,255,.94),transparent 23%),
+    radial-gradient(ellipse at 56% 105%,rgba(232,247,255,.8),transparent 24%),
+    linear-gradient(155deg,#174c98 0%,#287ac5 43%,#56afe9 78%,#9ad9f8 100%);
+  box-shadow:inset 0 -45px 90px rgba(13,77,145,.16);
+}
+#beranda .hero::before{
+  inset:auto -8% -18%;
+  width:116%;
+  height:48%;
+  filter:none;
+  background:
+    radial-gradient(ellipse at 13% 100%,rgba(255,255,255,.88) 0 12%,transparent 35%),
+    radial-gradient(ellipse at 42% 100%,rgba(255,255,255,.72) 0 14%,transparent 38%),
+    radial-gradient(ellipse at 74% 100%,rgba(255,255,255,.88) 0 13%,transparent 36%),
+    radial-gradient(ellipse at 100% 100%,rgba(255,255,255,.72) 0 14%,transparent 38%);
+  opacity:.72;
+}
+#beranda .hero::after{
+  opacity:.35;
+  background:
+    radial-gradient(ellipse at 100% 100%,rgba(255,255,255,.95) 0 8%,transparent 26%),
+    radial-gradient(ellipse at 0% 100%,rgba(255,255,255,.88) 0 9%,transparent 27%);
+  background-size:auto;
+  mask-image:none;
+  -webkit-mask-image:none;
+}
+#beranda .hero-layout{max-width:1280px;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:clamp(18px,4vw,54px)}
+#beranda .hero-copy{position:relative;z-index:3}
+#beranda .hero-kicker{padding:0 0 10px;border:0;border-bottom:1px solid rgba(219,242,255,.68);border-radius:0;background:none;color:#e5f5ff;letter-spacing:.28em}
+#beranda .hero-kicker::before{display:none}
+#beranda .hero-copy h1{max-width:600px;font-size:clamp(2.8rem,5.4vw,5.5rem);line-height:.92;letter-spacing:-.06em;text-shadow:0 8px 30px rgba(6,41,95,.18)}
+#beranda .hero-copy h1 span{background:linear-gradient(100deg,#d9f3ff,#8fd3ff 70%,#c9ecff);background-clip:text;-webkit-background-clip:text}
+#beranda .hero-copy p{max-width:510px;margin:22px 0;color:#e9f7ff!important;font-size:clamp(1rem,1.6vw,1.2rem)!important;text-shadow:0 2px 12px rgba(4,38,86,.28)}
+#beranda .hero-equation{display:flex;align-items:flex-start;width:fit-content;max-width:100%;margin:6px 0 22px;padding:0;border:0;background:none;color:#f5fbff;font-size:clamp(1.05rem,1.7vw,1.4rem);text-shadow:0 3px 14px rgba(3,34,81,.25)}
+#beranda .equation-main{white-space:nowrap}
+#beranda .hero-equation small{color:#d8f0ff;font-size:.74rem}
+#beranda .hero-copy .btn{min-height:48px;border:1px solid rgba(229,247,255,.9);border-radius:999px;background:rgba(255,255,255,.12);box-shadow:0 8px 24px rgba(4,49,102,.16);backdrop-filter:blur(8px)}
+#beranda .hero-copy .btn:hover{background:rgba(255,255,255,.24)}
+#beranda .hero-copy .btn.alt{border-color:rgba(229,247,255,.45);color:#fff;background:rgba(9,65,125,.22)}
+#beranda .hero-meta{color:#e6f5ff}
+#beranda .hero-meta span::before{background:#bbf7d0;box-shadow:0 0 10px #bbf7d0}
+#beranda .physics-scene{
+  min-height:clamp(320px,42vw,520px);
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:radial-gradient(ellipse at 68% 80%,rgba(245,252,255,.76),transparent 34%);
+  box-shadow:none;
+}
+#beranda .physics-scene::before,#beranda .physics-scene::after{display:none}
+#beranda .hero-flow{z-index:2;left:2%;right:2%;height:2px;background:linear-gradient(90deg,transparent,rgba(233,249,255,.9),transparent)}
+#beranda .hero-flow.one{top:29%;transform:rotate(-8deg)}
+#beranda .hero-flow.two{top:44%;transform:rotate(8deg)}
+#beranda .hero-flow::after{width:8px;height:8px;border-color:#fff;background:#dff5ff;box-shadow:0 0 12px 3px rgba(255,255,255,.68)}
+#beranda .hero-wing{position:absolute;z-index:1;right:-20%;bottom:-4%;width:min(135%,760px);height:auto;overflow:visible;filter:drop-shadow(0 26px 20px rgba(13,47,94,.28));animation:wing-glide 7s ease-in-out infinite}
+#beranda .wing-shadow{fill:rgba(21,62,116,.38)}
+#beranda .wing-surface{fill:url(#wingFill);stroke:#eaf7ff;stroke-width:3}
+#beranda .wing-edge{fill:none;stroke:rgba(66,113,162,.42);stroke-width:2}
+#beranda .wing-highlight{fill:none;stroke:rgba(255,255,255,.92);stroke-width:3}
+#beranda .scene-label{border-color:rgba(255,255,255,.42);background:rgba(21,77,139,.32);color:#fff;box-shadow:0 8px 24px rgba(19,68,124,.12)}
+#beranda .scene-label small{color:#e0f2fe}
+#beranda .scene-label.top{top:13%;right:1%}
+#beranda .scene-label.bottom{bottom:12%;left:0}
+#beranda .scene-formula{right:1%;bottom:4%;z-index:3;color:#f8fdff;font-size:clamp(.65rem,1.2vw,.9rem);text-shadow:0 2px 8px rgba(7,44,92,.42)}
+#beranda .airfoil-card{position:absolute;z-index:3;top:3%;right:2%;width:min(250px,53%);display:grid;gap:4px;padding:10px 12px;border:1px solid rgba(255,255,255,.32);border-radius:16px;background:rgba(21,77,139,.24);color:#f3fbff;font-size:.64rem;backdrop-filter:blur(7px)}
+#beranda .airfoil-card strong{font:600 .58rem 'JetBrains Mono',monospace;letter-spacing:.05em}
+#beranda .airfoil-card svg{width:100%;margin:0}
+#beranda .airfoil-card .airflow-streams{animation:airfoil-flow 2.4s linear infinite}
+#beranda .airfoil-card span{text-align:center;color:#e4f6ff}
+nav #tema{font-size:1.1rem;line-height:1}
+@keyframes wing-glide{0%,100%{transform:translateY(8px) rotate(-1deg)}50%{transform:translateY(-8px) rotate(.6deg)}}
+@keyframes airfoil-flow{to{stroke-dashoffset:-44}}
+[data-theme=dark] #beranda .hero{background:radial-gradient(ellipse at 79% 76%,rgba(39,112,168,.62),transparent 26%),linear-gradient(155deg,#071d43 0%,#0b3970 48%,#155b8e 100%)}
+[data-theme=dark] #beranda .hero::before{opacity:.24}
+[data-theme=dark] #beranda .hero::after{opacity:.12}
+@media(max-width:800px){
+  #beranda.pg.on{margin-top:-20px}
+  #beranda .hero{min-height:0;padding:40px 24px 26px}
+  #beranda .hero-layout{grid-template-columns:1fr;gap:0}
+  #beranda .hero-copy{text-align:left}
+  #beranda .hero-copy p{margin:18px 0}
+  #beranda .hero-copy .row{justify-content:flex-start}
+  #beranda .hero-meta{margin-top:22px}
+  #beranda .physics-scene{min-height:300px}
+  #beranda .hero-wing{right:-7%;bottom:-10%;width:112%}
+  #beranda .airfoil-card{top:0;right:0}
+}
+@media(max-width:520px){
+  #beranda .hero{padding:42px 18px 20px}
+  #beranda .hero-copy h1{font-size:clamp(2.8rem,14vw,4.4rem)}
+  #beranda .hero-meta{gap:10px;font-size:.64rem}
+  #beranda .physics-scene{min-height:250px}
+  #beranda .scene-label{font-size:.58rem}
+  #beranda .airfoil-card{width:54%;padding:7px 8px}
+  #beranda .scene-formula{bottom:2%}
+}
+@media(prefers-reduced-motion:reduce){#beranda .hero-wing,#beranda .airfoil-card .airflow-streams{animation:none}}
 </style>
 </head>
 <body class="intro-active">
@@ -461,8 +570,8 @@ body.site-entering nav,body.site-entering #bar,body.site-entering main{animation
 <b>✈ Gaya Angkat</b>
 <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Buka menu">☰</button>
 <div class="nav-links" id="navLinks">
-<button data-p="beranda">Beranda</button><button data-p="definisi">Definisi</button><button data-p="konsep">Konsep</button><button data-p="rumus">Rumus</button><button data-p="simulasi">Simulasi</button><button data-p="soal">Contoh Soal</button><button data-p="kuis">Kuis</button>
-<button id="tema" title="Mode gelap/terang (M)">🌓</button><button id="pres" title="Mode presentasi (P)">🖥</button>
+<button data-p="beranda">Beranda</button><button data-p="definisi">Materi</button><button data-p="rumus">Rumus</button><button data-p="simulasi">Simulasi</button><button data-about>Tentang</button><button data-p="konsep">Konsep</button><button data-p="soal">Contoh Soal</button><button data-p="kuis">Kuis</button>
+<button id="tema" type="button" aria-label="Aktifkan mode gelap" title="Ganti tema warna">☼</button><button id="pres" title="Mode presentasi (P)">🖥</button>
 </div>
 </nav>
 <div id="bar" aria-hidden="true" inert><i></i></div>
@@ -472,19 +581,27 @@ body.site-entering nav,body.site-entering #bar,body.site-entering main{animation
 <section class="pg" id="beranda">
 <div class="hero">
 <div class="hero-layout">
-<div class="hero-copy"><span class="hero-kicker">LAB FISIKA INTERAKTIF</span>
-<h1>Kenapa pesawat bisa<span>terbang?</span></h1>
-<p>Mengapa pesawat yang beratnya ratusan ton bisa terbang?</p>
-<div class="hero-equation">ΔF = ½ρ(Vₐ² − Vᵦ²)A<small>Selisih tekanan udara menghasilkan gaya angkat</small></div>
+<div class="hero-copy"><span class="hero-kicker">FISIKA KELAS X</span>
+<h1>Gaya Angkat<span>Pesawat</span></h1>
+<p>Bagaimana pesawat bisa terbang? Mari pelajari prinsip di balik gaya angkatnya.</p>
+<div class="hero-equation"><span class="equation-main">F<sub>L</sub> = ½ρv²C<sub>L</sub>A</span><small>Bentuk umum gaya angkat; simulasinya memakai selisih kecepatan udara di atas dan bawah sayap.</small></div>
 <div class="row" style="justify-content:flex-start"><button class="btn" data-go="definisi">Mulai Belajar <span aria-hidden="true">↗</span></button><button class="btn alt" data-go="simulasi">Coba Simulasi</button></div>
 <div class="hero-meta"><span>BERNOULLI</span><span>AERODINAMIKA</span><span>INTERAKTIF</span></div>
 </div>
-<div class="physics-scene" role="img" aria-label="Ilustrasi pesawat dan aliran udara di sekitar sayap">
+<div class="physics-scene" role="img" aria-label="Ilustrasi sayap pesawat dan aliran udara di sekitarnya">
 <span class="hero-flow one"></span><span class="hero-flow two"></span>
 <span class="scene-label top"><small>ALIRAN UDARA</small>v ↑ &nbsp; P ↓</span>
-<svg class="float" width="260" viewBox="0 0 260 110" aria-hidden="true"><path d="M20 62 Q20 44 60 44 L205 46 Q245 52 248 64 Q240 78 205 78 L60 78 Q20 78 20 62Z" fill="#fff" stroke="#94A3B8" stroke-width="2"/><path d="M30 46 L8 14 L40 14 L70 46Z" fill="#2563EB"/><path d="M110 66 L70 100 L100 100 L150 68Z" fill="#60A5FA"/><path d="M205 52 L232 52 L238 60 L200 60Z" fill="#7DD3FC"/><circle cx="105" cy="62" r="3" fill="#94A3B8"/><circle cx="125" cy="62" r="3" fill="#94A3B8"/><circle cx="145" cy="62" r="3" fill="#94A3B8"/><circle cx="165" cy="62" r="3" fill="#94A3B8"/></svg>
+<svg class="hero-wing" viewBox="0 0 640 420" aria-hidden="true">
+<defs><linearGradient id="wingFill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fdff"/><stop offset=".58" stop-color="#b9d9f5"/><stop offset="1" stop-color="#7aa7d3"/></linearGradient></defs>
+<path class="wing-shadow" d="M60 210Q94 177 184 169L616 294Q631 300 613 311L215 246Q135 248 70 232Q47 226 60 210Z"/>
+<path class="wing-surface" d="M50 191Q92 157 184 151L612 270Q631 277 613 288L214 228Q129 232 63 212Q43 205 50 191Z"/>
+<path class="wing-edge" d="M184 151L214 228M274 177L303 242M369 203L392 255M466 230L482 268"/>
+<path class="wing-highlight" d="M76 190Q118 171 181 167L570 275"/>
+</svg>
 <span class="scene-label bottom"><small>GAYA ANGKAT</small>ΔF &nbsp; ↑</span>
-<span class="scene-formula">ΔF = ΔP · A</span>
+<span class="scene-formula">F<sub>L</sub> = ½ρv²C<sub>L</sub>A</span>
+<div class="airfoil-card"><strong>ALIRAN DI SEKITAR SAYAP</strong><svg viewBox="0 0 250 100" aria-hidden="true"><path class="airflow-streams" d="M18 28C72 24 164 25 230 42M18 72C75 77 165 73 230 57" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="5 6"/><path d="M61 51Q116 23 194 48Q134 59 61 51Z" fill="rgba(255,255,255,.82)" stroke="currentColor" stroke-width="2"/><path d="M104 21V8M138 20V5M171 26V11" stroke="#16a34a" stroke-width="2"/><path d="M99 13L104 7L109 13M133 10L138 4L143 10M166 16L171 10L176 16" fill="none" stroke="#16a34a" stroke-width="2"/></svg><span>Kecepatan udara ↑ · Tekanan ↓</span></div>
+</div>
 </div>
 </div>
 <div class="learning-intro"><h2>Jelajahi konsep penerbangan</h2><p>Pahami gaya yang membuat pesawat mampu terbang.</p></div>
@@ -493,7 +610,7 @@ body.site-entering nav,body.site-entering #bar,body.site-entering main{animation
 <article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M64 72V31 M53 43L64 30L75 43" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 51H49 M40 42L50 51L40 60 M97 51H79 M88 42L78 51L88 60" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle class="visual-core" cx="64" cy="72" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Gaya pada pesawat</span><code class="card-equation">ΔF = ΔP · A &nbsp;|&nbsp; W = m · g</code><h3>Lift dan berat</h3><p>Kenali arah gaya angkat, gaya berat, gaya dorong, dan gaya hambat pada pesawat.</p><button class="btn alt" data-go="definisi">Lihat gaya →</button></article>
 <article class="learning-card"><div class="learning-card-visual" aria-hidden="true"><svg viewBox="0 0 128 100"><circle class="visual-ring" cx="64" cy="50" r="37"/><path d="M37 34H91 M37 50H91 M37 66H91" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M48 29L53 39 M75 45L80 55 M58 61L63 71" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/><circle class="visual-core" cx="101" cy="50" r="5" fill="currentColor"/></svg></div><span class="learning-card-label">Eksperimen virtual</span><code class="card-equation">ΔF = ½ρ(V<sub>a</sub>² − V<sub>b</sub>²)A</code><h3>Simulasi gaya angkat</h3><p>Ubah kecepatan dan luas sayap, lalu lihat dampaknya terhadap gaya angkat pesawat.</p><button class="btn alt" data-go="simulasi">Coba simulasi →</button></article>
 </div>
-<div class="card"><h3>Peta Belajar</h3><div class="row" id="peta"></div><p id="ident" style="color:var(--muted);margin-bottom:0"></p></div>
+<div class="card" id="aboutCard"><h3>Tentang pembelajaran</h3><div class="row" id="peta"></div><p id="ident" style="color:var(--muted);margin-bottom:0"></p></div>
 </section>
 
 <!-- ===== HTML: 2 Definisi ===== -->
@@ -709,7 +826,7 @@ else if(motionPreference.addListener)motionPreference.addListener(()=>{
 document.addEventListener('visibilitychange',syncIntroVideo);
 if(document.documentElement.classList.contains('intro-seen')||motionPreference.matches)closeSiteIntro(true);
 else syncIntroVideo();
-function go(p){
+function go(p,scroll=true){
   const next=typeof p==='number'?p:halaman.indexOf(p);
   if(next<0||next>=halaman.length)return;
   cur=next;
@@ -726,12 +843,22 @@ function go(p){
   $('#prev').style.visibility=cur?'visible':'hidden';
   $('#next').style.visibility=cur<halaman.length-1?'visible':'hidden';
   const pt=$('#peta');pt.innerHTML=halaman.slice(1).map(h=>`<span class="sub" style="${visited.has(h)?'background:var(--lift);color:#fff':''}">${visited.has(h)?'✓ ':''}${h}</span>`).join(' → ');
-  window.scrollTo({top:0,behavior:motionPreference.matches?'auto':'smooth'});
+  if(scroll)window.scrollTo({top:0,behavior:motionPreference.matches?'auto':'smooth'});
 }
 $$('nav [data-p]').forEach(b=>b.onclick=()=>go(b.dataset.p));
 $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+$$('[data-about]').forEach(b=>b.onclick=()=>{
+  if(cur!==0)go('beranda',false);
+  closeMobileNav();
+  $('#aboutCard').scrollIntoView({behavior:motionPreference.matches?'auto':'smooth',block:'center'});
+});
 $('#prev').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);
-$('#tema').onclick=()=>document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'':'dark';
+$('#tema').onclick=()=>{
+  const dark=document.documentElement.dataset.theme!=='dark';
+  document.documentElement.dataset.theme=dark?'dark':'light';
+  $('#tema').textContent=dark?'☾':'☼';
+  $('#tema').setAttribute('aria-label',dark?'Aktifkan mode terang':'Aktifkan mode gelap');
+};
 $('#pres').onclick=()=>document.body.classList.toggle('pres');
 document.addEventListener('keydown',e=>{
   if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;
@@ -741,7 +868,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='m'||e.key==='M')$('#tema').click();
   if(e.key==='p'||e.key==='P')$('#pres').click();
 });
-if(matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.dataset.theme='dark';
+$('#tema').textContent=document.documentElement.dataset.theme==='dark'?'☾':'☼';
 $('#ident').innerHTML=`<strong>${ID.nama}</strong> · ${ID.kelas} · ${ID.mapel} · ${ID.tahun}<ol>${ID.anggota.map(n=>`<li>${n}</li>`).join('')}</ol>`;
 if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
   $$('.learning-card').forEach(card=>{
