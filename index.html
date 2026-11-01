@@ -269,35 +269,18 @@ body.pres .hero{padding-block:90px}
 .hero-meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:30px;color:#8da2bd;font:500 .75rem 'JetBrains Mono',monospace}
 .hero-meta span{display:inline-flex;gap:8px;align-items:center}
 .hero-meta span::before{content:"";width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 10px #34d399}
-.physics-scene{position:relative;min-height:360px;display:grid;place-items:center;isolation:isolate;perspective:900px;border:1px solid rgba(125,211,252,.12);border-radius:28px;background-image:linear-gradient(rgba(125,211,252,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.045) 1px,transparent 1px),radial-gradient(ellipse at 50% 48%,rgba(14,165,233,.16),transparent 58%),linear-gradient(145deg,rgba(10,26,47,.76),rgba(7,15,28,.48));background-size:28px 28px,28px 28px,auto,auto;box-shadow:inset 0 0 60px rgba(14,165,233,.07),0 22px 60px rgba(0,0,0,.2)}
+.physics-scene{position:relative;min-height:260px;display:grid;place-items:center;isolation:isolate;perspective:900px;padding:18px;border:1px solid rgba(125,211,252,.12);border-radius:28px;background-image:linear-gradient(rgba(125,211,252,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.045) 1px,transparent 1px),radial-gradient(ellipse at 50% 48%,rgba(14,165,233,.16),transparent 58%),linear-gradient(145deg,rgba(10,26,47,.76),rgba(7,15,28,.48));background-size:28px 28px,28px 28px,auto,auto;box-shadow:inset 0 0 60px rgba(14,165,233,.07),0 22px 60px rgba(0,0,0,.2)}
 .physics-scene::before,.physics-scene::after{content:"";position:absolute;z-index:-1;border:1px solid rgba(125,211,252,.18);border-radius:50%;aspect-ratio:1}
 .physics-scene::before{width:min(83%,310px);animation:hero-pulse 3.8s ease-in-out infinite}
 .physics-scene::after{width:min(65%,235px);border-style:dashed;border-color:rgba(196,181,253,.32);animation:orbit-spin 12s linear infinite reverse}
-.physics-scene .orbit-dot{position:absolute;width:10px;height:10px;border:2px solid #07101f;border-radius:50%;background:#67e8f9;box-shadow:0 0 20px #22d3ee}
-.physics-scene .orbit-dot.one{top:12%;left:28%}
-.physics-scene .orbit-dot.two{right:13%;top:48%;width:8px;height:8px;background:#a78bfa;box-shadow:0 0 18px #a78bfa}
-.physics-scene .orbit-dot.three{bottom:12%;left:30%;width:7px;height:7px;background:#fbbf24;box-shadow:0 0 16px #fbbf24}
-.formula-note{position:absolute;z-index:2;max-width:88%;padding:8px 11px;border:1px solid rgba(125,211,252,.2);border-radius:11px;background:rgba(7,17,32,.78);box-shadow:0 12px 30px rgba(0,0,0,.22);color:#bae6fd;font:600 clamp(.58rem,1vw,.72rem)/1.5 'JetBrains Mono',monospace;white-space:nowrap;backdrop-filter:blur(10px);animation:formula-drift 5s ease-in-out infinite}
-.formula-note.one{top:5%;left:4%;transform:rotate(-3deg)}
-.formula-note.two{right:3%;bottom:5%;color:#a7f3d0;animation-delay:-2.5s}
-[data-theme=dark] .formula-note{color:#bae6fd}
-[data-theme=dark] .formula-note.two{color:#a7f3d0}
-.scene-aircraft{position:relative;z-index:1;width:min(100%,390px);transform:rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg));transform-style:preserve-3d;transition:transform .28s cubic-bezier(.2,.7,.2,1);will-change:transform}
-.scene-plane{position:relative;z-index:1;display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 24px 28px rgba(14,165,233,.2));animation:hero-plane-hover 2.8s ease-in-out infinite;will-change:transform,filter}
-.scene-plane .airflow-line{fill:none;stroke:#38bdf8;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:7 12;animation:airflow 1.2s linear infinite}
-.scene-plane .airflow-line.alt{stroke:#a78bfa;animation-delay:-.6s}
-.scene-plane .plane-body{fill:url(#planeBody);stroke:#bae6fd;stroke-opacity:.8;stroke-width:1.5}
-.scene-plane .plane-wing{fill:url(#planeWing);stroke:#67e8f9;stroke-opacity:.72;stroke-width:1.2}
-.scene-plane .plane-glass{fill:#07182c;stroke:#67e8f9;stroke-width:1.2}
-.scene-plane .plane-highlight{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1.5;stroke-linecap:round}
-.scene-label{position:absolute;z-index:2;display:grid;gap:3px;padding:8px 10px;border:1px solid rgba(125,211,252,.2);border-radius:11px;background:rgba(7,17,32,.78);color:#dbeafe;box-shadow:0 10px 24px rgba(0,0,0,.2);font:600 .68rem 'JetBrains Mono',monospace;backdrop-filter:blur(10px)}
-.scene-label small{color:#91a9c5;font:500 .56rem Inter,sans-serif}
-.scene-label.top{top:18%;right:1%;animation:label-drift 4s ease-in-out infinite}
-.scene-label.bottom{bottom:19%;left:1%;animation:label-drift 4.5s ease-in-out infinite reverse}
-.hero-flow{position:absolute;z-index:0;left:8%;right:8%;height:3px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(56,189,248,.58),transparent);opacity:.85}
-.hero-flow::after{content:"";position:absolute;top:50%;left:0;width:11px;height:11px;border:2px solid #e0f2fe;border-radius:50%;background:#38bdf8;box-shadow:0 0 16px 4px rgba(56,189,248,.75);transform:translate(-50%,-50%);animation:hero-flow-dot 1.8s ease-in-out infinite}
-.hero-flow.one{top:34%}.hero-flow.two{top:66%}
-.hero-flow.two::after{animation-delay:-.9s;background:#a78bfa;border-color:#ede9fe;box-shadow:0 0 16px 4px rgba(167,139,250,.7)}
+.physics-scene .orbit-dot{position:absolute;width:8px;height:8px;border:2px solid #07101f;border-radius:50%;background:#67e8f9;box-shadow:0 0 16px #22d3ee}
+.physics-scene .orbit-dot.one{top:12%;left:12%}
+.physics-scene .orbit-dot.two{right:12%;top:48%;background:#a78bfa;box-shadow:0 0 16px #a78bfa}
+.physics-scene .orbit-dot.three{bottom:12%;left:18%;width:7px;height:7px;background:#fbbf24;box-shadow:0 0 14px #fbbf24}
+.scene-aircraft{position:relative;z-index:1;display:grid;gap:10px;width:min(100%,520px);transform:rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg));transform-style:preserve-3d;transition:transform .28s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.video-label{justify-self:start;display:inline-flex;align-items:center;gap:8px;color:#c5d5ec;font:600 .68rem 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.video-label::before{content:"";width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 12px #34d399}
+.intro-video{display:block;width:100%;aspect-ratio:16/9;border:1px solid rgba(125,211,252,.24);border-radius:18px;background:#020617;box-shadow:0 18px 42px rgba(0,0,0,.35),0 0 30px rgba(14,165,233,.12);object-fit:cover}
 .learning-intro{margin:28px 0 14px}
 .learning-intro h2{margin-bottom:5px;font-size:clamp(1.35rem,3vw,1.8rem)}
 .learning-intro p{margin:0;color:var(--muted)}
@@ -319,14 +302,8 @@ body.pres .hero{padding-block:90px}
 .learning-card .btn{position:relative;align-self:flex-start;margin-top:auto;transform:translateZ(24px)}
 .learning-card:hover .btn{filter:brightness(1.08)}
 @keyframes orbit-spin{to{transform:rotate(360deg)}}
-@keyframes airflow{to{stroke-dashoffset:-38}}
-@keyframes plane-hover{0%,100%{transform:translateY(4px) rotate(-2deg)}50%{transform:translateY(-9px) rotate(1.5deg)}}
-@keyframes label-drift{0%,100%{transform:translateY(2px)}50%{transform:translateY(-7px)}}
 @keyframes core-pulse{0%,100%{opacity:.72;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
-@keyframes formula-drift{0%,100%{translate:0 2px}50%{translate:0 -6px}}
 @keyframes hero-pulse{0%,100%{transform:scale(.88);opacity:.45}50%{transform:scale(1.08);opacity:1}}
-@keyframes hero-plane-hover{0%,100%{transform:translateY(10px) rotate(-2.5deg) scale(.98);filter:drop-shadow(0 10px 12px rgba(14,165,233,.18))}50%{transform:translateY(-18px) rotate(2.5deg) scale(1.04);filter:drop-shadow(0 24px 24px rgba(14,165,233,.42))}}
-@keyframes hero-flow-dot{0%{left:4%;opacity:.25}45%{opacity:1}100%{left:96%;opacity:.25}}
 @media(max-width:800px){
   nav{position:relative}
   nav b{width:100%;margin-bottom:4px}
@@ -338,12 +315,7 @@ body.pres .hero{padding-block:90px}
   .hero-copy p{margin-inline:auto}
   .hero-copy .row{justify-content:center}
   .hero-equation{margin-inline:auto}
-  .physics-scene{min-height:290px}
-  .formula-note{font-size:.56rem;padding:6px 8px}
-  .formula-note.one{top:4%;left:2%}
-  .formula-note.two{right:2%;bottom:4%}
-  .scene-label.top{top:21%;right:0}
-  .scene-label.bottom{bottom:21%;left:0}
+  .physics-scene{min-height:290px;padding:18px}
   .learning-cards{grid-template-columns:1fr}
   .learning-card{min-height:0}
   .learning-card-visual{height:96px}
@@ -358,7 +330,7 @@ body.pres .hero{padding-block:90px}
   .formula{font-size:clamp(1rem,4vw,1.2rem);padding:18px 10px}
   .hero{padding:25px 18px}
   .physics-scene{min-height:250px;border-radius:22px}
-  .scene-label{font-size:.66rem;padding:6px 9px}
+  .intro-video{border-radius:14px}
   .learning-card{padding:18px}
 }
 @media(hover:none){
@@ -368,7 +340,7 @@ body.pres .hero{padding-block:90px}
   html{scroll-behavior:auto}
   .pg.on{animation:none}
   .pg::before{animation:none!important;opacity:.055;transform:none}
-  .scene-plane,.scene-plane .airflow-line,.physics-scene::before,.physics-scene::after,.hero-flow,.hero-flow::after,.orbit-dot,.scene-label,.formula-note,.visual-ring,.visual-core{animation:none}
+  .physics-scene::before,.physics-scene::after,.orbit-dot,.visual-ring,.visual-core{animation:none}
   .scene-aircraft{transition:none;transform:none}
   .learning-card{transition:none;transform:none}
 }
@@ -431,34 +403,15 @@ body::after{
 <div class="row" style="justify-content:flex-start"><button class="btn" data-go="definisi">Jelajahi konsep <span aria-hidden="true">↗</span></button><button class="btn alt" data-go="simulasi">Buka simulasi</button></div>
 <div class="hero-meta"><span>BERNOULLI</span><span>AERODINAMIKA</span><span>INTERAKTIF</span></div>
 </div>
-<div class="physics-scene" aria-hidden="true">
-<span class="hero-flow one"></span><span class="hero-flow two"></span>
+<div class="physics-scene" role="group" aria-label="Video pembuka gaya angkat pesawat">
 <span class="orbit-dot one"></span><span class="orbit-dot two"></span><span class="orbit-dot three"></span>
-<span class="formula-note one">P + ½ρv² + ρgh = konstan</span><span class="formula-note two">ΔF = ½ρ(V<sub>a</sub>² − V<sub>b</sub>²)A</span>
-<span class="scene-label top"><small>KECEPATAN ATAS</small>Vₐ &nbsp; 250 m/s</span><span class="scene-label bottom"><small>GAYA ANGKAT</small>ΔF &nbsp; ↑</span>
 <div class="scene-aircraft">
-<svg class="scene-plane" viewBox="0 0 360 230">
-<defs>
-<linearGradient id="planeBody" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f8fafc"/><stop offset=".48" stop-color="#cbd5e1"/><stop offset="1" stop-color="#64748b"/></linearGradient>
-<linearGradient id="planeWing" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#67e8f9"/><stop offset=".5" stop-color="#0ea5e9"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
-<linearGradient id="planeGlass" x1="0" x2="1"><stop stop-color="#164e63"/><stop offset="1" stop-color="#020617"/></linearGradient>
-<filter id="planeGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>
-</defs>
-<ellipse cx="187" cy="117" rx="91" ry="28" fill="#22d3ee" opacity=".14" filter="url(#planeGlow)"/>
-<path class="airflow-line" d="M8 82 C85 42 150 54 210 88 S300 118 352 72"/>
-<path class="airflow-line alt" d="M5 148 C78 188 150 176 210 142 S300 112 355 158"/>
-<g transform="translate(48 72)">
-<path class="plane-wing" d="M107 67 L38 18 Q32 14 26 18 L57 68 L124 83Z"/>
-<path class="plane-wing" d="M159 86 L109 153 Q105 159 111 161 L151 145 L195 89Z" opacity=".88"/>
-<path d="M222 56 L271 63 L286 74 L222 78Z" fill="#1e3a8a" stroke="#67e8f9" stroke-opacity=".7" stroke-width="1.2"/>
-<path class="plane-body" d="M22 74 Q25 55 74 53 L235 55 Q270 58 287 72 Q292 77 284 82 Q265 91 233 94 L73 99 Q29 99 22 81Z"/>
-<path class="plane-highlight" d="M48 62 Q93 56 196 60 L247 64"/>
-<path class="plane-glass" d="M253 62 Q274 66 284 73 Q274 78 252 78Z"/>
-<path d="M70 98L54 116L82 113L112 97Z" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
-<path d="M233 92L250 106L269 103L255 89Z" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
-<path d="M112 66L165 63M116 71L174 68M119 76L166 74M123 81L158 80" stroke="#64748b" stroke-width="1.2" opacity=".7"/>
-<circle cx="134" cy="60" r="2" fill="#38bdf8"/><circle cx="154" cy="59" r="2" fill="#38bdf8"/><circle cx="174" cy="59" r="2" fill="#38bdf8"/><circle cx="194" cy="59" r="2" fill="#38bdf8"/>
-</g></svg></div>
+<span class="video-label">Video pembuka · Fisika penerbangan</span>
+<video class="intro-video" controls muted loop playsinline preload="metadata" aria-label="Video pembuka tentang gaya angkat pesawat">
+<source src="flight-intro.mp4" type="video/mp4">
+Browser tidak dapat memutar video ini. <a href="flight-intro.mp4">Buka video pembuka.</a>
+</video>
+</div>
 </div>
 </div>
 </div>
@@ -596,6 +549,15 @@ const rumusHalaman={
   kuis:'W = m · g'
 };
 const visited=new Set();let cur=0;
+const introVideo=$('.intro-video'),motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
+function syncIntroVideoMotion(){
+  if(motionPreference.matches||document.hidden||!$('#beranda').classList.contains('on')){introVideo.pause();return}
+  const playback=introVideo.play();
+  if(playback)playback.catch(error=>{if(error.name!=='NotAllowedError')console.error('Video pembuka gagal diputar:',error)});
+}
+if(motionPreference.addEventListener)motionPreference.addEventListener('change',syncIntroVideoMotion);
+else if(motionPreference.addListener)motionPreference.addListener(syncIntroVideoMotion);
+document.addEventListener('visibilitychange',syncIntroVideoMotion);
 function go(p){
   cur=typeof p==='number'?p:halaman.indexOf(p);
   const halamanAktif=halaman[cur],section=$(`#${halamanAktif}`);
@@ -604,6 +566,7 @@ function go(p){
   section.dataset.equation=rumusHalaman[halamanAktif];
   void section.offsetWidth;
   section.classList.add('on');
+  syncIntroVideoMotion();
   $$('nav [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===halamanAktif));
   visited.add(halamanAktif);
   $('#bar i').style.width=visited.size/halaman.length*100+'%';
