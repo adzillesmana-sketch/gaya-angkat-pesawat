@@ -60,19 +60,30 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
 .ar-stage-ui{position:absolute;z-index:4;inset:0;display:none;flex-direction:column;justify-content:space-between;padding:clamp(10px,2.4vw,20px);color:#fff;pointer-events:none;background:linear-gradient(180deg,rgba(2,6,23,.66),transparent 25%,transparent 68%,rgba(2,6,23,.26))}
 .ar-stage.is-active .ar-stage-ui{display:flex}
 .ar-stage-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ar-stage-brand{display:grid;justify-items:start;gap:7px}
 .ar-stage-tools{display:flex;align-items:center;gap:8px;pointer-events:auto}
 .ar-live-badge,.ar-hud-stat{display:flex;align-items:center;gap:7px;min-height:38px;padding:7px 11px;border:1px solid rgba(255,255,255,.23);border-radius:999px;background:rgba(3,8,20,.62);box-shadow:0 4px 14px rgba(0,0,0,.14);backdrop-filter:blur(14px);color:#fff;font:600 .72rem 'JetBrains Mono',monospace}
 .ar-live-dot{width:7px;height:7px;border-radius:50%;background:#fb7185;box-shadow:0 0 12px #fb7185}
+.ar-hand-status{display:flex;align-items:center;gap:7px;min-height:30px;padding:5px 10px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(3,8,20,.56);color:#e2e8f0;font:600 .62rem 'JetBrains Mono',monospace;backdrop-filter:blur(14px);transition:color .2s,border-color .2s}
+.ar-hand-status i{width:7px;height:7px;border-radius:50%;background:#fbbf24;box-shadow:0 0 10px #fbbf24}
+.ar-hand-status[data-state=detected]{border-color:rgba(74,222,128,.48);color:#bbf7d0}
+.ar-hand-status[data-state=detected] i{background:#4ade80;box-shadow:0 0 10px #4ade80}
 .ar-hud-group{display:flex;gap:7px}
 .ar-hud-stat{min-width:76px;justify-content:center}
 .ar-hud-stat b{font-size:.92rem}
 .ar-screen-button{display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(3,8,20,.68);box-shadow:0 4px 14px rgba(0,0,0,.16);color:#fff;font:600 1.15rem Inter,sans-serif;cursor:pointer;backdrop-filter:blur(14px);pointer-events:auto;transition:background .2s,transform .2s}
 .ar-screen-button:hover{background:rgba(14,165,233,.8);transform:scale(1.06)}
+.ar-screen-button[aria-pressed=false]{opacity:.72}
 .ar-stage-message{align-self:center;max-width:min(90%,420px);padding:20px 24px;border:1px solid rgba(255,255,255,.2);border-radius:22px;background:rgba(3,8,20,.7);box-shadow:0 14px 44px rgba(0,0,0,.28);text-align:center;backdrop-filter:blur(16px);pointer-events:auto}
 .ar-stage-message[hidden]{display:none}
 .ar-stage-message strong{display:block;color:#fff;font:700 clamp(1.05rem,3vw,1.5rem) Poppins,sans-serif}
 .ar-stage-message p{margin:7px 0 14px;color:#dbeafe;font-size:.88rem}
 .ar-stage-message .btn{background:linear-gradient(110deg,#06b6d4,#2563eb);box-shadow:0 8px 26px rgba(14,165,233,.28)}
+.ar-result{display:grid;justify-items:center;gap:2px;margin:14px 0;padding:13px;border:1px solid rgba(103,232,249,.25);border-radius:16px;background:linear-gradient(135deg,rgba(8,145,178,.18),rgba(99,102,241,.18))}
+.ar-result[hidden]{display:none}
+.ar-result span{color:#bae6fd;font:600 .65rem 'JetBrains Mono',monospace;letter-spacing:.16em}
+.ar-result strong{color:#fff;font:700 clamp(2.4rem,9vw,4rem)/1 Poppins,sans-serif;text-shadow:0 0 28px rgba(34,211,238,.35)}
+.ar-result small{color:#dbeafe;font-size:.78rem}
 .ar-stage-hint{align-self:center;margin:0;padding:7px 12px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(3,8,20,.5);color:#e0f2fe;font-size:.76rem;text-align:center;backdrop-filter:blur(10px)}
 .ar-stage-hint[hidden]{display:none}
 .ar-stage:fullscreen,.ar-stage:-webkit-full-screen{width:100vw;height:100vh;height:100dvh;max-height:none;max-width:none;aspect-ratio:auto;margin:0;border:0;border-radius:0;background:#030712;box-shadow:none}
@@ -118,9 +129,14 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
   .ar-hud-stat{min-width:62px;padding:6px 9px}
   .ar-live-badge,.ar-hud-stat{min-height:34px;font-size:.64rem}
   .ar-screen-button{width:36px;height:36px}
+  .ar-stage-tools{gap:5px}
+  .ar-hud-group{gap:4px}
+  .ar-hud-stat{min-width:54px;padding:6px 7px}
+  .ar-hud-stat b{font-size:.78rem}
+  .ar-hand-status{min-height:27px;padding:4px 8px;font-size:.56rem}
   .ar-stage-message{padding:16px}
 }
-@media(max-width:520px){.ar-stage{border-radius:18px;max-height:60vh}.ar-controls .btn{flex:1 1 130px}}
+@media(max-width:520px){.ar-stage{border-radius:18px;max-height:60vh}.ar-controls .btn{flex:1 1 130px}.ar-live-badge{min-height:34px;padding:6px 9px;font-size:.58rem}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:6px 14px;cursor:pointer}.tabs button.on{background:var(--lift);color:#fff}
 .lv{font-size:.75rem;color:#fff;border-radius:8px;padding:2px 8px;margin-left:6px}
 .fb{font-weight:700;margin-top:8px}.ok{color:var(--thrust)}.no{color:var(--weight)}
@@ -778,14 +794,19 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="ar-placeholder"><strong>Siap untuk demonstrasi AR?</strong><span>Tekan “Mulai kamera”, izinkan akses kamera, lalu tunjukkan telapak tanganmu di depan kamera.</span></div>
 <div class="ar-stage-ui" id="arStageUI">
 <div class="ar-stage-top">
+<div class="ar-stage-brand">
 <span class="ar-live-badge"><i class="ar-live-dot"></i> FILTER PESAWAT</span>
+<span class="ar-hand-status" id="arHandStatus" data-state="searching" role="status" aria-live="polite"><i></i><span id="arHandStatusText">MENCARI TANGAN</span></span>
+</div>
 <div class="ar-stage-tools">
 <div class="ar-hud-group" aria-label="Skor permainan"><span class="ar-hud-stat">SKOR <b id="arHudScore">0</b></span><span class="ar-hud-stat">NYAWA <b id="arHudLives">♥ ♥ ♥</b></span></div>
+<button class="ar-screen-button" id="arEffects" type="button" aria-label="Matikan efek suara dan getar" aria-pressed="true" title="Efek suara dan getar aktif">🔊</button>
 <button class="ar-screen-button" id="arFullscreen" type="button" aria-label="Perbesar layar" title="Layar penuh">⛶</button>
 </div>
 </div>
 <div class="ar-stage-message" id="arStageMessage">
 <strong id="arStageMessageTitle">Pesawat siap terbang</strong>
+<div class="ar-result" id="arResult" hidden><span>SKOR AKHIR</span><strong id="arFinalScore">0</strong><small>gerbang terlewati</small></div>
 <p id="arStageMessageText">Tunjukkan telapak tangan, lalu lewati gerbang seperti Flappy Bird.</p>
 <button class="btn" id="arOverlayStart" type="button" disabled>Mulai Flappy Bird</button>
 </div>
@@ -1079,9 +1100,80 @@ const arVideo=$('#arVideo'),arCanvas=$('#arCanvas'),arCtx=arCanvas.getContext('2
 let arTracker=null,arStream=null,arFrame=0,arRunning=false,arStarting=false,arGeneration=0,arFacing='user',arDeviceId='',arRequestedDeviceId='',arSwitchRequested=false;
 let arLastVideoTime=-1,arLastInference=0,arLastFrameTime=0,arPalm=null,arHandLandmarks=null,arHasHand=false,arStatusText='';
 let arGesture='unknown',arGestureCandidate='',arGestureFrames=0,arFlightMode='stable';
+let arEffectsEnabled=true,arAudioContext=null;
 const arGame={state:'idle',score:0,lives:3,spawnIn:0,gates:[],invulnerable:0};
 const arEdges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
 function arDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function setArHandStatus(detected){
+  const badge=$('#arHandStatus'),label=$('#arHandStatusText');
+  const state=detected?'detected':'searching';
+  const text=detected?'TANGAN TERDETEKSI':'MENCARI TANGAN';
+  if(badge.dataset.state!==state)badge.dataset.state=state;
+  if(label.textContent!==text)label.textContent=text;
+}
+function updateArEffectsButton(){
+  const button=$('#arEffects');
+  button.textContent=arEffectsEnabled?'🔊':'🔇';
+  button.title=arEffectsEnabled?'Efek suara dan getar aktif':'Efek suara dan getar nonaktif';
+  button.setAttribute('aria-label',arEffectsEnabled?'Matikan efek suara dan getar':'Nyalakan efek suara dan getar');
+  button.setAttribute('aria-pressed',String(arEffectsEnabled));
+}
+function prepareArAudio(){
+  if(!arEffectsEnabled||arAudioContext)return;
+  const AudioContextConstructor=window.AudioContext||window.webkitAudioContext;
+  if(!AudioContextConstructor){
+    setArStatus('Browser ini tidak mendukung efek suara; getar tetap tersedia jika perangkat mendukungnya.');
+    return;
+  }
+  try{
+    arAudioContext=new AudioContextConstructor();
+    arAudioContext.resume().catch(error=>{
+      console.warn('Efek suara tidak dapat diaktifkan.',error);
+      setArStatus('Efek suara tidak dapat diaktifkan. Coba sentuh tombol suara lalu mulai lagi.',true);
+    });
+  }catch(error){
+    console.error('Audio game tidak dapat disiapkan.',error);
+    setArStatus('Audio game gagal disiapkan. Getar tetap tersedia jika perangkat mendukungnya.',true);
+  }
+}
+function playArEffect(type){
+  if(!arEffectsEnabled)return;
+  if(typeof navigator.vibrate==='function'){
+    try{
+      navigator.vibrate(type==='score'?28:[90,45,120]);
+    }catch(error){
+      console.warn('Getar perangkat tidak dapat dijalankan.',error);
+    }
+  }
+  if(!arAudioContext||arAudioContext.state!=='running')return;
+  const now=arAudioContext.currentTime;
+  const oscillator=arAudioContext.createOscillator(),gain=arAudioContext.createGain();
+  oscillator.type='sine';
+  oscillator.frequency.setValueAtTime(type==='score'?660:190,now);
+  oscillator.frequency.exponentialRampToValueAtTime(type==='score'?990:95,now+.12);
+  gain.gain.setValueAtTime(.0001,now);
+  gain.gain.exponentialRampToValueAtTime(type==='score'?.12:.18,now+.015);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+.18);
+  oscillator.connect(gain);gain.connect(arAudioContext.destination);
+  oscillator.start(now);oscillator.stop(now+.19);
+}
+function toggleArEffects(){
+  arEffectsEnabled=!arEffectsEnabled;
+  updateArEffectsButton();
+  if(arEffectsEnabled){
+    prepareArAudio();
+    setArStatus('Efek suara dan getar diaktifkan.');
+  }else{
+    if(typeof navigator.vibrate==='function'){
+      try{
+        navigator.vibrate(0);
+      }catch(error){
+        console.warn('Getar perangkat tidak dapat dihentikan.',error);
+      }
+    }
+    setArStatus('Efek suara dan getar dimatikan.');
+  }
+}
 function classifyArGesture(hand){
   const wrist=hand[0];
   const extended=(tip,pip)=>arDistance(hand[tip],wrist)>arDistance(hand[pip],wrist)*1.12;
@@ -1120,11 +1212,13 @@ function updateArGameUI(message){
   setText('#arOverlayStart',arGame.state==='over'?'Main lagi':'Mulai Flappy Bird');
   setText('#arHudScore',fmt(arGame.score));
   setText('#arHudLives',arGame.lives===0?'♡ ♡ ♡':Array.from({length:3},(_,i)=>i<arGame.lives?'♥':'♡').join(' '));
+  setText('#arFinalScore',fmt(arGame.score));
   $('#arStageMessage').hidden=arGame.state==='running';
+  $('#arResult').hidden=arGame.state!=='over';
   $('#arStageHint').hidden=arGame.state!=='running';
   if(arGame.state==='over'){
     setText('#arStageMessageTitle','Penerbangan selesai');
-    setText('#arStageMessageText',`Skor akhir: ${fmt(arGame.score)} gerbang. Coba sekali lagi!`);
+    setText('#arStageMessageText','Terbang lagi untuk mengalahkan skor ini!');
   }else if(arGame.state==='idle'){
     setText('#arStageMessageTitle','Pesawat siap terbang');
     setText('#arStageMessageText','Tunjukkan telapak tangan, lalu arahkan pesawat melewati celah gerbang.');
@@ -1140,6 +1234,7 @@ function finishArGame(message){
 }
 function startArGame(){
   if(!arRunning)return;
+  prepareArAudio();
   arGame.state='running';
   arGame.score=0;
   arGame.lives=3;
@@ -1184,6 +1279,7 @@ function updateArGame(delta,w,planeX,planeY,frame){
     if(!gate.hit&&arGame.invulnerable===0&&overlapsPlane&&(planeY-planeRadiusY<gapTop||planeY+planeRadiusY>gapBottom)){
       gate.hit=true;
       arGame.lives--;
+      playArEffect('hit');
       arGame.invulnerable=1.15;
       updateArGameUI(`Gerbang tersenggol! Sisa nyawa ${arGame.lives}.`);
       setArStatus(arGame.lives?'Awas, gerbang! Cari celah berikutnya.':`Game over — skor akhir ${fmt(arGame.score)}.`);
@@ -1195,6 +1291,7 @@ function updateArGame(delta,w,planeX,planeY,frame){
     if(!gate.passed&&!gate.hit&&gate.x+pipeWidth<planeX-planeRadiusX){
       gate.passed=true;
       arGame.score++;
+      playArEffect('score');
       updateArGameUI(`Mantap! Gerbang ${arGame.score} terlewati.`);
     }
   }
@@ -1320,6 +1417,7 @@ function stopArCamera(updateStatus=true){
   $('#arSwitch').disabled=true;
   $('#arStop').disabled=true;
   arHasHand=false;
+  setArHandStatus(false);
   arPalm=null;
   arHandLandmarks=null;
   arGesture='unknown';
@@ -1432,6 +1530,7 @@ function drawArFrame(time){
       try{
         const result=arTracker.detectForVideo(arVideo,time),hand=result.landmarks?.[0];
         arHasHand=!!hand;
+        setArHandStatus(arHasHand);
         arHandLandmarks=hand||null;
         if(hand){
           const palm={x:arDisplayX(hand[9].x),y:hand[9].y};
@@ -1505,6 +1604,9 @@ $('#arStart').onclick=startArCamera;
 $('#arStop').onclick=()=>stopArCamera();
 $('#arGameStart').onclick=startArGame;
 $('#arOverlayStart').onclick=startArGame;
+$('#arEffects').onclick=toggleArEffects;
+updateArEffectsButton();
+setArHandStatus(false);
 $('#arFullscreen').onclick=toggleArFullscreen;
 $('#arSwitch').onclick=async()=>{
   if(!arStream||arStarting)return;
