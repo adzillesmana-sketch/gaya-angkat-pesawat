@@ -79,6 +79,18 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
 .ar-stage-message strong{display:block;color:#fff;font:700 clamp(1.05rem,3vw,1.5rem) Poppins,sans-serif}
 .ar-stage-message p{margin:7px 0 14px;color:#dbeafe;font-size:.88rem}
 .ar-stage-message .btn{background:linear-gradient(110deg,#06b6d4,#2563eb);box-shadow:0 8px 26px rgba(14,165,233,.28)}
+.ar-game-menu{margin-top:14px}
+.ar-game-menu[hidden],.ar-mode-choice[hidden]{display:none}
+.ar-mode-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.ar-mode-choice{display:grid;gap:4px;justify-items:start;padding:10px;border:1px solid rgba(255,255,255,.2);border-radius:14px;background:rgba(15,23,42,.58);color:#e2e8f0;text-align:left;cursor:pointer;transition:border-color .18s,background .18s,transform .18s}
+.ar-mode-choice:hover{transform:translateY(-1px);border-color:rgba(103,232,249,.7)}
+.ar-mode-choice[aria-pressed=true]{border-color:#67e8f9;background:rgba(8,145,178,.26);box-shadow:0 0 0 1px rgba(103,232,249,.25),0 0 20px rgba(34,211,238,.12)}
+.ar-mode-choice strong{font:600 .76rem Poppins,sans-serif}
+.ar-mode-choice small{color:#cbd5e1;font-size:.66rem;line-height:1.35}
+.ar-menu-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.ar-menu-actions[hidden]{display:none}
+.ar-menu-actions .btn{min-width:132px}
+.ar-menu-back{border:1px solid rgba(255,255,255,.22)!important;background:rgba(15,23,42,.6)!important;box-shadow:none!important}
 .ar-result{display:grid;justify-items:center;gap:2px;margin:14px 0;padding:13px;border:1px solid rgba(103,232,249,.25);border-radius:16px;background:linear-gradient(135deg,rgba(8,145,178,.18),rgba(99,102,241,.18))}
 .ar-result[hidden]{display:none}
 .ar-result span{color:#bae6fd;font:600 .65rem 'JetBrains Mono',monospace;letter-spacing:.16em}
@@ -135,6 +147,9 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
   .ar-hud-stat b{font-size:.78rem}
   .ar-hand-status{min-height:27px;padding:4px 8px;font-size:.56rem}
   .ar-stage-message{padding:16px}
+  .ar-mode-list{gap:6px}
+  .ar-mode-choice{padding:8px}
+  .ar-menu-actions .btn{min-width:120px}
 }
 @media(max-width:520px){.ar-stage{border-radius:18px;max-height:60vh}.ar-controls .btn{flex:1 1 130px}.ar-live-badge{min-height:34px;padding:6px 9px;font-size:.58rem}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:6px 14px;cursor:pointer}.tabs button.on{background:var(--lift);color:#fff}
@@ -805,24 +820,32 @@ nav #tema{font-size:1.1rem;line-height:1}
 </div>
 </div>
 <div class="ar-stage-message" id="arStageMessage">
-<strong id="arStageMessageTitle">Pesawat siap terbang</strong>
+<strong id="arStageMessageTitle">Pilih cara bermain</strong>
+<div class="ar-game-menu" id="arGameMenu">
+<p>Pilih kontrol, lalu tekan <b>Mainkan</b>. Tangan harus terlihat di kamera.</p>
+<div class="ar-mode-list" role="group" aria-label="Pilih kontrol permainan">
+<button class="ar-mode-choice" id="arModePalm" type="button" aria-pressed="true"><strong>🖐️ Ikuti telapak</strong><small>Gerakkan telapak ke atas dan bawah untuk mengarahkan pesawat.</small></button>
+<button class="ar-mode-choice" id="arModeGesture" type="button" aria-pressed="false"><strong>✌️ Kontrol gestur</strong><small>☝️ telunjuk naik · ✌️ dua jari turun · 🖐️ tahan posisi.</small></button>
+</div>
+<div class="ar-menu-actions"><button class="btn" id="arOverlayStart" type="button" disabled>▶ Mainkan</button></div>
+</div>
 <div class="ar-result" id="arResult" hidden><span>SKOR AKHIR</span><strong id="arFinalScore">0</strong><small>gerbang terlewati</small></div>
-<p id="arStageMessageText">Tunjukkan telapak tangan, lalu lewati gerbang seperti Flappy Bird.</p>
-<button class="btn" id="arOverlayStart" type="button" disabled>Mulai Flappy Bird</button>
+<p id="arStageMessageText" hidden></p>
+<div class="ar-menu-actions" id="arResultActions" hidden><button class="btn" id="arReplay" type="button">▶ Mainkan lagi</button><button class="btn ar-menu-back" id="arBackToMenu" type="button">Pilih mode</button></div>
 </div>
 <p class="ar-stage-hint" id="arStageHint">Gerakkan telapak tangan untuk mengarahkan pesawat ✨</p>
 </div>
 </div>
 <div class="ar-controls"><button class="btn" id="arStart" type="button">Mulai kamera</button><button class="btn alt" id="arSwitch" type="button" disabled>Balik kamera</button><button class="btn alt" id="arStop" type="button" disabled>Matikan kamera</button></div>
 <div class="ar-game" id="arGame" data-state="idle">
-<div class="ar-game-copy"><strong>✦ Flappy Bird: mode tangan</strong><p>Gerakkan telapak tangan untuk mengarahkan pesawat melewati celah; ☝️ menengadah dan ✌️ menukik.</p></div>
-<button class="btn" id="arGameStart" type="button" disabled>Mulai Flappy Bird</button>
+<div class="ar-game-copy"><strong>✦ Flappy Bird: mode tangan</strong><p id="arModeSummary">Pilih kontrol telapak atau gestur ☝️ naik · ✌️ turun · 🖐️ tahan posisi.</p></div>
+<button class="btn" id="arGameStart" type="button" disabled>🎮 Pilih kontrol</button>
 <p class="ar-game-status" id="arGameStatus" role="status" aria-live="polite">Nyalakan kamera untuk mengaktifkan filter dan permainan.</p>
 </div>
 <div class="ar-gestures" aria-label="Kontrol gestur tangan">
-<div class="ar-gesture"><strong>☝️ Telunjuk</strong><span>Hidung pesawat menengadah</span></div>
-<div class="ar-gesture"><strong>✌️ Telunjuk + tengah</strong><span>Hidung pesawat menukik</span></div>
-<div class="ar-gesture"><strong>🖐️ Telapak terbuka</strong><span>Pesawat kembali stabil</span></div>
+<div class="ar-gesture"><strong>☝️ Telunjuk</strong><span>Pesawat bergerak naik dalam mode gestur.</span></div>
+<div class="ar-gesture"><strong>✌️ Telunjuk + tengah</strong><span>Pesawat bergerak turun dalam mode gestur.</span></div>
+<div class="ar-gesture"><strong>🖐️ Telapak terbuka</strong><span>Tahan posisi pesawat dalam mode gestur.</span></div>
 </div>
 <p class="ar-status" id="arStatus" role="status" aria-live="polite">Kamera mati. Tekan mulai untuk mencoba demonstrasi.</p>
 <p class="ar-note">Gunakan tombol ⛶ di layar kamera untuk memperbesar seperti YouTube; tekan Esc untuk kembali. Kamera hanya aktif setelah kamu menekan tombol dan mengizinkan akses. Pelacakan diproses langsung di perangkat; video tidak direkam atau dikirim ke server. Perlu koneksi internet untuk memuat model pelacakan.</p>
@@ -1101,6 +1124,7 @@ let arTracker=null,arStream=null,arFrame=0,arRunning=false,arStarting=false,arGe
 let arLastVideoTime=-1,arLastInference=0,arLastFrameTime=0,arPalm=null,arHandLandmarks=null,arHasHand=false,arStatusText='';
 let arGesture='unknown',arGestureCandidate='',arGestureFrames=0,arFlightMode='stable';
 let arEffectsEnabled=true,arAudioContext=null;
+let arControlMode='palm',arGestureAltitude=.5;
 const arGame={state:'idle',score:0,lives:3,spawnIn:0,gates:[],invulnerable:0};
 const arEdges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
 function arDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
@@ -1191,37 +1215,55 @@ function updateArGesture(next){
   arGesture=next;
   if(next==='up'){
     arFlightMode='up';
-    setArStatus('☝️ Telunjuk terdeteksi — hidung pesawat menengadah.');
+    setArStatus(arControlMode==='gesture'?'☝️ Telunjuk: pesawat bergerak naik.':'☝️ Telunjuk terdeteksi. Pilih mode gestur untuk kendali naik-turun.');
   }else if(next==='down'){
     arFlightMode='down';
-    setArStatus('✌️ Dua jari terdeteksi — hidung pesawat menukik.');
+    setArStatus(arControlMode==='gesture'?'✌️ Dua jari: pesawat bergerak turun.':'✌️ Dua jari terdeteksi. Pilih mode gestur untuk kendali naik-turun.');
   }else if(next==='stable'){
     arFlightMode='stable';
-    setArStatus('🖐️ Telapak terbuka — pesawat kembali stabil.');
+    setArStatus(arControlMode==='gesture'?'🖐️ Telapak terbuka: pesawat menahan posisi.':'🖐️ Telapak terbuka terdeteksi.');
   }else{
     arFlightMode='stable';
-    setArStatus('Gestur belum dikenali — gunakan ☝️/✌️ untuk mengubah sudut pesawat.');
+    setArStatus('Gestur belum dikenali — gunakan ☝️ naik, ✌️ turun, atau 🖐️ tahan posisi.');
+  }
+}
+function setArControlMode(mode){
+  if(mode!=='palm'&&mode!=='gesture')return;
+  arControlMode=mode;
+  $('#arModePalm').setAttribute('aria-pressed',String(mode==='palm'));
+  $('#arModeGesture').setAttribute('aria-pressed',String(mode==='gesture'));
+  $('#arModeSummary').textContent=mode==='gesture'
+    ?'Kontrol gestur: ☝️ tahan untuk naik · ✌️ tahan untuk turun · 🖐️ untuk berhenti dan menahan posisi.'
+    :'Ikuti telapak: geser tangan ke atas atau bawah untuk mengarahkan pesawat.';
+  if(arHasHand){
+    setArStatus(mode==='gesture'
+      ?'Mode gestur aktif — ☝️ naik, ✌️ turun, 🖐️ tahan posisi.'
+      :'Mode telapak aktif — geser telapak untuk mengarahkan pesawat.');
   }
 }
 function updateArGameUI(message){
   const setText=(selector,text)=>{const element=$(selector);if(element.textContent!==text)element.textContent=text};
   $('#arGame').dataset.state=arGame.state;
   $('#arGameStart').disabled=!arRunning||arGame.state==='running';
-  setText('#arGameStart',arGame.state==='over'?'Main lagi':'Mulai Flappy Bird');
+  setText('#arGameStart',arGame.state==='over'?'▶ Mainkan lagi':arGame.state==='running'?'Permainan berjalan':'🎮 Pilih kontrol');
   $('#arOverlayStart').disabled=!arRunning;
-  setText('#arOverlayStart',arGame.state==='over'?'Main lagi':'Mulai Flappy Bird');
+  setText('#arOverlayStart','▶ Mainkan');
   setText('#arHudScore',fmt(arGame.score));
   setText('#arHudLives',arGame.lives===0?'♡ ♡ ♡':Array.from({length:3},(_,i)=>i<arGame.lives?'♥':'♡').join(' '));
   setText('#arFinalScore',fmt(arGame.score));
   $('#arStageMessage').hidden=arGame.state==='running';
+  $('#arGameMenu').hidden=arGame.state!=='idle';
   $('#arResult').hidden=arGame.state!=='over';
+  $('#arResultActions').hidden=arGame.state!=='over';
   $('#arStageHint').hidden=arGame.state!=='running';
+  setText('#arStageHint',arControlMode==='gesture'
+    ?'☝️ Tahan telunjuk untuk naik · ✌️ dua jari untuk turun · 🖐️ tahan posisi'
+    :'Gerakkan telapak tangan untuk melewati celah gerbang ✨');
   if(arGame.state==='over'){
     setText('#arStageMessageTitle','Penerbangan selesai');
     setText('#arStageMessageText','Terbang lagi untuk mengalahkan skor ini!');
   }else if(arGame.state==='idle'){
-    setText('#arStageMessageTitle','Pesawat siap terbang');
-    setText('#arStageMessageText','Tunjukkan telapak tangan, lalu arahkan pesawat melewati celah gerbang.');
+    setText('#arStageMessageTitle','Pilih cara bermain');
   }
   if(message)setText('#arGameStatus',message);
 }
@@ -1235,14 +1277,37 @@ function finishArGame(message){
 function startArGame(){
   if(!arRunning)return;
   prepareArAudio();
+  if(arHasHand&&arPalm){
+    const frame=arVisibleFrame(arCanvas.width,arCanvas.height);
+    arGestureAltitude=Math.max(.1,Math.min(.9,(arPalm.y*arCanvas.height-frame.top)/frame.height));
+  }else arGestureAltitude=.5;
   arGame.state='running';
   arGame.score=0;
   arGame.lives=3;
   arGame.spawnIn=.55;
   arGame.gates=[];
   arGame.invulnerable=0;
-  updateArGameUI('Lewati celah gerbang. Pesawat menempel di telapak tanganmu.');
-  setArStatus('Flappy Bird dimulai — arahkan tangan melewati celah gerbang.');
+  updateArGameUI(arControlMode==='gesture'
+    ?'Kontrol gestur aktif — ☝️ naik, ✌️ turun, 🖐️ tahan posisi.'
+    :'Kontrol telapak aktif — geser tangan untuk melewati celah.');
+  setArStatus(arControlMode==='gesture'
+    ?'Flappy Bird dimulai — ☝️ tahan untuk naik, ✌️ tahan untuk turun, 🖐️ tahan posisi.'
+    :'Flappy Bird dimulai — gerakkan telapak melewati celah gerbang.');
+}
+function returnToArGameMenu(){
+  arGame.state='idle';
+  arGame.score=0;
+  arGame.lives=3;
+  arGame.spawnIn=0;
+  arGame.gates=[];
+  arGame.invulnerable=0;
+  updateArGameUI('Pilih cara bermain, lalu tekan Mainkan.');
+  setArStatus('Menu permainan dibuka kembali.');
+}
+function updateArGesturePlaneY(delta,frame){
+  const climb=arGesture==='up'?-1:arGesture==='down'?1:0;
+  arGestureAltitude=Math.max(.1,Math.min(.9,arGestureAltitude+climb*delta*.62));
+  return frame.top+frame.height*arGestureAltitude;
 }
 function arVisibleFrame(w,h){
   const stage=$('#arStage').getBoundingClientRect();
@@ -1558,7 +1623,9 @@ function drawArFrame(time){
       const planeScale=Math.max(.5,Math.min(1.05,frame.width/900));
       const radiusX=76*planeScale,radiusY=42*planeScale;
       planeX=Math.max(frame.left+radiusX,Math.min(frame.right-radiusX,arPalm.x*w));
-      planeY=Math.max(frame.top+radiusY,Math.min(frame.bottom-radiusY,arPalm.y*h));
+      if(arControlMode==='gesture'&&arGame.state==='running'){
+        planeY=updateArGesturePlaneY(delta,frame);
+      }else planeY=Math.max(frame.top+radiusY,Math.min(frame.bottom-radiusY,arPalm.y*h));
     }
     updateArGame(delta,w,planeX,planeY,frame);
     drawArGame(w,h,frame);
@@ -1602,8 +1669,17 @@ function drawArFrame(time){
 }
 $('#arStart').onclick=startArCamera;
 $('#arStop').onclick=()=>stopArCamera();
-$('#arGameStart').onclick=startArGame;
+$('#arGameStart').onclick=()=>{
+  if(arGame.state==='idle'){
+    $('#arStage').scrollIntoView({behavior:'smooth',block:'center'});
+    setArStatus('Pilih mode kontrol di menu kamera, lalu tekan Mainkan.');
+  }else startArGame();
+};
 $('#arOverlayStart').onclick=startArGame;
+$('#arReplay').onclick=startArGame;
+$('#arBackToMenu').onclick=returnToArGameMenu;
+$('#arModePalm').onclick=()=>setArControlMode('palm');
+$('#arModeGesture').onclick=()=>setArControlMode('gesture');
 $('#arEffects').onclick=toggleArEffects;
 updateArEffectsButton();
 setArHandStatus(false);
