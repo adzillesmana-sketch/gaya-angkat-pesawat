@@ -70,6 +70,31 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
 .ar-status{min-height:1.5em;margin:10px 0 0;color:var(--muted);font-size:.88rem}
 .ar-status[data-state=error]{color:#fca5a5}
 .ar-note{margin:8px 0 0;font-size:.78rem}
+.ar-game{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  margin:14px 0;
+  padding:15px;
+  border:1px solid rgba(103,232,249,.3);
+  border-radius:17px;
+  background:linear-gradient(120deg,rgba(8,145,178,.12),rgba(99,102,241,.12)),var(--bg);
+}
+.ar-game-copy strong{display:block;color:var(--text);font:700 1rem Poppins,sans-serif}
+.ar-game-copy p{margin:4px 0 0;color:var(--muted);font-size:.82rem}
+.ar-game-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ar-game-stat{min-width:82px;padding:7px 10px;border:1px solid var(--line);border-radius:11px;background:color-mix(in srgb,var(--card) 88%,transparent);font:500 .68rem 'JetBrains Mono',monospace;color:var(--muted)}
+.ar-game-stat b{display:block;color:var(--text);font-size:.95rem}
+.ar-game #arGameStart{white-space:nowrap}
+.ar-game[data-state=running]{border-color:#22d3ee;box-shadow:0 0 24px rgba(34,211,238,.12)}
+.ar-game-status{grid-column:1/-1;min-height:1.35em;margin:0!important;color:var(--muted);font-size:.8rem!important}
+.ar-stage.is-game-active{border-color:rgba(34,211,238,.75);box-shadow:0 0 32px rgba(34,211,238,.16)}
+@media(max-width:620px){
+  .ar-game{grid-template-columns:1fr}
+  .ar-game #arGameStart{width:100%}
+  .ar-game-status{grid-column:auto}
+}
 @media(max-width:520px){.ar-stage{border-radius:14px;max-height:60vh}.ar-controls .btn{flex:1 1 130px}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:6px 14px;cursor:pointer}.tabs button.on{background:var(--lift);color:#fff}
 .lv{font-size:.75rem;color:#fff;border-radius:8px;padding:2px 8px;margin-left:6px}
@@ -721,8 +746,16 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="card ar-demo">
 <span class="sub">DEMO AR · PELACAKAN TANGAN</span>
 <h3 style="margin-top:12px">Pesawat virtual mengikuti tanganmu</h3>
-<p>Arahkan kamera ke telapak tangan. Gerakkan tangan ke atas, bawah, atau samping untuk menerbangkan pesawat di tampilan kamera.</p>
+<p>Posisikan telapak tangan di depan kamera untuk mengendalikan pesawat. Gerakkan ke atas, bawah, kiri, atau kanan untuk menghindari meteor dan mengumpulkan bintang.</p>
 <div class="ar-stage" id="arStage">
+<div class="ar-game" id="arGame" data-state="idle">
+<div class="ar-game-copy"><strong>✦ Misi: Sky Runner</strong><p>Gerakkan telapak tangan untuk menerbangkan pesawat. Ambil bintang, hindari meteor, dan raih skor tertinggi dalam 45 detik.</p>
+<div class="ar-game-stats" aria-label="Skor permainan">
+<span class="ar-game-stat">SKOR<b id="arGameScore">0</b></span><span class="ar-game-stat">NYAWA<b id="arGameLives">♥ ♥ ♥</b></span><span class="ar-game-stat">WAKTU<b id="arGameTime">45 dtk</b></span>
+</div></div>
+<button class="btn" id="arGameStart" type="button" disabled>Mulai mini game</button>
+<p class="ar-game-status" id="arGameStatus" role="status" aria-live="polite">Nyalakan kamera untuk bermain. Telapak tangan menjadi joystick pesawat.</p>
+</div>
 <video id="arVideo" autoplay playsinline muted aria-label="Tampilan kamera langsung"></video>
 <canvas id="arCanvas" aria-hidden="true"></canvas>
 <div class="ar-placeholder"><strong>Siap untuk demonstrasi AR?</strong><span>Tekan “Mulai kamera”, izinkan akses kamera, lalu tunjukkan telapak tanganmu di depan kamera.</span></div>
@@ -735,7 +768,7 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="ar-gesture"><strong>🖐️ Lima jari terbuka</strong><span>Pesawat stabil di ketinggian saat ini</span></div>
 </div>
 <p class="ar-status" id="arStatus" role="status" aria-live="polite">Kamera mati. Tekan mulai untuk mencoba demonstrasi.</p>
-<p class="ar-note">Geser tangan ke kiri atau kanan untuk mengarahkan pesawat. Kamera hanya aktif setelah kamu menekan tombol dan mengizinkan akses. Pelacakan diproses langsung di perangkat; video tidak direkam atau dikirim ke server. Perlu koneksi internet untuk memuat model pelacakan.</p>
+<p class="ar-note">Pesawat mengikuti posisi telapak tangan di layar. Gunakan gestur ☝️/✌️ untuk mengubah ketinggian simulasi. Kamera hanya aktif setelah kamu menekan tombol dan mengizinkan akses. Pelacakan diproses langsung di perangkat; video tidak direkam atau dikirim ke server. Perlu koneksi internet untuk memuat model pelacakan.</p>
 </div>
 </section>
 
@@ -938,6 +971,7 @@ function hasil(){
   $('#sub').textContent=`ΔF = ½ × ${fmt(S.rho,2)} × (${S.Va}² − ${S.Vb}²) × ${S.A} = ${fmt(F)} N`;
   $('#wr').textContent=!ok?'Ada input di luar rentang. Periksa nilai yang kamu masukkan.':S.Vb>S.Va?'Vb lebih besar dari Va, sehingga gaya angkat bernilai negatif.':'';
   return{F,W};
+const arGame={state:'idle',score:0,lives:3,elapsed:0,spawnIn:0,items:[],uiSecond:-1};
 }
 function panah(c,x,y0,len,col,txt){c.strokeStyle=c.fillStyle=col;c.lineWidth=8;const d=len>0?-1:1,L=Math.abs(len);c.beginPath();c.moveTo(x,y0);c.lineTo(x,y0+d*L);c.stroke();c.beginPath();c.moveTo(x-14,y0+d*(L-8));c.lineTo(x,y0+d*(L+14));c.lineTo(x+14,y0+d*(L-8));c.fill();c.font='600 13px Inter';c.fillText(txt,x+16,y0+d*L/2)}
 function gambarPesawat(c,x,y,tilt,scale,wingPhase){
@@ -969,6 +1003,123 @@ function gambarPesawat(c,x,y,tilt,scale,wingPhase){
   c.fill();
 
   c.beginPath();
+function updateArGameUI(message){
+  const remaining=Math.max(0,45-Math.floor(arGame.elapsed));
+  const setText=(selector,text)=>{const element=$(selector);if(element.textContent!==text)element.textContent=text};
+  $('#arGame').dataset.state=arGame.state;
+  $('#arGameStart').disabled=!arRunning||arGame.state==='running';
+  setText('#arGameStart',arGame.state==='over'?'Main lagi':'Mulai mini game');
+  setText('#arGameScore',fmt(arGame.score));
+  setText('#arGameLives',arGame.state==='over'&&arGame.lives===0?'☠':Array.from({length:3},(_,i)=>i<arGame.lives?'♥':'♡').join(' '));
+  setText('#arGameTime',`${remaining} dtk`);
+  if(message)setText('#arGameStatus',message);
+  if(arGame.state==='running'&&remaining!==arGame.uiSecond)arGame.uiSecond=remaining;
+}
+function finishArGame(message){
+  if(arGame.state!=='running')return;
+  arGame.state='over';
+  arGame.items=[];
+  $('#arStage').classList.remove('is-game-active');
+  updateArGameUI(message);
+  setArStatus(message);
+}
+function startArGame(){
+  if(!arRunning)return;
+  arGame.state='running';
+  arGame.score=0;
+  arGame.lives=3;
+  arGame.elapsed=0;
+  arGame.spawnIn=.7;
+  arGame.items=[];
+  arGame.uiSecond=-1;
+  $('#arStage').classList.add('is-game-active');
+  updateArGameUI('Tunjukkan telapak tangan untuk mulai mengumpulkan bintang!');
+  setArStatus('Sky Runner dimulai — ambil bintang dan hindari meteor.');
+}
+function updateArGame(delta,w,h,planeX,planeY){
+  if(arGame.state!=='running')return;
+  if(!arHasHand||!arPalm){
+    updateArGameUI('Permainan dijeda. Tunjukkan telapak tangan agar pesawat kembali bergerak.');
+    return;
+  }
+  arGame.elapsed+=delta;
+  if(arGame.elapsed>=45){
+    finishArGame(`Waktu habis! Skor akhir: ${fmt(arGame.score)}. Main lagi untuk mengalahkan skor ini.`);
+    return;
+  }
+  arGame.spawnIn-=delta;
+  while(arGame.spawnIn<=0){
+    arGame.items.push({x:1.08,y:.14+Math.random()*.72,type:Math.random()<.72?'star':'meteor',phase:Math.random()*Math.PI*2});
+    arGame.spawnIn+=1.05;
+  }
+  const remaining=[];
+  for(const item of arGame.items){
+    item.x-=delta*.43;
+    if(Math.hypot(item.x*w-planeX,item.y*h-planeY)<w*.065){
+      if(item.type==='star'){
+        arGame.score+=10;
+        updateArGameUI(`Bintang didapat! Skor ${fmt(arGame.score)}.`);
+      }else{
+        arGame.lives--;
+        updateArGameUI(`Terkena meteor! Sisa nyawa ${arGame.lives}.`);
+        if(arGame.lives<=0){
+          arGame.items=[];
+          finishArGame(`Pesawat kehabisan nyawa. Skor akhir: ${fmt(arGame.score)}. Tekan main lagi untuk mencoba.`);
+          return;
+        }
+      }
+    }else if(item.x>-.08)remaining.push(item);
+  }
+  arGame.items=remaining;
+  updateArGameUI();
+}
+function drawArGameItems(w,h,time){
+  if(arGame.state!=='running'&&arGame.state!=='over')return;
+  arGame.items.forEach(item=>{
+    const x=item.x*w,y=item.y*h,r=Math.max(13,w*.027),pulse=1+Math.sin(time/180+item.phase)*.1;
+    arCtx.save();
+    arCtx.translate(x,y);
+    arCtx.scale(pulse,pulse);
+    arCtx.shadowBlur=r*.9;
+    if(item.type==='star'){
+      arCtx.shadowColor='#fde047';
+      arCtx.fillStyle='#fde047';
+      arCtx.beginPath();
+      for(let i=0;i<10;i++){
+        const angle=-Math.PI/2+i*Math.PI/5,outer=i%2===0?r:r*.46;
+        if(i===0)arCtx.moveTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
+        else arCtx.lineTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
+      }
+      arCtx.closePath();arCtx.fill();
+    }else{
+      arCtx.shadowColor='#fb7185';
+      arCtx.fillStyle='#fb7185';
+      arCtx.beginPath();
+      for(let i=0;i<9;i++){
+        const angle=i*Math.PI*2/9,outer=r*(i%2===0?1:.76);
+        if(i===0)arCtx.moveTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
+        else arCtx.lineTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
+      }
+      arCtx.closePath();arCtx.fill();
+      arCtx.fillStyle='rgba(69,10,10,.72)';
+      arCtx.beginPath();arCtx.arc(-r*.2,-r*.12,r*.25,0,Math.PI*2);arCtx.fill();
+    }
+    arCtx.restore();
+  });
+  if(arGame.state==='over'){
+    arCtx.save();
+    arCtx.fillStyle='rgba(2,6,23,.66)';
+    arCtx.fillRect(w*.2,h*.4,w*.6,h*.2);
+    arCtx.textAlign='center';
+    arCtx.fillStyle='#e0f2fe';
+    arCtx.font=`700 ${Math.max(18,w*.045)}px Poppins,sans-serif`;
+    arCtx.fillText(arGame.lives===0?'GAME OVER':'WAKTU HABIS',w/2,h*.48);
+    arCtx.fillStyle='#fde68a';
+    arCtx.font=`600 ${Math.max(13,w*.027)}px Inter,sans-serif`;
+    arCtx.fillText(`SKOR ${fmt(arGame.score)} · tekan “Main lagi”`,w/2,h*.54);
+    arCtx.restore();
+  }
+}
   c.moveTo(-16,4);
   c.lineTo(18 + wingLift,42);
   c.lineTo(36 + wingLift/2,30);
@@ -1036,6 +1187,13 @@ function updateArGesture(next){
     arFlightMode='stable';
     setArStatus('🖐️ Lima jari terbuka — pesawat stabil di ketinggian saat ini.');
   }else{
+  arGame.state='idle';
+  arGame.score=0;
+  arGame.lives=3;
+  arGame.elapsed=0;
+  arGame.items=[];
+  arGame.uiSecond=-1;
+  $('#arStage').classList.remove('is-game-active');
     arFlightMode='stable';
     setArStatus('Gestur belum dikenali — gunakan ☝️ untuk naik, ✌️ untuk turun, atau 🖐️ untuk stabil.');
   }
@@ -1098,6 +1256,7 @@ function stopArCamera(updateStatus=true){
   $('#arStage').classList.remove('is-active');
   $('#arStage').classList.remove('is-mirrored');
   $('#arStart').disabled=false;
+    updateArGameUI('Kamera siap! Mulai mini game, lalu gerakkan telapak tangan untuk mengendalikan pesawat.');
   $('#arSwitch').disabled=true;
   $('#arStop').disabled=true;
   arHasHand=false;
@@ -1131,6 +1290,7 @@ async function startArCamera(){
   if(!navigator.mediaDevices?.getUserMedia){
     setArStatus('Browser ini tidak mendukung kamera. Coba buka situs dengan Chrome atau Safari terbaru.',true);
     return;
+    let planeX=0,planeY=0;
   }
   if(!window.isSecureContext){
     setArStatus('Kamera memerlukan koneksi aman HTTPS. Buka demonstrasi dari website.',true);
@@ -1196,6 +1356,7 @@ function drawArFrame(time){
   if(arFlightMode==='down')arFlightAltitude=Math.max(0,arFlightAltitude-delta*.22);
   if(arVideo.readyState>=2&&arVideo.videoWidth){
     if(arCanvas.width!==arVideo.videoWidth||arCanvas.height!==arVideo.videoHeight){
+$('#arGameStart').onclick=startArGame;
       arCanvas.width=arVideo.videoWidth;
       arCanvas.height=arVideo.videoHeight;
     }
@@ -1235,16 +1396,19 @@ function drawArFrame(time){
     }
     if(arHasHand&&arPalm){
       const px=arPalm.x*w,py=arPalm.y*h;
-      const planeX=Math.max(86,Math.min(w-86,px+w*.17));
-      const planeY=Math.max(72,Math.min(h-72,h*(.78-arFlightAltitude*.58)));
+      planeX=Math.max(86,Math.min(w-86,px));
+      planeY=Math.max(72,Math.min(h-100,py-(arFlightAltitude-.5)*h*.12));
+    }
+    updateArGame(delta,w,h,planeX,planeY);
+    drawArGameItems(w,h,time);
+    if(arHasHand&&arPalm){
+      const px=arPalm.x*w,py=arPalm.y*h;
       const scale=Math.max(.56,Math.min(1.05,w/640));
       const gestureLabel={up:'↑ MENAIK',down:'↓ MENURUN',stable:'STABIL',unknown:'SIAP'}[arGesture];
       arCtx.save();
       arCtx.strokeStyle='rgba(103,232,249,.72)';
       arCtx.lineWidth=2;
-      arCtx.setLineDash([7,9]);
-      arCtx.beginPath();arCtx.moveTo(px,py);arCtx.lineTo(planeX,planeY);arCtx.stroke();
-      arCtx.setLineDash([]);
+      arCtx.beginPath();arCtx.arc(px,py,Math.max(16,w*.035),0,Math.PI*2);arCtx.stroke();
       arCtx.shadowColor='#38bdf8';arCtx.shadowBlur=22;
       gambarPesawat(arCtx,planeX,planeY,arFlightMode==='up'?-0.08:arFlightMode==='down'?0.08:0,scale,time/120);
       arCtx.shadowBlur=0;
