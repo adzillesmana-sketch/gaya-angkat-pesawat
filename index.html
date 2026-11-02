@@ -53,15 +53,38 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
 .sim{display:grid;grid-template-columns:300px 1fr;gap:16px}@media(max-width:800px){.sim{grid-template-columns:1fr}}
 .ar-demo{margin-top:20px}
 .ar-demo p{color:var(--muted)}
-.ar-stage{position:relative;overflow:hidden;width:100%;aspect-ratio:4/3;max-height:72vh;border:1px solid var(--line);border-radius:18px;background:radial-gradient(ellipse at center,#12243a,#020609 75%)}
+.ar-stage{position:relative;isolation:isolate;overflow:hidden;width:min(100%,680px);aspect-ratio:3/4;max-height:72vh;margin:16px auto;border:1px solid var(--line);border-radius:24px;background:radial-gradient(ellipse at center,#12243a,#020609 75%);box-shadow:0 20px 55px rgba(0,0,0,.24)}
 .ar-stage video,.ar-stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ar-stage.is-mirrored video{transform:scaleX(-1)}
 .ar-stage canvas{pointer-events:none}
+.ar-stage-ui{position:absolute;z-index:4;inset:0;display:none;flex-direction:column;justify-content:space-between;padding:clamp(10px,2.4vw,20px);color:#fff;pointer-events:none;background:linear-gradient(180deg,rgba(2,6,23,.66),transparent 25%,transparent 68%,rgba(2,6,23,.26))}
+.ar-stage.is-active .ar-stage-ui{display:flex}
+.ar-stage-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ar-stage-tools{display:flex;align-items:center;gap:8px;pointer-events:auto}
+.ar-live-badge,.ar-hud-stat{display:flex;align-items:center;gap:7px;min-height:38px;padding:7px 11px;border:1px solid rgba(255,255,255,.23);border-radius:999px;background:rgba(3,8,20,.62);box-shadow:0 4px 14px rgba(0,0,0,.14);backdrop-filter:blur(14px);color:#fff;font:600 .72rem 'JetBrains Mono',monospace}
+.ar-live-dot{width:7px;height:7px;border-radius:50%;background:#fb7185;box-shadow:0 0 12px #fb7185}
+.ar-hud-group{display:flex;gap:7px}
+.ar-hud-stat{min-width:76px;justify-content:center}
+.ar-hud-stat b{font-size:.92rem}
+.ar-screen-button{display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(3,8,20,.68);box-shadow:0 4px 14px rgba(0,0,0,.16);color:#fff;font:600 1.15rem Inter,sans-serif;cursor:pointer;backdrop-filter:blur(14px);pointer-events:auto;transition:background .2s,transform .2s}
+.ar-screen-button:hover{background:rgba(14,165,233,.8);transform:scale(1.06)}
+.ar-stage-message{align-self:center;max-width:min(90%,420px);padding:20px 24px;border:1px solid rgba(255,255,255,.2);border-radius:22px;background:rgba(3,8,20,.7);box-shadow:0 14px 44px rgba(0,0,0,.28);text-align:center;backdrop-filter:blur(16px);pointer-events:auto}
+.ar-stage-message[hidden]{display:none}
+.ar-stage-message strong{display:block;color:#fff;font:700 clamp(1.05rem,3vw,1.5rem) Poppins,sans-serif}
+.ar-stage-message p{margin:7px 0 14px;color:#dbeafe;font-size:.88rem}
+.ar-stage-message .btn{background:linear-gradient(110deg,#06b6d4,#2563eb);box-shadow:0 8px 26px rgba(14,165,233,.28)}
+.ar-stage-hint{align-self:center;margin:0;padding:7px 12px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(3,8,20,.5);color:#e0f2fe;font-size:.76rem;text-align:center;backdrop-filter:blur(10px)}
+.ar-stage-hint[hidden]{display:none}
+.ar-stage:fullscreen,.ar-stage:-webkit-full-screen{width:100vw;height:100vh;height:100dvh;max-height:none;max-width:none;aspect-ratio:auto;margin:0;border:0;border-radius:0;background:#030712;box-shadow:none}
+.ar-stage:fullscreen video,.ar-stage:fullscreen canvas,.ar-stage:-webkit-full-screen video,.ar-stage:-webkit-full-screen canvas{object-fit:cover}
+.ar-stage:fullscreen .ar-stage-ui,.ar-stage:-webkit-full-screen .ar-stage-ui{padding:clamp(14px,3vw,32px)}
+.ar-stage:fullscreen .ar-screen-button,.ar-stage:-webkit-full-screen .ar-screen-button{width:48px;height:48px;font-size:1.35rem}
+.ar-stage:fullscreen .ar-stage-message,.ar-stage:-webkit-full-screen .ar-stage-message{padding:24px 32px}
 .ar-placeholder{position:absolute;inset:0;display:grid;place-content:center;gap:8px;padding:24px;text-align:center;color:#eaf2ff;background:radial-gradient(ellipse at center,rgba(8,17,31,.38),rgba(3,6,9,.88))}
+.ar-placeholder{z-index:3}
 .ar-placeholder strong{font:600 1.1rem Poppins,sans-serif}
 .ar-placeholder span{max-width:34rem;color:#a8bad4;font-size:.9rem}
 .ar-stage.is-active .ar-placeholder{display:none}
-.ar-badge{position:absolute;top:12px;left:12px;padding:6px 10px;border:1px solid rgba(103,232,249,.25);border-radius:999px;background:rgba(3,6,9,.72);color:#a5f3fc;font:600 .72rem 'JetBrains Mono',monospace}
 .ar-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
 .ar-gestures{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:12px}
 .ar-gesture{padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 86%,var(--lift))}
@@ -73,30 +96,31 @@ label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
 .ar-game{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
-  gap:12px;
+  gap:12px 18px;
   align-items:center;
-  margin:14px 0;
-  padding:15px;
-  border:1px solid rgba(103,232,249,.3);
+  max-width:680px;
+  margin:12px auto;
+  padding:15px 17px;
+  border:1px solid var(--line);
   border-radius:17px;
-  background:linear-gradient(120deg,rgba(8,145,178,.12),rgba(99,102,241,.12)),var(--bg);
+  background:linear-gradient(120deg,rgba(8,145,178,.08),rgba(99,102,241,.08)),var(--card);
 }
 .ar-game-copy strong{display:block;color:var(--text);font:700 1rem Poppins,sans-serif}
 .ar-game-copy p{margin:4px 0 0;color:var(--muted);font-size:.82rem}
-.ar-game-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.ar-game-stat{min-width:82px;padding:7px 10px;border:1px solid var(--line);border-radius:11px;background:color-mix(in srgb,var(--card) 88%,transparent);font:500 .68rem 'JetBrains Mono',monospace;color:var(--muted)}
-.ar-game-stat b{display:block;color:var(--text);font-size:.95rem}
 .ar-game #arGameStart{white-space:nowrap}
 .ar-game #arGameStart:disabled{opacity:.55;cursor:not-allowed}
-.ar-game[data-state=running]{border-color:#22d3ee;box-shadow:0 0 24px rgba(34,211,238,.12)}
 .ar-game-status{grid-column:1/-1;min-height:1.35em;margin:0!important;color:var(--muted);font-size:.8rem!important}
-.ar-stage.is-game-active{border-color:rgba(34,211,238,.75);box-shadow:0 0 32px rgba(34,211,238,.16)}
 @media(max-width:620px){
   .ar-game{grid-template-columns:1fr}
   .ar-game #arGameStart{width:100%}
   .ar-game-status{grid-column:auto}
+  .ar-stage{width:min(100%,480px);max-height:66vh;border-radius:20px}
+  .ar-hud-stat{min-width:62px;padding:6px 9px}
+  .ar-live-badge,.ar-hud-stat{min-height:34px;font-size:.64rem}
+  .ar-screen-button{width:36px;height:36px}
+  .ar-stage-message{padding:16px}
 }
-@media(max-width:520px){.ar-stage{border-radius:14px;max-height:60vh}.ar-controls .btn{flex:1 1 130px}}
+@media(max-width:520px){.ar-stage{border-radius:18px;max-height:60vh}.ar-controls .btn{flex:1 1 130px}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:6px 14px;cursor:pointer}.tabs button.on{background:var(--lift);color:#fff}
 .lv{font-size:.75rem;color:#fff;border-radius:8px;padding:2px 8px;margin-left:6px}
 .fb{font-weight:700;margin-top:8px}.ok{color:var(--thrust)}.no{color:var(--weight)}
@@ -747,29 +771,40 @@ nav #tema{font-size:1.1rem;line-height:1}
 <div class="card ar-demo">
 <span class="sub">DEMO AR · PELACAKAN TANGAN</span>
 <h3 style="margin-top:12px">Pesawat virtual mengikuti tanganmu</h3>
-<p>Posisikan telapak tangan di depan kamera untuk mengendalikan pesawat. Gerakkan ke atas, bawah, kiri, atau kanan untuk menghindari meteor dan mengumpulkan bintang.</p>
+<p>Rasakan seperti memakai filter kamera: pesawat menempel di telapak tanganmu. Mainkan Flappy Bird dengan mengarahkan tangan melewati celah gerbang.</p>
 <div class="ar-stage" id="arStage">
 <video id="arVideo" autoplay playsinline muted aria-label="Tampilan kamera langsung"></video>
 <canvas id="arCanvas" aria-hidden="true"></canvas>
 <div class="ar-placeholder"><strong>Siap untuk demonstrasi AR?</strong><span>Tekan “Mulai kamera”, izinkan akses kamera, lalu tunjukkan telapak tanganmu di depan kamera.</span></div>
-<span class="ar-badge">✦ LIFT LAB · LIVE</span>
+<div class="ar-stage-ui" id="arStageUI">
+<div class="ar-stage-top">
+<span class="ar-live-badge"><i class="ar-live-dot"></i> FILTER PESAWAT</span>
+<div class="ar-stage-tools">
+<div class="ar-hud-group" aria-label="Skor permainan"><span class="ar-hud-stat">SKOR <b id="arHudScore">0</b></span><span class="ar-hud-stat">NYAWA <b id="arHudLives">♥ ♥ ♥</b></span></div>
+<button class="ar-screen-button" id="arFullscreen" type="button" aria-label="Perbesar layar" title="Layar penuh">⛶</button>
+</div>
+</div>
+<div class="ar-stage-message" id="arStageMessage">
+<strong id="arStageMessageTitle">Pesawat siap terbang</strong>
+<p id="arStageMessageText">Tunjukkan telapak tangan, lalu lewati gerbang seperti Flappy Bird.</p>
+<button class="btn" id="arOverlayStart" type="button" disabled>Mulai Flappy Bird</button>
+</div>
+<p class="ar-stage-hint" id="arStageHint">Gerakkan telapak tangan untuk mengarahkan pesawat ✨</p>
+</div>
 </div>
 <div class="ar-controls"><button class="btn" id="arStart" type="button">Mulai kamera</button><button class="btn alt" id="arSwitch" type="button" disabled>Balik kamera</button><button class="btn alt" id="arStop" type="button" disabled>Matikan kamera</button></div>
 <div class="ar-game" id="arGame" data-state="idle">
-<div class="ar-game-copy"><strong>✦ Misi: Sky Runner</strong><p>Gerakkan telapak tangan untuk menerbangkan pesawat. Ambil bintang, hindari meteor, dan raih skor tertinggi dalam 45 detik.</p>
-<div class="ar-game-stats" aria-label="Skor permainan">
-<span class="ar-game-stat">SKOR<b id="arGameScore">0</b></span><span class="ar-game-stat">NYAWA<b id="arGameLives">♥ ♥ ♥</b></span><span class="ar-game-stat">WAKTU<b id="arGameTime">45 dtk</b></span>
-</div></div>
-<button class="btn" id="arGameStart" type="button" disabled>Mulai mini game</button>
-<p class="ar-game-status" id="arGameStatus" role="status" aria-live="polite">Nyalakan kamera untuk bermain. Telapak tangan menjadi joystick pesawat.</p>
+<div class="ar-game-copy"><strong>✦ Flappy Bird: mode tangan</strong><p>Gerakkan telapak tangan untuk mengarahkan pesawat melewati celah; ☝️ menengadah dan ✌️ menukik.</p></div>
+<button class="btn" id="arGameStart" type="button" disabled>Mulai Flappy Bird</button>
+<p class="ar-game-status" id="arGameStatus" role="status" aria-live="polite">Nyalakan kamera untuk mengaktifkan filter dan permainan.</p>
 </div>
 <div class="ar-gestures" aria-label="Kontrol gestur tangan">
-<div class="ar-gesture"><strong>☝️ Telunjuk</strong><span>Pesawat naik</span></div>
-<div class="ar-gesture"><strong>✌️ Telunjuk + tengah</strong><span>Pesawat turun</span></div>
-<div class="ar-gesture"><strong>🖐️ Lima jari terbuka</strong><span>Pesawat stabil di ketinggian saat ini</span></div>
+<div class="ar-gesture"><strong>☝️ Telunjuk</strong><span>Hidung pesawat menengadah</span></div>
+<div class="ar-gesture"><strong>✌️ Telunjuk + tengah</strong><span>Hidung pesawat menukik</span></div>
+<div class="ar-gesture"><strong>🖐️ Telapak terbuka</strong><span>Pesawat kembali stabil</span></div>
 </div>
 <p class="ar-status" id="arStatus" role="status" aria-live="polite">Kamera mati. Tekan mulai untuk mencoba demonstrasi.</p>
-<p class="ar-note">Pesawat mengikuti posisi telapak tangan di layar. Gunakan gestur ☝️/✌️ untuk mengubah ketinggian simulasi. Kamera hanya aktif setelah kamu menekan tombol dan mengizinkan akses. Pelacakan diproses langsung di perangkat; video tidak direkam atau dikirim ke server. Perlu koneksi internet untuk memuat model pelacakan.</p>
+<p class="ar-note">Gunakan tombol ⛶ di layar kamera untuk memperbesar seperti YouTube; tekan Esc untuk kembali. Kamera hanya aktif setelah kamu menekan tombol dan mengizinkan akses. Pelacakan diproses langsung di perangkat; video tidak direkam atau dikirim ke server. Perlu koneksi internet untuk memuat model pelacakan.</p>
 </div>
 </section>
 
@@ -1042,9 +1077,9 @@ function gambarPesawat(c,x,y,tilt,scale,wingPhase){
 }
 const arVideo=$('#arVideo'),arCanvas=$('#arCanvas'),arCtx=arCanvas.getContext('2d');
 let arTracker=null,arStream=null,arFrame=0,arRunning=false,arStarting=false,arGeneration=0,arFacing='user',arDeviceId='',arRequestedDeviceId='',arSwitchRequested=false;
-let arLastVideoTime=-1,arLastInference=0,arLastFrameTime=0,arPalm=null,arHasHand=false,arStatusText='';
-let arGesture='unknown',arGestureCandidate='',arGestureFrames=0,arFlightMode='stable',arFlightAltitude=.5;
-const arGame={state:'idle',score:0,lives:3,elapsed:0,spawnIn:0,items:[],uiSecond:-1};
+let arLastVideoTime=-1,arLastInference=0,arLastFrameTime=0,arPalm=null,arHandLandmarks=null,arHasHand=false,arStatusText='';
+let arGesture='unknown',arGestureCandidate='',arGestureFrames=0,arFlightMode='stable';
+const arGame={state:'idle',score:0,lives:3,spawnIn:0,gates:[],invulnerable:0};
 const arEdges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
 function arDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
 function classifyArGesture(hand){
@@ -1064,35 +1099,42 @@ function updateArGesture(next){
   arGesture=next;
   if(next==='up'){
     arFlightMode='up';
-    setArStatus('☝️ Telunjuk terdeteksi — pesawat naik (gaya angkat bertambah).');
+    setArStatus('☝️ Telunjuk terdeteksi — hidung pesawat menengadah.');
   }else if(next==='down'){
     arFlightMode='down';
-    setArStatus('✌️ Telunjuk dan tengah terdeteksi — pesawat turun.');
+    setArStatus('✌️ Dua jari terdeteksi — hidung pesawat menukik.');
   }else if(next==='stable'){
     arFlightMode='stable';
-    setArStatus('🖐️ Lima jari terbuka — pesawat stabil di ketinggian saat ini.');
+    setArStatus('🖐️ Telapak terbuka — pesawat kembali stabil.');
   }else{
     arFlightMode='stable';
-    setArStatus('Gestur belum dikenali — gunakan ☝️ untuk naik, ✌️ untuk turun, atau 🖐️ untuk stabil.');
+    setArStatus('Gestur belum dikenali — gunakan ☝️/✌️ untuk mengubah sudut pesawat.');
   }
 }
 function updateArGameUI(message){
-  const remaining=Math.max(0,45-Math.floor(arGame.elapsed));
   const setText=(selector,text)=>{const element=$(selector);if(element.textContent!==text)element.textContent=text};
   $('#arGame').dataset.state=arGame.state;
   $('#arGameStart').disabled=!arRunning||arGame.state==='running';
-  setText('#arGameStart',arGame.state==='over'?'Main lagi':'Mulai mini game');
-  setText('#arGameScore',fmt(arGame.score));
-  setText('#arGameLives',arGame.state==='over'&&arGame.lives===0?'☠':Array.from({length:3},(_,i)=>i<arGame.lives?'♥':'♡').join(' '));
-  setText('#arGameTime',`${remaining} dtk`);
+  setText('#arGameStart',arGame.state==='over'?'Main lagi':'Mulai Flappy Bird');
+  $('#arOverlayStart').disabled=!arRunning;
+  setText('#arOverlayStart',arGame.state==='over'?'Main lagi':'Mulai Flappy Bird');
+  setText('#arHudScore',fmt(arGame.score));
+  setText('#arHudLives',arGame.lives===0?'♡ ♡ ♡':Array.from({length:3},(_,i)=>i<arGame.lives?'♥':'♡').join(' '));
+  $('#arStageMessage').hidden=arGame.state==='running';
+  $('#arStageHint').hidden=arGame.state!=='running';
+  if(arGame.state==='over'){
+    setText('#arStageMessageTitle','Penerbangan selesai');
+    setText('#arStageMessageText',`Skor akhir: ${fmt(arGame.score)} gerbang. Coba sekali lagi!`);
+  }else if(arGame.state==='idle'){
+    setText('#arStageMessageTitle','Pesawat siap terbang');
+    setText('#arStageMessageText','Tunjukkan telapak tangan, lalu arahkan pesawat melewati celah gerbang.');
+  }
   if(message)setText('#arGameStatus',message);
-  if(arGame.state==='running'&&remaining!==arGame.uiSecond)arGame.uiSecond=remaining;
 }
 function finishArGame(message){
   if(arGame.state!=='running')return;
   arGame.state='over';
-  arGame.items=[];
-  $('#arStage').classList.remove('is-game-active');
+  arGame.gates=[];
   updateArGameUI(message);
   setArStatus(message);
 }
@@ -1101,97 +1143,88 @@ function startArGame(){
   arGame.state='running';
   arGame.score=0;
   arGame.lives=3;
-  arGame.elapsed=0;
-  arGame.spawnIn=.7;
-  arGame.items=[];
-  arGame.uiSecond=-1;
-  $('#arStage').classList.add('is-game-active');
-  updateArGameUI('Tunjukkan telapak tangan untuk mulai mengumpulkan bintang!');
-  setArStatus('Sky Runner dimulai — ambil bintang dan hindari meteor.');
+  arGame.spawnIn=.55;
+  arGame.gates=[];
+  arGame.invulnerable=0;
+  updateArGameUI('Lewati celah gerbang. Pesawat menempel di telapak tanganmu.');
+  setArStatus('Flappy Bird dimulai — arahkan tangan melewati celah gerbang.');
 }
-function updateArGame(delta,w,h,planeX,planeY){
+function arVisibleFrame(w,h){
+  const stage=$('#arStage').getBoundingClientRect();
+  const aspect=stage.width&&stage.height?stage.width/stage.height:w/h;
+  const sourceAspect=w/h;
+  if(sourceAspect>aspect){
+    const width=h*aspect;
+    return{left:(w-width)/2,right:(w+width)/2,top:0,bottom:h,width,height:h};
+  }
+  const height=w/aspect;
+  return{left:0,right:w,top:(h-height)/2,bottom:(h+height)/2,width:w,height};
+}
+function updateArGame(delta,w,planeX,planeY,frame){
   if(arGame.state!=='running')return;
-  if(!arHasHand||!arPalm){
-    updateArGameUI('Permainan dijeda. Tunjukkan telapak tangan agar pesawat kembali bergerak.');
-    return;
-  }
-  arGame.elapsed+=delta;
-  if(arGame.elapsed>=45){
-    finishArGame(`Waktu habis! Skor akhir: ${fmt(arGame.score)}. Main lagi untuk mengalahkan skor ini.`);
-    return;
-  }
+  if(!arHasHand||!arPalm)return;
+  arGame.invulnerable=Math.max(0,arGame.invulnerable-delta);
   arGame.spawnIn-=delta;
   while(arGame.spawnIn<=0){
-    arGame.items.push({x:1.08,y:.14+Math.random()*.72,type:Math.random()<.72?'star':'meteor',phase:Math.random()*Math.PI*2});
-    arGame.spawnIn+=1.05;
+    const gapHeight=frame.height*.38;
+    const margin=frame.height*.08;
+    const gapCenter=frame.top+gapHeight/2+margin+Math.random()*Math.max(0,frame.height-gapHeight-margin*2);
+    arGame.gates.push({x:frame.right+frame.width*.14,gapCenter,gapHeight,passed:false,hit:false});
+    arGame.spawnIn+=1.75;
   }
-  const remaining=[];
-  for(const item of arGame.items){
-    item.x-=delta*.43;
-    if(Math.hypot(item.x*w-planeX,item.y*h-planeY)<w*.065){
-      if(item.type==='star'){
-        arGame.score+=10;
-        updateArGameUI(`Bintang didapat! Skor ${fmt(arGame.score)}.`);
-      }else{
-        arGame.lives--;
-        updateArGameUI(`Terkena meteor! Sisa nyawa ${arGame.lives}.`);
-        if(arGame.lives<=0){
-          arGame.items=[];
-          finishArGame(`Pesawat kehabisan nyawa. Skor akhir: ${fmt(arGame.score)}. Tekan main lagi untuk mencoba.`);
-          return;
-        }
+  const pipeWidth=frame.width*.12;
+  const planeScale=Math.max(.5,Math.min(1.05,frame.width/900));
+  const planeRadiusX=76*planeScale;
+  const planeRadiusY=42*planeScale;
+  for(const gate of arGame.gates){
+    gate.x-=frame.width*.43*delta;
+    const gapTop=gate.gapCenter-gate.gapHeight/2;
+    const gapBottom=gate.gapCenter+gate.gapHeight/2;
+    const overlapsPlane=gate.x<planeX+planeRadiusX&&gate.x+pipeWidth>planeX-planeRadiusX;
+    if(!gate.hit&&arGame.invulnerable===0&&overlapsPlane&&(planeY-planeRadiusY<gapTop||planeY+planeRadiusY>gapBottom)){
+      gate.hit=true;
+      arGame.lives--;
+      arGame.invulnerable=1.15;
+      updateArGameUI(`Gerbang tersenggol! Sisa nyawa ${arGame.lives}.`);
+      setArStatus(arGame.lives?'Awas, gerbang! Cari celah berikutnya.':`Game over — skor akhir ${fmt(arGame.score)}.`);
+      if(arGame.lives===0){
+        finishArGame(`Game over! Kamu melewati ${fmt(arGame.score)} gerbang.`);
+        return;
       }
-    }else if(item.x>-.08)remaining.push(item);
-  }
-  arGame.items=remaining;
-  updateArGameUI();
-}
-function drawArGameItems(w,h,time){
-  if(arGame.state!=='running'&&arGame.state!=='over')return;
-  arGame.items.forEach(item=>{
-    const x=item.x*w,y=item.y*h,r=Math.max(13,w*.027),pulse=1+Math.sin(time/180+item.phase)*.1;
-    arCtx.save();
-    arCtx.translate(x,y);
-    arCtx.scale(pulse,pulse);
-    arCtx.shadowBlur=r*.9;
-    if(item.type==='star'){
-      arCtx.shadowColor='#fde047';
-      arCtx.fillStyle='#fde047';
-      arCtx.beginPath();
-      for(let i=0;i<10;i++){
-        const angle=-Math.PI/2+i*Math.PI/5,outer=i%2===0?r:r*.46;
-        if(i===0)arCtx.moveTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
-        else arCtx.lineTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
-      }
-      arCtx.closePath();arCtx.fill();
-    }else{
-      arCtx.shadowColor='#fb7185';
-      arCtx.fillStyle='#fb7185';
-      arCtx.beginPath();
-      for(let i=0;i<9;i++){
-        const angle=i*Math.PI*2/9,outer=r*(i%2===0?1:.76);
-        if(i===0)arCtx.moveTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
-        else arCtx.lineTo(Math.cos(angle)*outer,Math.sin(angle)*outer);
-      }
-      arCtx.closePath();arCtx.fill();
-      arCtx.fillStyle='rgba(69,10,10,.72)';
-      arCtx.beginPath();arCtx.arc(-r*.2,-r*.12,r*.25,0,Math.PI*2);arCtx.fill();
     }
+    if(!gate.passed&&!gate.hit&&gate.x+pipeWidth<planeX-planeRadiusX){
+      gate.passed=true;
+      arGame.score++;
+      updateArGameUI(`Mantap! Gerbang ${arGame.score} terlewati.`);
+    }
+  }
+  arGame.gates=arGame.gates.filter(gate=>gate.x+pipeWidth>frame.left);
+}
+function drawArGame(w,h,frame){
+  if(arGame.state!=='running')return;
+  const pipeWidth=frame.width*.12,capHeight=Math.max(12,frame.width*.035);
+  const gradient=arCtx.createLinearGradient(0,0,w,0);
+  gradient.addColorStop(0,'#0891b2');
+  gradient.addColorStop(.48,'#67e8f9');
+  gradient.addColorStop(1,'#0e7490');
+  arGame.gates.forEach(gate=>{
+    const gapTop=gate.gapCenter-gate.gapHeight/2,gapBottom=gate.gapCenter+gate.gapHeight/2;
+    arCtx.save();
+    arCtx.shadowColor=gate.hit?'#fb7185':'#22d3ee';
+    arCtx.shadowBlur=gate.hit?8:18;
+    arCtx.fillStyle=gradient;
+    arCtx.strokeStyle=gate.hit?'rgba(251,113,133,.8)':'rgba(207,250,254,.9)';
+    arCtx.lineWidth=Math.max(2,w/320);
+    arCtx.fillRect(gate.x,frame.top,pipeWidth,gapTop-frame.top);
+    arCtx.strokeRect(gate.x,frame.top,pipeWidth,gapTop-frame.top);
+    arCtx.fillRect(gate.x,gapBottom,pipeWidth,frame.bottom-gapBottom);
+    arCtx.strokeRect(gate.x,gapBottom,pipeWidth,frame.bottom-gapBottom);
+    arCtx.fillRect(gate.x-capHeight*.12,gapTop-capHeight/2,pipeWidth+capHeight*.24,capHeight);
+    arCtx.strokeRect(gate.x-capHeight*.12,gapTop-capHeight/2,pipeWidth+capHeight*.24,capHeight);
+    arCtx.fillRect(gate.x-capHeight*.12,gapBottom-capHeight/2,pipeWidth+capHeight*.24,capHeight);
+    arCtx.strokeRect(gate.x-capHeight*.12,gapBottom-capHeight/2,pipeWidth+capHeight*.24,capHeight);
     arCtx.restore();
   });
-  if(arGame.state==='over'){
-    arCtx.save();
-    arCtx.fillStyle='rgba(2,6,23,.66)';
-    arCtx.fillRect(w*.2,h*.4,w*.6,h*.2);
-    arCtx.textAlign='center';
-    arCtx.fillStyle='#e0f2fe';
-    arCtx.font=`700 ${Math.max(18,w*.045)}px Poppins,sans-serif`;
-    arCtx.fillText(arGame.lives===0?'GAME OVER':'WAKTU HABIS',w/2,h*.48);
-    arCtx.fillStyle='#fde68a';
-    arCtx.font=`600 ${Math.max(13,w*.027)}px Inter,sans-serif`;
-    arCtx.fillText(`SKOR ${fmt(arGame.score)} · tekan “Main lagi”`,w/2,h*.54);
-    arCtx.restore();
-  }
 }
 function arDisplayX(x){return arFacing==='user'?1-x:x}
 async function findArCamera(facing){
@@ -1238,6 +1271,39 @@ function setArStatus(message,isError=false){
   $('#arStatus').textContent=message;
   $('#arStatus').dataset.state=state;
 }
+function arIsFullscreen(){
+  return document.fullscreenElement===$('#arStage')||document.webkitFullscreenElement===$('#arStage');
+}
+function updateArFullscreenButton(){
+  const fullscreen=arIsFullscreen();
+  const button=$('#arFullscreen');
+  button.textContent=fullscreen?'⤢':'⛶';
+  button.title=fullscreen?'Keluar dari layar penuh':'Layar penuh';
+  button.setAttribute('aria-label',fullscreen?'Keluar dari layar penuh':'Perbesar layar');
+}
+async function toggleArFullscreen(){
+  const stage=$('#arStage');
+  try{
+    if(arIsFullscreen()){
+      const exit=document.exitFullscreen||document.webkitExitFullscreen;
+      if(exit)await exit.call(document);
+      return;
+    }
+    const enter=stage.requestFullscreen||stage.webkitRequestFullscreen;
+    if(!enter){
+      setArStatus('Layar penuh tidak didukung browser ini. Coba buka di Chrome atau Safari terbaru.',true);
+      return;
+    }
+    await enter.call(stage);
+  }catch(error){
+    console.error('Layar penuh tidak dapat diaktifkan.',error);
+    setArStatus('Tidak dapat membuka layar penuh. Periksa izin browser lalu coba lagi.',true);
+  }finally{
+    updateArFullscreenButton();
+  }
+}
+document.addEventListener('fullscreenchange',updateArFullscreenButton);
+document.addEventListener('webkitfullscreenchange',updateArFullscreenButton);
 function stopArCamera(updateStatus=true){
   arGeneration++;
   arRunning=false;
@@ -1255,23 +1321,22 @@ function stopArCamera(updateStatus=true){
   $('#arStop').disabled=true;
   arHasHand=false;
   arPalm=null;
+  arHandLandmarks=null;
   arGesture='unknown';
   arGestureCandidate='';
   arGestureFrames=0;
   arFlightMode='stable';
-  arFlightAltitude=.5;
   arGame.state='idle';
   arGame.score=0;
   arGame.lives=3;
-  arGame.elapsed=0;
-  arGame.items=[];
-  arGame.uiSecond=-1;
-  $('#arStage').classList.remove('is-game-active');
+  arGame.spawnIn=0;
+  arGame.gates=[];
+  arGame.invulnerable=0;
   arLastFrameTime=0;
   arSwitchRequested=false;
   arRequestedDeviceId='';
   if(arCanvas.width&&arCanvas.height)arCtx.clearRect(0,0,arCanvas.width,arCanvas.height);
-  updateArGameUI('Nyalakan kamera untuk bermain. Telapak tangan menjadi joystick pesawat.');
+  updateArGameUI('Nyalakan kamera untuk mengaktifkan filter pesawat.');
   if(updateStatus)setArStatus('Kamera dimatikan. Tekan mulai untuk mencoba lagi.');
 }
 async function loadArTracker(){
@@ -1329,7 +1394,7 @@ async function startArCamera(){
     arLastFrameTime=0;
     arRunning=true;
     $('#arSwitch').disabled=false;
-    updateArGameUI('Kamera siap! Mulai mini game, lalu gerakkan telapak tangan untuk mengendalikan pesawat.');
+    updateArGameUI('Kamera siap! Mulai Flappy Bird, lalu gerakkan tangan untuk melewati celah.');
     setArStatus('Arahkan telapak tangan ke kamera untuk menggerakkan pesawat.');
     arFrame=requestAnimationFrame(drawArFrame);
   }catch(error){
@@ -1354,8 +1419,6 @@ function drawArFrame(time){
   if(!arRunning)return;
   const delta=arLastFrameTime?Math.min((time-arLastFrameTime)/1000,.05):0;
   arLastFrameTime=time;
-  if(arFlightMode==='up')arFlightAltitude=Math.min(1,arFlightAltitude+delta*.22);
-  if(arFlightMode==='down')arFlightAltitude=Math.max(0,arFlightAltitude-delta*.22);
   if(arVideo.readyState>=2&&arVideo.videoWidth){
     if(arCanvas.width!==arVideo.videoWidth||arCanvas.height!==arVideo.videoHeight){
       arCanvas.width=arVideo.videoWidth;
@@ -1363,31 +1426,25 @@ function drawArFrame(time){
     }
     const w=arCanvas.width,h=arCanvas.height;
     arCtx.clearRect(0,0,w,h);
-    let planeX=0,planeY=0;
     if(arVideo.currentTime!==arLastVideoTime&&time-arLastInference>=70){
       arLastVideoTime=arVideo.currentTime;
       arLastInference=time;
       try{
         const result=arTracker.detectForVideo(arVideo,time),hand=result.landmarks?.[0];
         arHasHand=!!hand;
+        arHandLandmarks=hand||null;
         if(hand){
           const palm={x:arDisplayX(hand[9].x),y:hand[9].y};
-          arPalm=arPalm?{x:arPalm.x*.65+palm.x*.35,y:arPalm.y*.65+palm.y*.35}:palm;
+          arPalm=arPalm?{x:arPalm.x*.25+palm.x*.75,y:arPalm.y*.25+palm.y*.75}:palm;
           updateArGesture(classifyArGesture(hand));
         }else{
           arPalm=null;
+          arHandLandmarks=null;
           arGesture='unknown';
           arGestureCandidate='';
           arGestureFrames=0;
           arFlightMode='stable';
           setArStatus('Tunjukkan satu telapak tangan di depan kamera.');
-        }
-        if(hand){
-          const points=hand.map(p=>({x:arDisplayX(p.x)*w,y:p.y*h}));
-          arCtx.lineWidth=Math.max(2,w/300);
-          arCtx.strokeStyle='rgba(103,232,249,.78)';
-          arEdges.forEach(([a,b])=>{arCtx.beginPath();arCtx.moveTo(points[a].x,points[a].y);arCtx.lineTo(points[b].x,points[b].y);arCtx.stroke()});
-          points.forEach((p,i)=>{arCtx.beginPath();arCtx.arc(p.x,p.y,i===9?Math.max(5,w/90):Math.max(2,w/220),0,Math.PI*2);arCtx.fillStyle=i===9?'#f0abfc':'#67e8f9';arCtx.fill()});
         }
       }catch(error){
         console.error('Pelacakan tangan berhenti karena kesalahan.',error);
@@ -1396,32 +1453,49 @@ function drawArFrame(time){
         return;
       }
     }
+    const frame=arVisibleFrame(w,h);
+    let planeX=frame.left+frame.width*.3,planeY=frame.top+frame.height*.5;
     if(arHasHand&&arPalm){
-      const px=arPalm.x*w,py=arPalm.y*h;
-      planeX=Math.max(86,Math.min(w-86,px));
-      planeY=Math.max(72,Math.min(h-100,py-(arFlightAltitude-.5)*h*.12));
+      const planeScale=Math.max(.5,Math.min(1.05,frame.width/900));
+      const radiusX=76*planeScale,radiusY=42*planeScale;
+      planeX=Math.max(frame.left+radiusX,Math.min(frame.right-radiusX,arPalm.x*w));
+      planeY=Math.max(frame.top+radiusY,Math.min(frame.bottom-radiusY,arPalm.y*h));
     }
-    updateArGame(delta,w,h,planeX,planeY);
-    drawArGameItems(w,h,time);
+    updateArGame(delta,w,planeX,planeY,frame);
+    drawArGame(w,h,frame);
     if(arHasHand&&arPalm){
-      const px=arPalm.x*w,py=arPalm.y*h;
-      const scale=Math.max(.56,Math.min(1.05,w/640));
-      const gestureLabel={up:'↑ MENAIK',down:'↓ MENURUN',stable:'STABIL',unknown:'SIAP'}[arGesture];
+      const px=planeX,py=planeY;
       arCtx.save();
-      arCtx.strokeStyle='rgba(103,232,249,.72)';
-      arCtx.lineWidth=2;
-      arCtx.beginPath();arCtx.arc(px,py,Math.max(16,w*.035),0,Math.PI*2);arCtx.stroke();
+      arCtx.globalAlpha=.72;
+      arCtx.shadowColor='#22d3ee';arCtx.shadowBlur=Math.max(12,w*.025);
+      arCtx.strokeStyle='rgba(103,232,249,.88)';
+      arCtx.lineWidth=Math.max(2,w/280);
+      arEdges.forEach(([a,b])=>{
+        const left=arHandLandmarks?.[a],right=arHandLandmarks?.[b];
+        if(!left||!right)return;
+        arCtx.beginPath();
+        arCtx.moveTo(arDisplayX(left.x)*w,left.y*h);
+        arCtx.lineTo(arDisplayX(right.x)*w,right.y*h);
+        arCtx.stroke();
+      });
+      arHandLandmarks?.forEach((point,index)=>{
+        if(![4,8,12,16,20].includes(index))return;
+        arCtx.beginPath();
+        arCtx.arc(arDisplayX(point.x)*w,point.y*h,Math.max(3,w/180),0,Math.PI*2);
+        arCtx.fillStyle='#e0f2fe';
+        arCtx.fill();
+      });
+      arCtx.globalAlpha=1;
+      arCtx.shadowBlur=0;
+      arCtx.strokeStyle='rgba(103,232,249,.58)';
+      arCtx.lineWidth=Math.max(2,w/320);
+      arCtx.beginPath();arCtx.arc(px,py,Math.max(24,w*.055)+Math.sin(time/140)*3,0,Math.PI*2);arCtx.stroke();
+      arCtx.restore();
+      const scale=Math.max(.5,Math.min(1.05,frame.width/900));
+      arCtx.save();
+      if(arGame.invulnerable>0&&Math.floor(time/90)%2)arCtx.globalAlpha=.32;
       arCtx.shadowColor='#38bdf8';arCtx.shadowBlur=22;
       gambarPesawat(arCtx,planeX,planeY,arFlightMode==='up'?-0.08:arFlightMode==='down'?0.08:0,scale,time/120);
-      arCtx.shadowBlur=0;
-      arCtx.fillStyle='rgba(3,6,9,.78)';
-      arCtx.fillRect(planeX-108,planeY+45,216,44);
-      arCtx.fillStyle='#a5f3fc';
-      arCtx.font=`600 ${Math.max(11,w/48)}px "JetBrains Mono",monospace`;
-      arCtx.textAlign='center';
-      arCtx.fillText(`${gestureLabel} · ΔF ${arFlightMode==='up'?'>':arFlightMode==='down'?'<':'≈'} W`,planeX,planeY+62);
-      arCtx.font=`500 ${Math.max(9,w/60)}px "JetBrains Mono",monospace`;
-      arCtx.fillText('ΔF = ½ρ(Vₐ² − Vᵦ²)A',planeX,planeY+80);
       arCtx.restore();
     }
   }
@@ -1430,6 +1504,8 @@ function drawArFrame(time){
 $('#arStart').onclick=startArCamera;
 $('#arStop').onclick=()=>stopArCamera();
 $('#arGameStart').onclick=startArGame;
+$('#arOverlayStart').onclick=startArGame;
+$('#arFullscreen').onclick=toggleArFullscreen;
 $('#arSwitch').onclick=async()=>{
   if(!arStream||arStarting)return;
   arStarting=true;
